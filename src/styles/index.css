@@ -16,18 +16,19 @@
   --color-primary:  #215482;
   --color-secondary: #C7E1FC;
   --color-input:   #E8EDF0;
+  --color-text: #57738F;
   --color-white: #FAFAFA;
   --color-black: #0F141A;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
   --color-input-dark:   #99B0C2;
-  --color-white-dark: #1A1A1A;
-  --color-black-dark: #FAFAFA;
+  --color-text-dark: #99B0C2;
+
 }
 
 @utility heading {
-  @apply font-sans text-5xl font-medium dark:text-white text-black;
+  @apply font-sans text-5xl font-medium dark:text-white text-secondary;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
