@@ -22,12 +22,11 @@
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
   --color-input-dark:   #99B0C2;
-  --color-white-dark: #1A1A1A;
-  --color-black-dark: #FAFAFA;
+
 }
 
 @utility heading {
-  @apply font-sans text-5xl font-medium dark:text-white text-black;
+  @apply font-sans text-5xl font-medium dark:text-white text-secondary;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

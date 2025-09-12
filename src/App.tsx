@@ -1,8 +1,9 @@
 import {  useTheme } from "./contexts/Theme/ThemeContext"
+import { Theme } from "./types/theme";
 function App() {
   const { theme, setMyTheme } = useTheme();
 
-  setMyTheme('dark');
+  setMyTheme(Theme.Light);
 
   return (
     <div className=" bg-primary dark:bg-primary-dark 100 min-h-screen flex items-center justify-center" data-theme={theme} >
