@@ -1,12 +1,33 @@
 @import "tailwindcss";
 
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap; 
+}
+
 @theme {
-  --color-primary-:  #215482;
-  --color-secondary-: #C7E1FC;
-  --color-input-:   #E8EDF0;
-  --color-white-: #FAFAFA;
-  --color-black-: #0F141A;
-  
+  /* fonts */
+  --font-sans: "Lexend", sans-serif;
+  /* light theme colors */
+  --color-primary:  #215482;
+  --color-secondary: #C7E1FC;
+  --color-input:   #E8EDF0;
+  --color-white: #FAFAFA;
+  --color-black: #0F141A;
+  /* dark theme colors */
+  --color-primary-dark:  #121A21;
+  --color-secondary-dark: #293642;
+  --color-input-dark:   #99B0C2;
+  --color-white-dark: #1A1A1A;
+  --color-black-dark: #FAFAFA;
+}
+
+@utility heading {
+  @apply font-sans text-5xl font-medium dark:text-white text-black;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
