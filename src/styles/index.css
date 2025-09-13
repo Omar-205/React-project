@@ -28,8 +28,22 @@
 
 }
 
-@utility heading {
-  @apply font-sans text-5xl font-medium dark:text-white text-secondary;
+@layer utilities {
+  .heading {
+    @apply text-5xl font-medium dark:text-white text-secondary;
+  }
+
 }
+
+@layer base {
+  html {
+    @apply transition-colors duration-300;
+    font-family: var(--font-sans);
+  }
+
+}
+
+
+
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

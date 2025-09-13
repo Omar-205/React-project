@@ -1,4 +1,4 @@
-import { useState, type FC, type PropsWithChildren } from "react";
+import { useEffect, useState, type FC, type PropsWithChildren } from "react";
 import { ThemeContext } from "./ThemeContext";
 
 const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -14,6 +14,12 @@ const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
             localStorage.setItem('theme', 'light');
         }
     };
+    
+    useEffect(() => {
+        const html = document.documentElement;
+        html.setAttribute('data-theme', theme);
+    }, [theme]
+    )
     
     return (
         <ThemeContext.Provider value={{ theme, setMyTheme }}>
