@@ -31,10 +31,13 @@
 
 @layer utilities {
   .heading {
-    @apply mt-10 text-4xl font-bold text-primary dark:text-text-dark;
+    @apply mt-5 text-4xl font-bold text-primary dark:text-text-dark;
   }
   .label{
     @apply block mb-2  text-[18px] font-medium dark:text-white;
+  }
+  .small-label{
+    @apply block mb-2  text-[14px] font-normal dark:text-white;
   }
 
 }
@@ -44,6 +47,7 @@
     @apply transition-colors duration-300;
     font-family: var(--font-sans);
   }
+
 
 }
 
