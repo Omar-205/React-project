@@ -19,10 +19,11 @@
   --color-text: #57738F;
   --color-white: #FAFAFA;
   --color-black: #0F141A;
+  --color-hover: #2A6DA7;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
-  --color-input-dark:   #99B0C2;
+  --color-input-dark:   #293642;
   --color-text-dark: #99B0C2;
 
 
@@ -30,7 +31,10 @@
 
 @layer utilities {
   .heading {
-    @apply text-5xl font-medium dark:text-white text-secondary;
+    @apply mt-10 text-4xl font-bold text-primary dark:text-text-dark;
+  }
+  .label{
+    @apply block mb-2  text-[18px] font-medium dark:text-white;
   }
 
 }

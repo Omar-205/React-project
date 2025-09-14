@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar";
 import {  useTheme } from "./contexts/Theme/ThemeContext"
+import LoginPage from "./pages/LoginPage";
 import { Theme } from "./types/theme";
 function App() {
   const { theme, setMyTheme } = useTheme();
@@ -7,7 +8,8 @@ function App() {
   setMyTheme(Theme.Light);
 
   return (
-    <Navbar/>
+    <><Navbar />
+    <LoginPage /></>
   )
 }
 
