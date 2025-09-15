@@ -32,7 +32,7 @@ function LoginPage() {
                     <img
                         src={theme === "dark" ? "src/assets/Logindark.png" : "src/assets/Login.png"}
                         alt="Ready to train"
-                        className="rounded-[100px] w-full object-cover ring-2 ring-text-dark dark:ring-text"
+                        className="rounded-[100px] w-full object-cover ring-2 ring-text-dark dark:ring-text hidden md:block"
                     />
                 </div>
             </div>

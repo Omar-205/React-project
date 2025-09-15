@@ -20,6 +20,7 @@
   --color-white: #FAFAFA;
   --color-black: #0F141A;
   --color-hover: #2A6DA7;
+  --color-secondary-hover: #90C3F9;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
@@ -31,7 +32,7 @@
 
 @layer utilities {
   .heading {
-    @apply mt-5 text-4xl font-bold text-primary dark:text-text-dark;
+    @apply mt-5 text-4xl font-bold text-primary dark:text-text-dark mb-10 md:mb-1;
   }
   .label{
     @apply block mb-2  text-[18px] font-medium dark:text-white;
@@ -47,7 +48,6 @@
     @apply transition-colors duration-300;
     font-family: var(--font-sans);
   }
-
 
 }
 

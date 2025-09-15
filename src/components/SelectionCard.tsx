@@ -15,7 +15,8 @@ interface SelectionCardProps {
           aspect-[3/4] 
           rounded-3xl cursor-pointer 
           transition-all bg-secondary
-          ${selected ? "ring-4 ring-primary scale-105 dark:ring-text" : "ring-1 ring-text-dark"}
+          dark:bg-text-dark
+          ${selected ? "ring-4 ring-primary scale-105 dark:ring-primary" : "ring-1 ring-text-dark"}
         `}
       >
         <img
