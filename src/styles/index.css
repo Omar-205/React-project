@@ -21,6 +21,7 @@
   --color-black: #0F141A;
   --color-hover: #2A6DA7;
   --color-secondary-hover: #90C3F9;
+  --color-error: #D10000;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
@@ -39,6 +40,9 @@
   }
   .small-label{
     @apply block mb-2  text-[14px] font-normal dark:text-white;
+  }
+  .error{
+    @apply text-error text-sm mb-2 font-thin;
   }
 
 }

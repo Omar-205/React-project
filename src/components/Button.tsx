@@ -6,7 +6,7 @@ interface ButtonProps {
   width?: string;
   isSecondary?: boolean;
   margin?: string;
-  onClick?: () => void;
+  onClick?: (e: React.FormEvent) => void;
   icon?: "next" | "submit";
   disabled?: boolean;
   className?: string;
