@@ -22,7 +22,7 @@ interface SelectionCardProps {
         <img
           src={image}
           alt={label}
-          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain mb-4 sm:mb-6"
+          className="w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30 object-contain mb-4 sm:mb-6"
         />
         <p className="text-sm sm:text-base md:text-lg font-medium text-primary text-center">
           {label}

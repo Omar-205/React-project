@@ -6,7 +6,7 @@ import type { TraineeData } from "../types/TraineeData.ts";
 
 
 // Sign up
-export const registerTrainer = async (fullName: string, email: string, password: string) => {
+export const registerTrainer = async ({fullName,email,password}:{fullName:string,email:string,password:string}) => {
     try {
         const trainer = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "Trainers", trainer.user.uid), {
@@ -14,11 +14,14 @@ export const registerTrainer = async (fullName: string, email: string, password:
             email,
             createdAt: new Date()
         });
-        console.log("Trainer registered and profile saved!");
         return trainer.user;
     }
     catch (err) {
-        console.error("Error registering trainer:", err);
+        if (err instanceof Error) {
+            return { error: err.message };
+        } else {
+            return { error: "An unknown error occurred" };
+        }
     }
 };
 export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age }: TraineeData) => {
@@ -37,12 +40,14 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
             activityLevel,
             createdAt: new Date()
         });
-        console.log("Trainee registered and profile saved!");
         return trainee.user;
     }
     catch (err) {
-        console.error("Error registering trainee:", err);
-
+        if (err instanceof Error) {
+            return { error: err.message };
+        } else {
+            return { error: "An unknown error occurred" };
+        }
     }
 }
 

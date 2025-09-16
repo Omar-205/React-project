@@ -1,9 +1,12 @@
+import { use } from "react";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import { useTheme } from "../contexts/Theme/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
     const { theme } = useTheme();
+    const navigator=useNavigate();
 
     return (
         <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-64px)]">
@@ -21,7 +24,7 @@ function LoginPage() {
                     </form>
                     <p className="mt-5 text-center text-gray-400 text-sm">
                         Don’t have an account?{" "}
-                        <a href="#" className="text-gray-400 hover:underline font-bold">
+                        <a onClick={() => navigator("/register")} className="text-gray-400 hover:underline font-bold">
                             Register
                         </a>
                     </p>
