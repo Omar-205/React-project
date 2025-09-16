@@ -129,10 +129,10 @@ function RegisterPage() {
         clearAllFields();
     }
 
-    
+
     return (
         <>
-            <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-64px)]">
+            <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-73px)]">
                 {/* progress bar */}
                 <ProgressBar
                     percentage={step === 1 ? selected === "Trainee" ? 50 : 100 : 100}

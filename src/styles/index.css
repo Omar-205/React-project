@@ -55,13 +55,13 @@
   }
   input:focus {
     outline: none;             /* remove default */
-    border: 2px solid #215482; 
-    box-shadow: 0 0 4px #215482; 
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
   }
   select:focus {
     outline: none;             /* remove default */
-    border: 2px solid #215482; 
-    box-shadow: 0 0 4px #215482; 
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
   }
 }
 

@@ -9,7 +9,7 @@ import AuthLayout from "./layouts/AuthLayout";
 function App() {
   const { setMyTheme } = useTheme();
 
-  setMyTheme(Theme.Dark);
+  setMyTheme(Theme.Light);
 
   return (
     <BrowserRouter>

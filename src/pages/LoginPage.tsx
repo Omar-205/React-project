@@ -24,7 +24,7 @@ function LoginPage() {
                     </form>
                     <p className="mt-5 text-center text-gray-400 text-sm">
                         Don’t have an account?{" "}
-                        <a onClick={() => navigator("/register")} className="text-gray-400 hover:underline font-bold">
+                        <a onClick={() => navigator("/register")} className="text-gray-400 hover:underline font-bold cursor-pointer">
                             Register
                         </a>
                     </p>
