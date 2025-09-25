@@ -22,7 +22,7 @@ function Button({
   icon,
   isSecondary = false,
   disabled = false,
-  className = "w-full h-12 sm:h-14 rounded-lg font-bold  ",
+  className = "flex justify-center items-center h-12 sm:h-14 rounded-lg font-bold  sm:text-md md:text-md",
 }: ButtonProps) {
   return (
     <button
@@ -32,15 +32,15 @@ function Button({
       className={`
         ${width ?? "md:w-full"} 
         ${className}
-        px-4 sm:px-6 
-        text-sm sm:text-base md:text-lg
+         px-4 sm:px-6 
+         sm:text-base 
          text-center
          cursor-pointer
         bg-primary hover:bg-hover
         transition-all duration-200 ease-in-out
-        focus:ring-4 focus:outline-none focus:ring-primary-300
+        focus:ring-4 focus:outline-none focus:ring-primary
         dark:bg-primary dark:hover:bg-hover dark:focus:ring-primary
-        ${isSecondary ? "text-primary bg-secondary hover:bg-secondary-hover dark:bg-text-dark dark:text-primary  dark:hover:bg-secondary-hover " : "text-white"}
+        ${isSecondary ? "text-sm text-primary bg-secondary hover:bg-secondary-hover dark:bg-text-dark dark:text-primary  dark:hover:bg-secondary-hover " : "text-white"}
         ${margin ?? ""} 
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}

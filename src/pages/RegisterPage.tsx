@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { ProgressBar } from "../components/ProgressBar";
 import InputField from "../components/InputField";
 import SelectionCard from "../components/SelectionCard";
@@ -28,7 +28,7 @@ function RegisterPage() {
     const [activityLevel, setActivityLevel] = useState<string>("");
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
-    const formRef = useRef<HTMLFormElement>(null);
+    const FormRef=useRef<HTMLFormElement>(null);
     //error
     const [errors, setErrors] = useState<{
         fullName?: string;
@@ -72,7 +72,7 @@ function RegisterPage() {
     const prevStep = () => setStep((prev) => prev - 1);
 
     // handle form submission for trainer and trainee
-    const handleTrainerSubmit = async (e: React.FormEvent) => {
+    const handleTrainerSubmit = async (e: FormEvent) => {
         e.preventDefault();
         alert && setAlert(false);
         const newErrors: typeof errors = {};
@@ -86,14 +86,14 @@ function RegisterPage() {
         const Trainer = await registerTrainer({ fullName, email, password });
         if ('error' in Trainer) {
             setAlert(true);
-            setAlertMessage(Trainer.error.split(" ")[1]+": "+Trainer.error.split(" ")[2]);
+            setAlertMessage(Trainer.error);
             return;
         }
         if (Trainer && !('error' in Trainer)) {
             setAlert(true);
             setAlertMessage("Trainer registered successfully!");
         }
-        formRef.current?.reset();
+        FormRef.current?.reset();
         clearAllFields();
         
     }
@@ -118,21 +118,21 @@ function RegisterPage() {
         const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age });
         if ('error' in Trainee) {
             setAlert(true);
-            setAlertMessage(Trainee.error.split(" ")[1]+": "+Trainee.error.split(" ")[2]);
+            setAlertMessage(Trainee.error);
             return;
         }
         if (Trainee && !('error' in Trainee)) {
             setAlert(true);
             setAlertMessage("Trainee registered successfully!");
         }
-        formRef.current?.reset();
+        FormRef.current?.reset;
         clearAllFields();
     }
 
 
     return (
         <>
-            <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-73px)]">
+            <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-71px)]">
                 {/* progress bar */}
                 <ProgressBar
                     percentage={step === 1 ? selected === "Trainee" ? 50 : 100 : 100}
@@ -152,7 +152,7 @@ function RegisterPage() {
                         <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl md:space-x-30 space-y-10 md:space-y-0">
                             {/* form */}
                             <div className="w-full max-w-[550px] space-y-4">
-                                <form ref={formRef} >
+                                <form onSubmit={(e)=>handleTrainerSubmit(e)} ref={FormRef} >
                                     <InputField type="text" name="Full Name" id="fullName" placeholder="Enter Your full name" onChange={(e) => { setFullName(e.target.value); clearError("fullName"); }} error={errors.fullName} />
                                     {errors.fullName && <p className="error">{errors.fullName}</p>}
                                     <InputField type="email" name="Email" id="email" placeholder="Enter Your email" onChange={(e) => { setEmail(e.target.value); clearError("email") }} error={errors.email} />
@@ -217,10 +217,10 @@ function RegisterPage() {
 
                         {/* buttons */}
                         {selected === "Trainee" && (
-                            <Button type="button" label="Next" icon="next" width="md:w-150" onClick={nextStep} />
+                            <Button type="button" label="Next" icon="next" width="md:w-150 w-full" onClick={nextStep} />
                         )}
                         {selected === "Trainer" && (
-                            <><Button type="submit" label="Submit" icon="submit" width="md:w-150" onClick={(e) => handleTrainerSubmit(e as React.FormEvent)} />
+                            <><Button type="submit" label="Submit" icon="submit" width="md:w-150 w-full" onClick={handleTrainerSubmit}  />
                                 <div></div>
                             </>
                         )}
@@ -232,7 +232,7 @@ function RegisterPage() {
                         <div className="flex flex-col md:flex-row items-center md:items-start justify-center mt-5 md:mt-10 w-full max-w-5xl md:space-x-30 space-y-10 md:space-y-0">
                             {/* form */}
                             <div className="w-full max-w-[550px]">
-                                <form ref={formRef} className="space-y-4">
+                                <form onSubmit={(e)=>{handleTraineeSubmit(e)}} ref={FormRef} >
                                     <InputField name="Height" id="Height" type="text" placeholder="Enter Your height (cm)" onChange={(e) => { setHeight(e.target.value); clearError("height") }} error={errors.height} />
                                     {errors.height && <p className="error">{errors.height}</p>}
                                     <InputField name="Current Weight" id="Weight" placeholder="Enter Your Weight (kg)" onChange={(e) => { setCurrentWeight(e.target.value); clearError("currentWeight") }} error={errors.currentWeight} />
@@ -241,11 +241,11 @@ function RegisterPage() {
                                     {errors.primaryGoal && <p className="error">{errors.primaryGoal}</p>}
                                     <InputField name="Target Weight" id="TargetWeight" placeholder="Enter Your Target Weight (kg)" onChange={(e) => { setTargetWeight(e.target.value); clearError("targetWeight") }} error={errors.targetWeight} />
                                     {errors.targetWeight && <p className="error">{errors.targetWeight}</p>}
-                                    <SelectField select={activityLevel === "" ? "Select Your Activity Level" : activityLevel} options={["Sedentary (little to no exercise)", "Light (1-3 days/week)", "Moderate (3-5 days/week)", "Active (6-7 days/week)"]} id={"ActivityLevel"} name="Activity Level" onchange={(e) => { setActivityLevel(e.target.value); clearError("activityLevel") }} error={errors.activityLevel} />
+                                    <SelectField select={activityLevel === "" ? "Select Your Activity Level" : activityLevel} options={["Sedentary (little to no exercise)", "Light (1-3 days/week)", "Moderate (3-5 days/week)", "Active (6-7 days/week)"]} id={"ActivityLevel"} name="Activity Level" onchange={(e) => { setActivityLevel(e.target.value); clearError("activityLevel") }} error={errors.activityLevel}  />
                                     {errors.activityLevel && <p className="error">{errors.activityLevel}</p>}
                                     <div className="flex flex-col-reverse md:flex-row md:space-x-40 space-y-10 md:space-y-0 ">
                                         <Button isSecondary type="button" label="Back" margin="mt-10" onClick={prevStep} />
-                                        <Button type="submit" label="Submit" margin="mt-10" icon="submit" onClick={(e) => handleTraineeSubmit(e as React.FormEvent)} />
+                                        <Button type="submit" label="Submit" margin="mt-10" icon="submit" />
                                     </div>
                                 </form>
 

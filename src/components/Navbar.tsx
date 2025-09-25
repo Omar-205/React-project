@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Avatar from "./Avatar";
-import { div } from "framer-motion/client";
+import { NavLink } from "react-router-dom";
 
-function Navbar({ buttonLabel }: { buttonLabel: string }) {
+function Navbar({ buttonLabel,secondButtonLabel,isLandingPage }: { buttonLabel: string,secondButtonLabel?:string ,isLandingPage?:boolean}) {
   // const { username, isAuthenticated, logout } = useAuth();
   const [isAuthenticated, setAuth] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,23 +13,24 @@ function Navbar({ buttonLabel }: { buttonLabel: string }) {
   const handleLogin = () => {
     navigate("/login");
   };
- const handleRegister = () => {
+  const handleRegister = () => {
     navigate("/register");
   }
   const handleLogout = () => {
     setMenuOpen(false);
     navigate("/");
   };
-
   return (
-    <nav className="bg-white shadow-2xl dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+    <nav className="bg-white shadow-md dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
+      <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Left side (logo) */}
         <div
           onClick={() => navigate("/")}
           className="flex items-center cursor-pointer"
         >
-          <span className="text-primary text-3xl font-bold dark:text-text-dark">Coachy</span>
+          {/* <img src="src/assets/Logo.png" alt="Logo" className="" /> */}
+          <img src="src/assets/Logo.png" alt="Check" className="w-12 h-12" />
+          <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-6">
@@ -56,9 +57,10 @@ function Navbar({ buttonLabel }: { buttonLabel: string }) {
               }
             </div>
           ) : (
-            <div className="flex items-center gap-4">
-              <a onClick={() => navigate("/")} className="text-black cursor-pointer"> Overview</a>
-              <Button label={buttonLabel} onClick={buttonLabel === "Login" ?handleLogin:handleRegister} className="rounded-xl w-[94px] h-[46px] " />
+            <div className="flex items-center gap-4 w-min-[250px]">
+              {!isLandingPage&&<NavLink to="/" className="text-black cursor-pointer dark:text-white"> Overview</NavLink> }
+              <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel==="Login"?"md:w-[90px] w-[60px]":"md:w-[135px]"}  />
+              {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true}  width="md:w-[135px]  w-[80px]" />}
             </div>
           )}
 

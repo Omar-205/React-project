@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Variant = "success" | "error";
@@ -10,6 +10,7 @@ interface AlertCardProps {
     dismissible?: boolean;
     onClose?: () => void;
     className?: string;
+    duration?: number;
 }
 
 const variantStyles: Record<Variant, { bg: string; ring: string; icon: React.ReactNode }> = {
@@ -41,12 +42,21 @@ function AlertCard({
     message,
     dismissible = true,
     onClose,
+    duration=3000,
     className = "",
 }: AlertCardProps) {
     const styles = variantStyles[variant];
+    useEffect(() => {
+        if (duration && onClose) {
+            const timer = setTimeout(() => {
+                onClose();
+            }, duration);
+            return () => clearTimeout(timer);
+        }
+    }, [duration, onClose]);
 
     return (
-        <div className="mt-10">
+        <div className="mt-5 mb-5">
             <AnimatePresence >
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}

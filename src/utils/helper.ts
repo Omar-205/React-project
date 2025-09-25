@@ -31,3 +31,4 @@ export const validate = ({fullName,email,password,confirmPassword,errors}:Errors
     }
 
 } 
+

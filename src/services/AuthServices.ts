@@ -6,7 +6,7 @@ import type { TraineeData } from "../types/TraineeData.ts";
 
 
 // Sign up
-export const registerTrainer = async ({fullName,email,password}:{fullName:string,email:string,password:string}) => {
+export const registerTrainer = async ({ fullName, email, password }: { fullName: string, email: string, password: string }) => {
     try {
         const trainer = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "Trainers", trainer.user.uid), {
@@ -18,10 +18,11 @@ export const registerTrainer = async ({fullName,email,password}:{fullName:string
     }
     catch (err) {
         if (err instanceof Error) {
-            return { error: err.message };
-        } else {
-            return { error: "An unknown error occurred" };
+            if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+                return { error: "Error: Email already in use" };
+            }
         }
+        return { error: "An unknown error occurred" };
     }
 };
 export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age }: TraineeData) => {
@@ -44,16 +45,36 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
     }
     catch (err) {
         if (err instanceof Error) {
-            return { error: err.message };
-        } else {
-            return { error: "An unknown error occurred" };
+            if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+                return { error: "Error: Email already in use" };
+            }
         }
+        return { error: "An unknown error occurred" };
     }
 }
 
 // Sign in
-export const loginUser = async (email: string, password: string) => {
-    return await signInWithEmailAndPassword(auth, email, password);
+export const loginUser = async ({ email, password }: { email: string, password: string }) => {
+
+    try {
+        const user = await signInWithEmailAndPassword(auth, email, password);
+        return user.user;
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            let errorMessage = "Error: An unknown error occurred";
+            switch (err.message) {
+                case "Firebase: Error (auth/user-not-found).":
+                    errorMessage = "Error: Invalid Email";
+                    break;
+                case "Firebase: Error (auth/wrong-password).":
+                    errorMessage = "Error: Incorrect password";
+                    break;
+            }
+            return { error: errorMessage };
+        }  
+        return { error: "Error: An unknown error occurred" };
+    }
 };
 
 // Logout
