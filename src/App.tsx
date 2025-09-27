@@ -10,7 +10,7 @@ import LandingPage from "./pages/LandingPage";
 function App() {
   const { setMyTheme } = useTheme();
 
-  setMyTheme(Theme.Dark);
+  setMyTheme(Theme.Light);
 
   return (
       <Routes>
