@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import OptionsMenu from "../components/OptionsMenu";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
+import Profile from "../components/Profile";
 
 export default function TraineePageLayout() {
     const [hideMenu, setHideMenu] = useState(true); //true by default
@@ -13,6 +14,7 @@ export default function TraineePageLayout() {
             <OptionsMenu hideMenu={hideMenu} setHideMenu={setHideMenu}/>
             {hideMenu && (<Routes>
                 <Route path="/dashboard" element={<Dashboard />}/>
+                <Route path="/profile" element={<Profile />}/>
                 <Route path="*" element={<Navigate to={'/'} />}/>
 
             </Routes>)}
