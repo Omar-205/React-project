@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 
 function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean }) {
   // const { username, isAuthenticated, logout } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAuthenticated, setAuth] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel
           onClick={() => navigate("/")}
           className="flex items-center cursor-pointer"
         >
-          <img src="src/assets/Logo.png" alt="Logo" className="w-12 h-12" />
-          <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
+          <img src="src/assets/Logo.png" alt="Logo" className="w-8 h-8" />
+          <span className=" text-primary text-2xl md:text-3xl xl:text-4xl font-bold dark:text-white">Coachy</span>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-6">

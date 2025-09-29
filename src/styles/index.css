@@ -19,6 +19,9 @@
   --color-text: #57738F;
   --color-white: #FAFAFA;
   --color-black: #0F141A;
+  --color-menu-white: #FFFFFF;
+  --color-light-bg: #F6F8FB;
+  --color-light-border: #CAD5E2;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
