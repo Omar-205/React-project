@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import OptionsMenu from "../components/OptionsMenu";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import Profile from "../components/Profile";
 import Progress from "../Pages/Progress";
@@ -18,19 +18,7 @@ export default function TraineePageLayout() {
         {/* // breakpoint is md */}
         <div className="flex mx-auto justify-center gap-[2vw] px-[5vw]">
             <OptionsMenu hideMenu={hideMenu} setHideMenu={setHideMenu}/>
-            {hideMenu && (<Routes>
-                {/* <Route path="/" element={<Navigate to={"/dashboard"} />}/> */}
-                <Route path="/dashboard" element={<Dashboard />}/>
-                <Route path="/profile" element={<Profile />}/>
-                <Route path="/progress" element={<Progress />}/>
-                <Route path="/workouts" element={<Workouts />}/>
-                <Route path="/nutrition" element={<Nutrition />}/>
-                <Route path="/timer" element={<StopWatches />}/>
-
-                
-                <Route path="*" element={<Navigate to={'/'} />}/>
-
-            </Routes>)}
+            {hideMenu && <Outlet />}
         </div>
     </div>
 }

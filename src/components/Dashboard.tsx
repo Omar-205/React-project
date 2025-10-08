@@ -3,6 +3,7 @@ import RoundedProgressBar from "./RoundedProgressBar";
 import { useTheme } from "../contexts/Theme/ThemeContext";
 import RecCard from "./RecCard";
 import Quick from "./Quick";
+import type { JSX } from "react";
 
 
 interface RecData {
