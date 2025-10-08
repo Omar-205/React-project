@@ -9,34 +9,28 @@ import Workouts from "../Pages/Workouts";
 import Nutrition from "../Pages/Nutrition";
 import StopWatches from "../Pages/StopWatches";
 
+
+
 export default function TraineePageLayout() {
-  const [hideMenu, setHideMenu] = useState(true); // true by default
+    const [hideMenu, setHideMenu] = useState(true); //true by default
+    return <div className="bg-[#F6F8FB] dark:bg-secondary-dark w-full min-h-dvh">
+        <Navbar buttonLabel="Omar Ahmed" />
+        {/* // breakpoint is md */}
+        <div className="flex mx-auto justify-center gap-[2vw] px-[5vw]">
+            <OptionsMenu hideMenu={hideMenu} setHideMenu={setHideMenu}/>
+            {hideMenu && (<Routes>
+                {/* <Route path="/" element={<Navigate to={"/dashboard"} />}/> */}
+                <Route path="/dashboard" element={<Dashboard />}/>
+                <Route path="/profile" element={<Profile />}/>
+                <Route path="/progress" element={<Progress />}/>
+                <Route path="/workouts" element={<Workouts />}/>
+                <Route path="/nutrition" element={<Nutrition />}/>
+                <Route path="/timer" element={<StopWatches />}/>
 
-  return (
-    <div className="bg-[#F6F8FB] dark:bg-secondary-dark w-full min-h-dvh">
-      {/* Navbar always at the top */}
-      <Navbar buttonLabel="Omar Ahmed" />
+                
+                <Route path="*" element={<Navigate to={'/'} />}/>
 
-      {/* Main content area */}
-      <div className="flex mx-auto gap-[2vw] px-[5vw]">
-        {/* Left sidebar menu */}
-        <OptionsMenu hideMenu={hideMenu} setHideMenu={setHideMenu} />
-
-        {/* Right main page section */}
-        <div className="flex-1 flex justify-center">
-          {hideMenu && (
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/progress" element={<Progress />} />
-              <Route path="/workouts" element={<Workouts />} />
-              <Route path="/nutrition" element={<Nutrition />} />
-              <Route path="/timer" element={<StopWatches />} />
-              <Route path="*" element={<Navigate to={"/dashboard"} />} />
-            </Routes>
-          )}
+            </Routes>)}
         </div>
-      </div>
     </div>
-  );
 }
