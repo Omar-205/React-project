@@ -15,7 +15,8 @@ export default function Profile() {
 
 
 
-    return <div className="w-full max-w-[1200px] mt-8 mx-auto px-4 ">
+    return <div className="flex flex-col gap-8 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] mt-8 px-4">
+
         <div className="flex justify-between items-center "> {/*heading section */}
             <div>
                 <h1 className="text-4xl text-prof-text font-bold mb-4 dark:text-text-dark">Profile</h1>
