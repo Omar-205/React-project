@@ -7,6 +7,7 @@ interface InputFieldProps {
   width?: string;
   margin?: string;
   placeholder?: string;
+  value?: string;
   error?: string;
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -25,6 +26,7 @@ function InputField({
   onChange,
   isPassword = false,
   showPassword,
+  value,
   margin = "mb-4",
   onTogglePassword,
 }: InputFieldProps) {
@@ -41,6 +43,7 @@ function InputField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        value={value}
         className={`bg-input rounded-lg  block p-2.5 pr-10
           text-text
         placeholder:text-text 

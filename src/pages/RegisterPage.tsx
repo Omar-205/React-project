@@ -8,6 +8,7 @@ import SelectField from "../components/SelectField";
 import { registerTrainee, registerTrainer } from "../services/AuthServices";
 import { validate } from "../utils/helper";
 import AlertCard from "../components/AlertCard";
+import { Weight } from "lucide-react";
 
 function RegisterPage() {
     // states
@@ -153,13 +154,13 @@ function RegisterPage() {
                             {/* form */}
                             <div className="w-full max-w-[550px] space-y-4">
                                 <form onSubmit={(e)=>handleTrainerSubmit(e)} ref={FormRef} >
-                                    <InputField type="text" name="Full Name" id="fullName" placeholder="Enter Your full name" onChange={(e) => { setFullName(e.target.value); clearError("fullName"); }} error={errors.fullName} />
+                                    <InputField type="text" name="Full Name" id="fullName" placeholder="Enter Your full name" value={fullName} onChange={(e) => { setFullName(e.target.value); clearError("fullName"); }} error={errors.fullName} />
                                     {errors.fullName && <p className="error">{errors.fullName}</p>}
-                                    <InputField type="email" name="Email" id="email" placeholder="Enter Your email" onChange={(e) => { setEmail(e.target.value); clearError("email") }} error={errors.email} />
+                                    <InputField type="email" name="Email" id="email" placeholder="Enter Your email" value={email} onChange={(e) => { setEmail(e.target.value); clearError("email") }} error={errors.email} />
                                     {errors.email && <p className="error">{errors.email}</p>}
                                     {selected === "Trainee" && (
                                         <>
-                                            <InputField type="text" name="Age" id="age" placeholder="Enter Your age" error={errors.age} onChange={(e) => { setAge(e.target.value); clearError("age") }} />
+                                            <InputField type="text" name="Age" id="age" placeholder="Enter Your age" error={errors.age} value={age} onChange={(e) => { setAge(e.target.value); clearError("age") }} />
                                             {errors.age && <p className="error">{errors.age}</p>}
                                             <SelectField select={gender === "" ? "Select Your Gender" : gender} options={["Male", "Female"]} id={"gender"} name="Gender" onchange={(e) => { setGender(e.target.value); clearError("gender") }} error={errors.gender} />
                                             {errors.gender && <p className="error">{errors.gender}</p>}
@@ -172,6 +173,7 @@ function RegisterPage() {
                                         isPassword={true}
                                         placeholder="Enter Your password"
                                         showPassword={showPassword}
+                                        value={password}
                                         onTogglePassword={() => setShowPassword(!showPassword)}
                                         onChange={(e) => {
                                             setPassword(e.target.value)
@@ -187,6 +189,7 @@ function RegisterPage() {
                                         isPassword={true}
                                         placeholder="Confirm Your password"
                                         showPassword={showPassword}
+                                        value={confirmPassword}
                                         onChange={(e) => {
                                             setConfirmPassword(e.target.value)
                                             clearError("confirmPassword")
@@ -233,13 +236,13 @@ function RegisterPage() {
                             {/* form */}
                             <div className="w-full max-w-[550px]">
                                 <form onSubmit={(e)=>{handleTraineeSubmit(e)}} ref={FormRef} >
-                                    <InputField name="Height" id="Height" type="text" placeholder="Enter Your height (cm)" onChange={(e) => { setHeight(e.target.value); clearError("height") }} error={errors.height} />
+                                    <InputField name="Height" id="Height" type="text" placeholder="Enter Your height (cm)" value={height} onChange={(e) => { setHeight(e.target.value); clearError("height") }} error={errors.height} />
                                     {errors.height && <p className="error">{errors.height}</p>}
-                                    <InputField name="Current Weight" id="Weight" placeholder="Enter Your Weight (kg)" onChange={(e) => { setCurrentWeight(e.target.value); clearError("currentWeight") }} error={errors.currentWeight} />
+                                    <InputField name="Current Weight" id="Weight" placeholder="Enter Your Weight (kg)" value={currentWeight} onChange={(e) => { setCurrentWeight(e.target.value); clearError("currentWeight") }} error={errors.currentWeight} />
                                     {errors.currentWeight && <p className="error">{errors.currentWeight}</p>}
                                     <SelectField select={primaryGoal === "" ? "Select Your primary goal" : primaryGoal} options={["Lose Weight", "Maintain Weight", "Gain Weight"]} id={"primaryGoal"} name="Primary Goal" onchange={(e) => { setprimaryGoal(e.target.value); clearError("primaryGoal") }} error={errors.primaryGoal} />
                                     {errors.primaryGoal && <p className="error">{errors.primaryGoal}</p>}
-                                    <InputField name="Target Weight" id="TargetWeight" placeholder="Enter Your Target Weight (kg)" onChange={(e) => { setTargetWeight(e.target.value); clearError("targetWeight") }} error={errors.targetWeight} />
+                                    <InputField name="Target Weight" id="TargetWeight" placeholder="Enter Your Target Weight (kg)" value={targetWeight} onChange={(e) => { setTargetWeight(e.target.value); clearError("targetWeight") }} error={errors.targetWeight} />
                                     {errors.targetWeight && <p className="error">{errors.targetWeight}</p>}
                                     <SelectField select={activityLevel === "" ? "Select Your Activity Level" : activityLevel} options={["Sedentary (little to no exercise)", "Light (1-3 days/week)", "Moderate (3-5 days/week)", "Active (6-7 days/week)"]} id={"ActivityLevel"} name="Activity Level" onchange={(e) => { setActivityLevel(e.target.value); clearError("activityLevel") }} error={errors.activityLevel}  />
                                     {errors.activityLevel && <p className="error">{errors.activityLevel}</p>}
