@@ -5,7 +5,7 @@ function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { theme, setMyTheme } = useTheme();
 
-  setMyTheme(Theme.Light);
+  setMyTheme(Theme.Dark);
 
   return (
     
