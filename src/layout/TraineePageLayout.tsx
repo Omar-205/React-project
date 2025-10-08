@@ -4,6 +4,12 @@ import OptionsMenu from "../components/OptionsMenu";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import Profile from "../components/Profile";
+import Progress from "../Pages/Progress";
+import Workouts from "../Pages/Workouts";
+import Nutrition from "../Pages/Nutrition";
+import StopWatches from "../Pages/StopWatches";
+
+
 
 export default function TraineePageLayout() {
     const [hideMenu, setHideMenu] = useState(true); //true by default
@@ -16,6 +22,12 @@ export default function TraineePageLayout() {
                 {/* <Route path="/" element={<Navigate to={"/dashboard"} />}/> */}
                 <Route path="/dashboard" element={<Dashboard />}/>
                 <Route path="/profile" element={<Profile />}/>
+                <Route path="/progress" element={<Progress />}/>
+                <Route path="/workouts" element={<Workouts />}/>
+                <Route path="/nutrition" element={<Nutrition />}/>
+                <Route path="/timer" element={<StopWatches />}/>
+
+                
                 <Route path="*" element={<Navigate to={'/'} />}/>
 
             </Routes>)}
