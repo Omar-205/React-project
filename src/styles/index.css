@@ -22,11 +22,14 @@
   --color-menu-white: #FFFFFF;
   --color-light-bg: #F6F8FB;
   --color-light-border: #CAD5E2;
+  --color-prof-text: oklch(37.1% 0 0);
+  --color-prof-text-secondary: oklch(55.6% 0 0);
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
-  --color-input-dark:   #99B0C2;
+  --color-input-dark:   #293642;
   --color-text-dark: #99B0C2;
+  --color-text-secondary-dark: #C7E1FC;
 
 
 }
