@@ -24,6 +24,10 @@
   --color-light-border: #CAD5E2;
   --color-prof-text: oklch(37.1% 0 0);
   --color-prof-text-secondary: oklch(55.6% 0 0);
+  --color-hover: #2A6DA7;
+  --color-secondary-hover: #90C3F9;
+  --color-error: #D10000;
+  --color-success: #00A600;
   /* dark theme colors */
   --color-primary-dark:  #121A21;
   --color-secondary-dark: #293642;
@@ -36,7 +40,16 @@
 
 @layer utilities {
   .heading {
-    @apply text-5xl font-medium dark:text-white text-secondary;
+    @apply mt-5 text-4xl font-bold text-primary dark:text-text-dark mb-5 md:mb-1;
+  }
+  .label{
+    @apply block mb-2  text-[18px] font-medium dark:text-white;
+  }
+  .small-label{
+    @apply block mb-2  text-[14px] font-normal dark:text-white;
+  }
+  .error{
+    @apply text-error text-sm mb-2 font-thin;
   }
 
 }
@@ -46,7 +59,16 @@
     @apply transition-colors duration-300;
     font-family: var(--font-sans);
   }
-
+  input:focus {
+    outline: none;             /* remove default */
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
+  }
+  select:focus {
+    outline: none;             /* remove default */
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
+  }
 }
 
 

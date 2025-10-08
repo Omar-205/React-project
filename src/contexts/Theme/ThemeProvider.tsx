@@ -5,7 +5,6 @@ const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
     const setMyTheme = (newTheme: string) => {
-        setTheme(newTheme);
         if (newTheme === 'dark') {
             setTheme('dark');
             localStorage.setItem('theme', 'dark');
