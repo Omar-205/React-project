@@ -34,7 +34,8 @@
   --color-input-dark:   #293642;
   --color-text-dark: #99B0C2;
   --color-text-secondary-dark: #C7E1FC;
-
+  --color-input-locked-dark: #2A3C4E; /* slightly brighter, looks editable */
+  --color-input-unlocked-dark:   #18232E; /* deeper, dimmed, feels disabled */
 
 }
 
