@@ -1,13 +1,8 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import OptionsMenu from "../components/OptionsMenu";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import Dashboard from "../components/Dashboard";
-import Profile from "../components/Profile";
-import Progress from "../Pages/Progress";
-import Workouts from "../Pages/Workouts";
-import Nutrition from "../Pages/Nutrition";
-import StopWatches from "../Pages/StopWatches";
+import {  Outlet  } from "react-router-dom";
+
 
 
 

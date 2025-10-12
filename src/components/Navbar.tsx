@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean }) {
   // const { username, isAuthenticated, logout } = useAuth();
-  const [isAuthenticated, setAuth] = useState(true);
+  const [isAuthenticated, setAuth] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const username = "Hazem Emad";
@@ -22,7 +22,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel
   };
 
   return (
-    <nav className="bg-white shadow-md dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
+    <nav className="bg-white shadow-sm dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
       <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Left side (logo) */}
         <div
