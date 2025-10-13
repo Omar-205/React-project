@@ -1,5 +1,4 @@
 
-import { useTheme } from "./contexts/Theme/ThemeContext";
 import { Theme } from "./types/theme";
 import MainLayout from "./layouts/MainLayout";
 import { Routes, Route } from "react-router-dom";
@@ -13,13 +12,13 @@ import Progress from "./Pages/Progress";
 import Workouts from "./Pages/Workouts";
 import Nutrition from "./Pages/Nutrition";
 import StopWatches from "./Pages/StopWatches";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "./store/store";
 
 function App() {
 
-  const { theme, setMyTheme } = useTheme();
-
-
-  setMyTheme(Theme.Dark);
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  const dispatch = useDispatch();
 
   return (
 

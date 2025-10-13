@@ -2,13 +2,14 @@ import { useRef, useState, type FormEvent } from "react";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../contexts/Theme/ThemeContext";
 import AlertCard from "../components/AlertCard";
 import { loginUser } from "../services/AuthServices";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 function LoginPage() {
     const navigator = useNavigate();
-    const { theme } = useTheme();
+    const theme = useSelector((state: RootState) => state.theme.theme);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<{ email?: string, password?: string }>({});

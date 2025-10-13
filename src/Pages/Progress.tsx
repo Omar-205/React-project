@@ -1,10 +1,10 @@
+import type { JSX } from "react";
 import Activity from "../components/Activity";
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
 import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
-import { useTheme } from "../contexts/Theme/ThemeContext";
 
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos", "Activity"];
   const components = [
@@ -45,9 +45,7 @@ interface ProgRecData {
   
 
 export default function Progress() {
-    const { theme } = useTheme();
     
-    console.log(theme)
     return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">
     <h3 className="font-bold text-3xl md:text-3xl mb-2 dark:text-[#f1f5f9]">Progress tracking
     <p className="text-slate-400  text-lg md:text-lg  dark:text-[#94a3b8]">Monitor your fitness journey and celebrate achievements </p>

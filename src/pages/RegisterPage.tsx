@@ -3,19 +3,20 @@ import { ProgressBar } from "../components/ProgressBar";
 import InputField from "../components/InputField";
 import SelectionCard from "../components/SelectionCard";
 import Button from "../components/Button";
-import { useTheme } from "../contexts/Theme/ThemeContext";
 import SelectField from "../components/SelectField";
 import { registerTrainee, registerTrainer } from "../services/AuthServices";
 import { validate } from "../utils/helper";
 import AlertCard from "../components/AlertCard";
 import { Weight } from "lucide-react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 function RegisterPage() {
     // states
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
     const [selected, setSelected] = useState<string>("Trainee");
-    const { theme } = useTheme();
+    const theme = useSelector((state: RootState) => state.theme.theme);
     const [fullName, setFullName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");

@@ -4,9 +4,15 @@ import Button from "./Button";
 import Avatar from "./Avatar";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/Logo.png"; // <-- import the image
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { toggleTheme } from "../store/slices/themeSlice";
+import { Moon, Sun } from "lucide-react";
 
-function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean, icon?: ReactNode, hideMenu?: boolean, setHideMenu?: Dispatch<SetStateAction<boolean>>}) {
+function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean, icon?: ReactNode, hideMenu?: boolean, setHideMenu?: Dispatch<SetStateAction<boolean>> }) {
   // const { username, isAuthenticated, logout } = useAuth();
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  const dispatch = useDispatch();
   const [isAuthenticated, setAuth] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -27,18 +33,25 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
       <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Left side (logo) */}
         <div className="flex gap-2">
-          <div className="flex my-auto" onClick={() => {setHideMenu && setHideMenu(!hideMenu)}}>
+          <div className="flex my-auto" onClick={() => { setHideMenu && setHideMenu(!hideMenu) }}>
             {icon}
           </div>
           <div onClick={() => navigate("/")}
             className="flex items-center cursor-pointer"
-            >
+          >
             <img src={logo} alt="Logo" className="w-12 h-12" />
             <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
           </div>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-6">
+          {/* theme toggle */}
+          <button
+            onClick={() => dispatch(toggleTheme())}
+            className="p-3 rounded-full  text-primary hover:bg-secondary transition dark:text-secondary dark:hover:bg-prof-text-secondary"
+          >
+            {theme == "light" ? <Moon size={30} /> : <Sun size={30} />}
+          </button>
           {isAuthenticated ?
             <div className="relative ">
               {/* Avatar */}
