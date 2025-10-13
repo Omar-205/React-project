@@ -46,9 +46,9 @@ function LandingPage() {
   const HeadingText = "Revolutionize Your Fitness Journey with AI";
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center dark:bg-primary-dark">
       <motion.div
-        className="w-full md:w-[calc(100%-160px)] lg::w-[calc(100%-220px)] xl:w-[calc(100%-320px)] 2xl:w-[calc(100%-520px)] flex flex-col gap-10"
+        className="w-full md:w-[calc(100%-160px)] lg::w-[calc(100%-220px)] xl:w-[calc(100%-320px)] 2xl:w-[calc(100%-520px)] flex flex-col gap-10 "
         initial="hidden"
         animate="visible"
       >
@@ -98,11 +98,11 @@ function LandingPage() {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <motion.h2 className="text-xl md:text-4xl font-black w-3xs md:w-2xl text-black mb-2">
+          <motion.h2 className="text-xl md:text-4xl font-black w-3xs md:w-2xl text-black mb-2 dark:text-white">
             Unlock Your Potential with Powered Features
           </motion.h2>
 
-          <motion.p className="font-thin md:w-2xl text-black w-3xs">
+          <motion.p className="font-thin md:w-2xl text-black w-3xs dark:text-white">
             Our platform leverages cutting-edge AI technology to provide personalized fitness solutions
             tailored to your unique needs and goals.
           </motion.p>
@@ -134,8 +134,8 @@ function LandingPage() {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <motion.h2 className="font-black text-4xl mb-2">Ready to Transform Your Fitness?</motion.h2>
-          <motion.p className="font-thin text-center md:w-[600px]">
+          <motion.h2 className="font-black text-4xl mb-2 dark:text-white">Ready to Transform Your Fitness?</motion.h2>
+          <motion.p className="font-thin text-center md:w-[600px] dark:text-white">
             Join us today and experience the future of fitness with AI-powered solutions tailored to your
             unique needs and goals.
           </motion.p>
