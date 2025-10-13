@@ -19,7 +19,7 @@ function App() {
   const { theme, setMyTheme } = useTheme();
 
 
-  setMyTheme(Theme.Light);
+  setMyTheme(Theme.Dark);
 
   return (
 

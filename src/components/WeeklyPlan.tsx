@@ -3,7 +3,7 @@ import WeeklyExcercise from "./WeeklyExcercise";
 export  function WeeklyPlan() {
     return <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
       <h3 className="text-prof-text dark:text-text-dark text-lg">This Week's Plan</h3>
-      <p>Your Structured Workout Schedule</p>
+      <p className=" dark:text-text-dark">Your Structured Workout Schedule</p>
       <WeeklyExcercise day={0} />
       <WeeklyExcercise day={1} />
       <WeeklyExcercise day={2} />
