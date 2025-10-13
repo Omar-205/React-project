@@ -1,5 +1,5 @@
 import userProfilePhoto from "../assets/userProfilePhoto.png";
-import profileData from "../profile/profileData";
+import profileData, { BMI } from "../profile/profileData";
 import EditProfileButton from "./EditProfileButton";
 import ProfileInput from "./ProfileInput";
 import { useState } from "react";
@@ -87,7 +87,7 @@ export default function Profile() {
                     </div>
                     <div className="col-span-2">
                         <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Body Mass Index (BMI)</h4>
-                        <ProfileInput disabled={disabled} type="number" content={profile.bmi} profile={profile} setProfile={setProfile} field="bmi" /> {/*bmi */}
+                        <ProfileInput disabled={true} type="number" content={BMI(profileData)} profile={profile} setProfile={setProfile} field="bmi" /> {/*bmi */}
                     </div>
                 </div>
             </div>

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Avatar from "./Avatar";
 import { NavLink } from "react-router-dom";
+import logo from "../assets/Logo.png"; // <-- import the image
 
-function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean }) {
+function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean, icon?: ReactNode, hideMenu?: boolean, setHideMenu?: Dispatch<SetStateAction<boolean>>}) {
   // const { username, isAuthenticated, logout } = useAuth();
   const [isAuthenticated, setAuth] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,12 +26,16 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage }: { buttonLabel
     <nav className="bg-white shadow-sm dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
       <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Left side (logo) */}
-        <div
-          onClick={() => navigate("/")}
-          className="flex items-center cursor-pointer"
-        >
-          <img src="src/assets/Logo.png" alt="Logo" className="w-12 h-12" />
-          <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
+        <div className="flex gap-2">
+          <div className="flex my-auto" onClick={() => {setHideMenu && setHideMenu(!hideMenu)}}>
+            {icon}
+          </div>
+          <div onClick={() => navigate("/")}
+            className="flex items-center cursor-pointer"
+            >
+            <img src={logo} alt="Logo" className="w-12 h-12" />
+            <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
+          </div>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-6">
