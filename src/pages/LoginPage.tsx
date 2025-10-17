@@ -4,11 +4,13 @@ import InputField from "../components/InputField";
 import { useNavigate } from "react-router-dom";
 import AlertCard from "../components/AlertCard";
 import { loginUser } from "../services/AuthServices";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { setUid } from "../store/slices/authSlice";
 
 function LoginPage() {
     const navigator = useNavigate();
+    const dispatch = useDispatch();
     const theme = useSelector((state: RootState) => state.theme.theme);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -59,6 +61,10 @@ function LoginPage() {
         }
         FormRef.current?.reset();
         clearAllFields();
+        dispatch(setUid(user.uid));
+        setTimeout(() => {
+        navigator("/trainee");
+        }, 1000);
     }
 
     return (

@@ -1,7 +1,7 @@
 import "react-circular-progressbar/dist/styles.css";
-import RoundedProgressBar from "./RoundedProgressBar";
-import RecCard from "./RecCard";
-import Quick from "./Quick";
+import RoundedProgressBar from "../components/RoundedProgressBar";
+import RecCard from "../components/RecCard";
+import Quick from "../components/Quick";
 import type { JSX } from "react";
 
 

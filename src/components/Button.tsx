@@ -2,7 +2,7 @@ import { Send, ArrowBigRight } from "lucide-react";
 
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
-  label: string;
+  label?: string;
   width?: string;
   isSecondary?: boolean;
   margin?: string;

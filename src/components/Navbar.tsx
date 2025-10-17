@@ -8,15 +8,25 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { toggleTheme } from "../store/slices/themeSlice";
 import { Moon, Sun } from "lucide-react";
+import { clearAuth } from "../store/slices/authSlice";
 
-function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: { buttonLabel: string, secondButtonLabel?: string, isLandingPage?: boolean, icon?: ReactNode, hideMenu?: boolean, setHideMenu?: Dispatch<SetStateAction<boolean>> }) {
-  // const { username, isAuthenticated, logout } = useAuth();
+interface NavbarProps {
+  buttonLabel?: string;
+  secondButtonLabel?: string;
+  isLandingPage?: boolean;
+  icon?: ReactNode;
+  hideMenu?: boolean;
+  setHideMenu?: Dispatch<SetStateAction<boolean>>;
+}
+function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: NavbarProps) {
+  // const { username, isAuthenticated} = useAuth();
   const theme = useSelector((state: RootState) => state.theme.theme);
+  const { uid ,user} = useSelector((state: RootState) => state.Authantication);
   const dispatch = useDispatch();
-  const [isAuthenticated, setAuth] = useState(false);
+  const [isAuthenticated, setAuth] = useState(!!uid);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const username = "Hazem Emad";
+  const username = user?.fullName;
   const handleLogin = () => {
     navigate("/login");
   };
@@ -25,6 +35,8 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
   }
   const handleLogout = () => {
     setMenuOpen(false);
+    dispatch(clearAuth());
+    setAuth(false);
     navigate("/");
   };
 
@@ -59,7 +71,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="flex items-center gap-2 text-white"
               >
-                <Avatar name={username} />
+                <Avatar name={username || ""} />
               </button>
               {/* Dropdown Menu */}
               {menuOpen && (

@@ -25,7 +25,7 @@ export const registerTrainer = async ({ fullName, email, password }: { fullName:
         return { error: "An unknown error occurred" };
     }
 };
-export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age }: TraineeData) => {
+export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age }: { email: string, password: string } & TraineeData) => {
     try {
         const trainee = await createUserWithEmailAndPassword(auth, email, password);
 

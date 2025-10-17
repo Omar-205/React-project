@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const storedTheme = localStorage.getItem("theme") || "light";
 document.documentElement.setAttribute("data-theme", storedTheme);
