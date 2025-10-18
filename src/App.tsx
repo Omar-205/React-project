@@ -7,7 +7,7 @@ import LandingPage from "./Pages/LandingPage";
 import LoginPage from "./Pages/LoginPage";
 import TraineePageLayout from "./layouts/TraineePageLayout";
 import Dashboard from "./Pages/Dashboard";
-import Profile from "./components/Profile";
+import Profile from "./Pages/Profile";
 import Progress from "./Pages/Progress";
 import Workouts from "./Pages/Workouts";
 import Nutrition from "./Pages/Nutrition";

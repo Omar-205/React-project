@@ -7,4 +7,6 @@ export interface TraineeData {
     primaryGoal: string;
     targetWeight: string;
     activityLevel: string;
+    bio: string;
+    createdAt: string;
 }

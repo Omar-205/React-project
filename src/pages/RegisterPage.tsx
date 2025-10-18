@@ -10,6 +10,7 @@ import AlertCard from "../components/AlertCard";
 import { Weight } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
     // states
@@ -31,6 +32,7 @@ function RegisterPage() {
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const FormRef=useRef<HTMLFormElement>(null);
+    const navigate=useNavigate();
     //error
     const [errors, setErrors] = useState<{
         fullName?: string;
@@ -117,7 +119,7 @@ function RegisterPage() {
             setAlertMessage("Error: Please fill all fields in the form");
             return;
         }
-        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age });
+        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "", createdAt: new Date().toISOString() });
         if ('error' in Trainee) {
             setAlert(true);
             setAlertMessage(Trainee.error);
@@ -129,6 +131,9 @@ function RegisterPage() {
         }
         FormRef.current?.reset;
         clearAllFields();
+        setTimeout(() => {
+            navigate("/login")
+        }, 2000);
     }
 
 

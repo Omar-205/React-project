@@ -9,18 +9,16 @@ import Loading from "../components/Loading";
 
 export default function TraineePageLayout() {
     const dispatch = useDispatch<AppDispatch>();
-    const { uid, error, status, user } = useSelector(
+    const { uid, error, status } = useSelector(
         (state: RootState) => state.Authantication
     );
-
     const [hideMenu, setHideMenu] = useState(true);
 
     useEffect(() => {
         if (uid && status === "idle") {
             dispatch(fetchUser(uid));
         }
-    }, [uid, status, dispatch]);
-
+    }, [uid, status, dispatch]);    
     return (
         <div className="bg-white dark:bg-secondary-dark w-full min-h-dvh">
             <Navbar
