@@ -60,7 +60,7 @@ export default function OptionsMenu({ hideMenu, setHideMenu }: IProps) {
                 setHideMenu(true)
             }}
                 className=" px-10 py-3 hover:bg-secondary hover:text-primary hover:cursor-pointer">
-                <i className="fa-solid fa-stopwatch"></i>
+                <i className="fa-solid fa-stopwatch mr-3"></i>
                 Timer</li>
         </ul>
     </nav>
