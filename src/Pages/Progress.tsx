@@ -54,6 +54,9 @@ export default function Progress() {
 =======
     return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8 bg-input">
 >>>>>>> Stashed changes
+=======
+    return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8 bg-input">
+>>>>>>> Stashed changes
     <h3 className="font-bold text-3xl md:text-3xl mb-2 dark:text-[#f1f5f9]">Progress tracking
     <p className="text-slate-400  text-lg md:text-lg  dark:text-[#94a3b8]">Monitor your fitness journey and celebrate achievements </p>
     </h3>
