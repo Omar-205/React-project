@@ -48,6 +48,7 @@ export default function Progress() {
     const { theme } = useTheme();
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     console.log(theme)
     return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">
 =======
