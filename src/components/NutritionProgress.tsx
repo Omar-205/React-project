@@ -10,7 +10,6 @@ export function NutritionProgress({
     color: string
 }) {
     const percentage = progress / total * 100;
-    console.log(color)
     return <>
         <div className="flex justify-between mb-1">
             <h6 className="font-semibold text-">{title}</h6>

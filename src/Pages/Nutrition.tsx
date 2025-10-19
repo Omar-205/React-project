@@ -54,7 +54,7 @@ export default function Nutrition() {
         return (
           <div className="text-center cursor-pointer flex-1 rounded-2xl hover:bg-white"
             style={{ backgroundColor: selectedTab === index ? "#FFFFFF" : "" }}
-            onClick={() => setSelectedTab(index)}
+            onClick={() => setSelectedTab(index)} key={index}
           >{tab}</div>
         )
       })}
