@@ -1,10 +1,10 @@
+import type { JSX } from "react";
 import Activity from "../components/Activity";
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
 import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
-import { useTheme } from "../contexts/Theme/ThemeContext";
 
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos", "Activity"];
   const components = [
@@ -45,10 +45,7 @@ interface ProgRecData {
   
 
 export default function Progress() {
-    const { theme } = useTheme();
     
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     console.log(theme)
     return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">
 =======

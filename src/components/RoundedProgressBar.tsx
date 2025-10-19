@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import { useTheme } from "../contexts/Theme/ThemeContext";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 const styleBuild = {
     pathColor: '#FF6E00',
@@ -23,7 +24,7 @@ interface IProps {
     color: string;
 }
 export default function RoundedProgressBar({title, total, progress, type, svg, color}: IProps) {
-    const {theme} = useTheme();
+    const theme = useSelector((state: RootState) => state.theme.theme);
     styleBuild.pathColor = color;
     styleBuild.textColor = theme == 'dark' ? '#f1f5f9': styleBuild.textColor
     styleBuild.trailColor = theme == 'dark'? "#121A21": styleBuild.trailColor
