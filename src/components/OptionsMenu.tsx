@@ -54,14 +54,6 @@ export default function OptionsMenu({ hideMenu, setHideMenu }: IProps) {
                 className=" px-10 py-3 hover:bg-secondary hover:text-primary hover:cursor-pointer">
                 <i className="fa-solid fa-apple-whole mr-3"></i>
                 Nutrition</li>
-
-            <li onClick={() => {
-                navigate("timer")
-                setHideMenu(true)
-            }}
-                className=" px-10 py-3 hover:bg-secondary hover:text-primary hover:cursor-pointer">
-                <i className="fa-solid fa-stopwatch mr-3"></i>
-                Timer</li>
         </ul>
     </nav>
 }

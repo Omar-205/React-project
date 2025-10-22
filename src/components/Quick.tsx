@@ -2,13 +2,13 @@ import ButtonsDash from "./ButtonsDash";
 import Workouts from "../Pages/Workouts";
 import Nutrition from "../Pages/Nutrition";
 import Progress from "../Pages/Progress";
-import StopWatches from "../Pages/StopWatches";
+import Profile from "../Pages/Profile";
 
 const quickActions = [
   { path: "trainee/workouts", label: "Start Workout", icon: "fa-dumbbell", bg: "bg-green-400", element: <Workouts /> },
   { path: "trainee/nutrition", label: "Log Meal", icon: "fa-fire", bg: "bg-red-500", element: <Nutrition /> },
   { path: "trainee/progress", label: "View Progress", icon: "fa-bullseye", bg: "bg-blue-400", element: <Progress /> },
-  { path: "trainee/timer", label: "Set Timer", icon: "fa-stopwatch", bg: "bg-violet-500", element: <StopWatches /> },
+  { path: "trainee/profile", label: "View Profile", icon: "fa-user", bg: "bg-violet-500", element: <Profile /> },
 ];
 
 export default function Quick() {

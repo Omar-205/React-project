@@ -11,7 +11,6 @@ import Profile from "./Pages/Profile";
 import Progress from "./Pages/Progress";
 import Workouts from "./Pages/Workouts";
 import Nutrition from "./Pages/Nutrition";
-import StopWatches from "./Pages/StopWatches";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "./store/store";
 import ProtectedRoute from "./Pages/ProtectedRoute";
@@ -40,7 +39,6 @@ function App() {
         <Route path="progress" element={<Progress />} />
         <Route path="workouts" element={<Workouts />} />
         <Route path="nutrition" element={<Nutrition />} />
-        <Route path="timer" element={<StopWatches />} />
       </Route>
       </Route>
     </Routes>

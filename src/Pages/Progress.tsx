@@ -1,17 +1,15 @@
 import type { JSX } from "react";
-import Activity from "../components/Activity";
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
 import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
 
-const titles = ["Weight Progress", "Workout Stats", "Progress Photos", "Activity"];
+const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [
   <WeightProgress />,
   <WorkoutStats />,
   <ProgressPhotos />,
-  <Activity />,
 ];
 
 interface ProgRecData {
