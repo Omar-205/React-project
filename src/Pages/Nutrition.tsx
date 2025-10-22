@@ -5,6 +5,7 @@ import { useState } from "react";
 import { TodayMeal } from "../components/TodayMeal";
 import { MealPlans } from "../components/MealPlans";
 import { FoodLibrary } from "../components/FoodLibrary";
+import NavTabs from "../components/NavTabs";
 
 
 const styles = {
@@ -49,18 +50,9 @@ export default function Nutrition() {
 
     </div>
 
-    <div className="flex gap-1 justify-between text-center bg-[#ECECF0] my-3 rounded-2xl p-1 cursor-pointer">
-      {tabsNames.map((tab, index) => {
-        return (
-          <div className="text-center cursor-pointer flex-1 rounded-2xl hover:bg-white"
-            style={{ backgroundColor: selectedTab === index ? "#FFFFFF" : "" }}
-            onClick={() => setSelectedTab(index)} key={index}
-          >{tab}</div>
-        )
-      })}
-    </div>
-
-    {tabs[selectedTab % tabs.length]}
+    <div className="p-4">
+            <NavTabs titles={tabsNames} components={tabs} />
+          </div>
 
 
   </div>
