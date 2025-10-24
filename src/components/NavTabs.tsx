@@ -28,7 +28,7 @@ export default function NavTabs({ titles, components }: NavTabsProps) {
               flex-1 text-center py-2 px-3 rounded-full text-sm font-medium transition-all duration-200
               ${
                 activeIndex === index
-                  ? `bg-blue-600 text-white shadow-sm 
+                  ? `bg-primary text-white shadow-sm 
                      dark:bg-primary dark:text-secondary`
                   : `hover:bg-gray-300 dark:hover:bg-gray-700`
               }

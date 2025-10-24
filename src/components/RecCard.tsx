@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 type RecCardProps = {
   given: number;
   statement: string;
@@ -13,7 +15,7 @@ export default function RecCard({ given, statement, icon }: RecCardProps) {
       <div className="text-xl self-center">{icon}</div>
       <div className="flex flex-col">
         <p className="font-bold  text-2xl  text-black dark:text-white">{given}</p>
-        <p className="dark:text-text-dark">{statement}</p>
+        <p className="text-black dark:text-white">{statement}</p>
       </div>
     </div>
   );

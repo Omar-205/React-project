@@ -6,14 +6,18 @@ import { TodayMeal } from "../components/TodayMeal";
 import { MealPlans } from "../components/MealPlans";
 import { FoodLibrary } from "../components/FoodLibrary";
 import NavTabs from "../components/NavTabs";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 
-const styles = {
-  pathColor: "#FF6E00",
-  textColor: '#000',
-
-}
 export default function Nutrition() {
+  const theme = useSelector((state: RootState) => state.theme.theme);
+
+  const styles = {
+    pathColor: "#FF6E00",
+    textColor: theme === "dark" ? "#f1f5f9" : "#000",
+  };
+
   const [selectedTab, setSelectedTab] = useState(0);
   const tabsNames = ["Today's Meal", "Meal Plans", "Food Library"];
   const tabs = [<TodayMeal />, <MealPlans />, <FoodLibrary />];

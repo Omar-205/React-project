@@ -48,7 +48,7 @@ export function TodaysWorkoutExercise(props: {
                             ? "bg-green-500 cursor-not-allowed"
                             : startWorkout
                                 ? "bg-black dark:bg-primary hover:bg-slate-900"
-                                : "bg-gray-500 cursor-not-allowed"
+                                : "bg-gray-400 cursor-not-allowed"
                         }`}
                     onClick={() => {
                         if (startWorkout && !exercise.completed) {
