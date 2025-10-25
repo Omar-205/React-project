@@ -28,7 +28,7 @@ export function PlanCard({ plan }: PlanCardProps) {
             ))}
           </ul>
           {idx < plan.meals.length - 1 && (
-            <hr className="my-3 border-t border-gray-200 dark:border-gray-600" />
+            <hr className="my-3 border-t border-gray-200 dark:border-gray-600" />//n3ml line 2bl 2l2a5r
           )}
         </div>
       ))}
