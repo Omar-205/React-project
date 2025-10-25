@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 
+interface Exercise {
+    title: string;
+    sets: number;
+    minReps: number;
+    maxReps: number;
+    rest: number;
+    note?: string;
+    modelName: string;
+}
+
 interface TrainPopupProps {
     isOpen: boolean;
     onClose: () => void;
-    exercise: any;
+    exercise: Exercise;
     onComplete: () => void;
 }
 
@@ -13,14 +23,21 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     exercise,
     onComplete,
 }) => {
+    exercise.modelName = "squat";
     const [cameraActive, setCameraActive] = useState(false);
+    const [formStatus, setFormStatus] = useState("Analyzing...");
+    const [error, setError] = useState<number | null>(null);
+    const [connected, setConnected] = useState(false);
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
+    const wsRef = useRef<WebSocket | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "user", width: { ideal: 1920 }, height: { ideal: 1080 } },
+                video: { facingMode: "user" },
                 audio: false,
             });
             streamRef.current = stream;
@@ -31,15 +48,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         }
     };
 
-    useEffect(() => {
-        if (cameraActive && videoRef.current && streamRef.current) {
-            videoRef.current.srcObject = streamRef.current;
-            videoRef.current.play().catch((err) =>
-                console.warn("Autoplay blocked:", err)
-            );
-        }
-    }, [cameraActive]);
-
     const stopCamera = () => {
         if (streamRef.current) {
             streamRef.current.getTracks().forEach((t) => t.stop());
@@ -48,15 +56,65 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         setCameraActive(false);
     };
 
-    const handleClose = () => {
-        stopCamera();
-        onClose();
-    };
+    useEffect(() => {
+        if (cameraActive && videoRef.current && streamRef.current) {
+            videoRef.current.srcObject = streamRef.current;
+            videoRef.current.play().catch((err) => console.warn("Autoplay blocked:", err));
+        }
+    }, [cameraActive]);
 
     useEffect(() => {
-        if (!isOpen) stopCamera();
-        return () => stopCamera();
-    }, [isOpen]);
+        if (!cameraActive) return;
+        const ws = new WebSocket("ws://localhost:8000/ws");
+        wsRef.current = ws;
+        ws.onopen = () => {
+            setConnected(true);
+            ws.send(JSON.stringify({ model: exercise.modelName }));
+        };
+        ws.onmessage = (ev) => {
+            try {
+                const data = JSON.parse(ev.data);
+                if (data.error) {
+                    console.error("Backend error:", data.error);
+                    setFormStatus("Error");
+                    setError(null);
+                } else {
+                    setFormStatus(data.form_status || "Unknown");
+                    setError(data.reconstruction_error ?? null);
+                }
+            } catch (e) {
+                console.error("Invalid message", e);
+            }
+        };
+        ws.onclose = () => setConnected(false);
+        ws.onerror = () => setConnected(false);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const sendFrame = () => {
+            if (!videoRef.current || ws.readyState !== WebSocket.OPEN) return;
+            const v = videoRef.current;
+            if (v.videoWidth === 0 || v.videoHeight === 0) return;
+            canvas.width = v.videoWidth;
+            canvas.height = v.videoHeight;
+            ctx?.drawImage(v, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+            ws.send(JSON.stringify({ frame: dataUrl }));
+        };
+
+        intervalRef.current = setInterval(sendFrame, 100);
+        return () => {
+            ws.close();
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, [cameraActive, exercise.modelName]);
+
+    const handleClose = () => {
+        stopCamera();
+        wsRef.current?.close();
+        setConnected(false);
+        onClose();
+    };
 
     if (!isOpen) return null;
 
@@ -66,12 +124,12 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             onClick={handleClose}
         >
             <div
-                className={`bg-input dark:bg-input-dark text-text dark:text-text-dark rounded-lg shadow-lg
-        w-full transition-all duration-300 overflow-hidden relative
-        ${cameraActive ? "max-w-3xl h-[80vh]" : "max-w-md sm:max-w-lg p-6 sm:p-8"}`}
+                className={`bg-white text-text dark:bg-input-dark dark:text-text-dark rounded-xl shadow-lg w-full transition-all duration-300 overflow-hidden relative ${cameraActive
+                        ? "max-w-5xl h-[90vh]" // full popup size
+                        : "max-w-md sm:max-w-lg p-6 sm:p-8"
+                    }`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close button */}
                 <button
                     onClick={handleClose}
                     className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-300 text-lg z-10"
@@ -79,70 +137,48 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                     ✕
                 </button>
 
-                <div className={`${cameraActive ? "h-full flex flex-col" : ""}`}>
-                    {!cameraActive ? (
-                        <>
-                            <h2 className="text-xl font-semibold mb-4">
-                                Start Training: {exercise.title}
-                            </h2>
-
-                            <div className="space-y-2 text-md font-thin">
-                                <p>
-                                    <span className="font-medium">Sets:</span> {exercise.sets}
-                                </p>
-                                <p>
-                                    <span className="font-medium">Reps:</span> {exercise.minReps} –{" "}
-                                    {exercise.maxReps}
-                                </p>
-                                <p>
-                                    <span className="font-medium">Rest:</span> {exercise.rest}s
-                                </p>
-                                {exercise.note && (
-                                    <p className="italic opacity-80">💡 {exercise.note}</p>
-                                )}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="relative flex-grow rounded-lg overflow-hidden border border-gray-300">
-                            {/* Video feed */}
-                            <video
-                                ref={videoRef}
-                                autoPlay
-                                playsInline
-                                muted
-                                className="w-full h-full object-cover bg-black"
-                            />
-
-                            {/* Frame Overlay */}
-                            <div className="absolute inset-0 pointer-events-none">
-                                <div className="absolute inset-0 border-2 border-white/30 rounded-lg" />
-                                <div className="absolute top-6 left-6 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-lg" />
-                                <div className="absolute top-6 right-6 w-12 h-12 border-t-4 border-r-4 border-primary rounded-tr-lg" />
-                                <div className="absolute bottom-6 left-6 w-12 h-12 border-b-4 border-l-4 border-primary rounded-bl-lg" />
-                                <div className="absolute bottom-6 right-6 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-lg" />
-                            </div>
-
-                            {/* Floating End Training Button */}
-                            <button
-                                onClick={() => {
-                                    onComplete();
-                                    handleClose();
-                                }}
-                                className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200 z-20"
-                            >
-                                End Training
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {!cameraActive && (
-                    <div className="mt-6">
+                {!cameraActive ? (
+                    <>
+                        <h2 className="text-xl font-semibold mb-4">Start Training: {exercise.title}</h2>
+                        <p><strong>Sets:</strong> {exercise.sets}</p>
+                        <p><strong>Reps:</strong> {exercise.minReps} – {exercise.maxReps}</p>
+                        <p><strong>Rest:</strong> {exercise.rest}s</p>
+                        {exercise.note && (
+                            <p className="italic opacity-80 mt-2 placeholder:text-text placeholder:text-md placeholder:font-thin">
+                                💡 {exercise.note}
+                            </p>
+                        )}
                         <button
                             onClick={startCamera}
-                            className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-2.5 transition-colors duration-200"
+                            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5"
                         >
                             Open Camera
+                        </button>
+                    </>
+                ) : (
+                    <div className="relative w-full h-full rounded-lg overflow-hidden">
+                        <video
+                            ref={videoRef}
+                            autoPlay
+                            playsInline
+                            muted
+                            className="w-full h-full object-cover bg-black"
+                        />
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm flex items-center gap-3">
+                            <span>{connected ? "🟢 Connected" : "🔴 Disconnected"}</span>
+                            <span>|</span>
+                            <span>{formStatus}</span>
+                            <span>|</span>
+                            <span>Error: {error !== null ? error.toFixed(6) : "—"}</span>
+                        </div>
+                        <button
+                            onClick={() => {
+                                onComplete();
+                                handleClose();
+                            }}
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200"
+                        >
+                            End Training
                         </button>
                     </div>
                 )}
