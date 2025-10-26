@@ -42,7 +42,7 @@ export function TodaysWorkout() {
   // console.log(selectedProgram)
 
   // todays index
-  const today = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24));
+  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
   const todayIndex = (today - 1) % 7;
   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
   const [progressPercent, setProgressPercent] = useState(0);

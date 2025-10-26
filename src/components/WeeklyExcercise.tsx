@@ -27,7 +27,7 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
     const workoutPlan = workoutPrograms[selectedWorkoutName]; //  workouts and program name
     const plan = workoutPlan.program;          //array of workouts
     const workoutData = authData?.user?.workoutData;
-    const today = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24))
+    const today = Math.floor((new Date().getTime() + 1000 * 60 * 60 * 3) / (1000 * 60 * 60 * 24))
     const lastFriday = today - today % 7 + 1;
 
     //console.log(plan)
@@ -41,7 +41,7 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
     return (
         <div className={"flex justify-between items-center mt-4 p-2 border-1 dark:border-gray-700 rounded-md"
             + (done ? ' bg-green-50 dark:bg-green-900/20 border-[#CBF8E3]' :
-                day == new Date().getDay() - 1 ? ' bg-[#EEF5FF] dark:bg-blue-900/20 border-[#AED4FF] border-2' :
+                isToday ? ' bg-[#EEF5FF] dark:bg-blue-900/20 border-[#AED4FF] border-2' :
                     'bg-[#F8F9FA] border-[#ECEDF0] border-1 dark:bg-[#2A3C4E]'
             )
         }>
