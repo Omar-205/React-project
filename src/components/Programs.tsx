@@ -27,7 +27,7 @@ export function Programs() {
     }
   }, [])
   const dispatch = useDispatch()
-  console.log(selectedWorkoutName);
+  // console.log(selectedWorkoutName);
   // handle changing the plan
   function setPlan(planName: string) {
     saveUserData(authData.uid as string, { workoutData: { selectedWorkout: planName, history: authData.user?.workoutData?.history || {} } })

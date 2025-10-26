@@ -11,7 +11,7 @@ export function TodaysWorkout() {
   const authData = useSelector((state: RootState) => state.Authantication);
   const dispatch = useDispatch();
   const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
-  console.log(selectedProgramName);
+  // console.log(selectedProgramName);
   useLayoutEffect(() => {
     //access the user data inwhich the workoutData exists
     const userData = authData.user;
@@ -37,9 +37,9 @@ export function TodaysWorkout() {
     }
   }, [])
 
-  console.log(selectedProgramName);
+  // console.log(selectedProgramName);
   const selectedProgram = workoutPrograms[selectedProgramName];
-  console.log(selectedProgram)
+  // console.log(selectedProgram)
 
   // todays index
   const today = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24));
@@ -48,9 +48,9 @@ export function TodaysWorkout() {
   const [progressPercent, setProgressPercent] = useState(0);
   const [startWorkout, setStartWorkout] = useState(false);
   const isRestDay = workout.exercises.length === 0;
-  console.log(workout.exercises);
+  // console.log(workout.exercises);
   const isDone = authData.user?.workoutData?.history?.[today] as unknown as boolean
-  console.log(isDone ? "this work out is done" : "this workout isn't done")
+  // console.log(isDone ? "this work out is done" : "this workout isn't done")
 
   function handleFinishedTodaysWorkout() {
     console.log("today's workout is done");
