@@ -1,12 +1,43 @@
 
-import { getWorkoutProgram } from "../store/slices/workoutProgram";
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { workoutPrograms } from "../types/weeklyPlans";
+import { saveUserData } from "../services/DatabaseServices";
+import { useEffect, useState } from "react";
+const days = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"]
 
 export default function WeeklyExcercise(props: { day?: number, done?: boolean }) {
-    const plan = getWorkoutProgram().plan.program;
+    const defaultWorkoutPlan = "beginnerFullBodyPlan";
+    const authData = useSelector((state: RootState) => state.Authantication);
+    let [selectedWorkoutName, setSelectedWorkoutName] = useState(defaultWorkoutPlan);
+    useEffect(() => {
+        //access the user data inwhich the workoutData exists
+        const userData = authData.user;
+        //hanlde workout name does not exist
+        if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
+            saveUserData(authData.uid as string, { workoutData: { selectedWorkout: userData?.workoutData?.selectedWorkout || defaultWorkoutPlan, history: userData?.workoutData?.history || {} } })
+            return;
+        }
+        // if the selected plan is found ?
+        else {
+            setSelectedWorkoutName(userData.workoutData.selectedWorkout);
+        }
+    }, [])
+    //get plan data and workouts names
+    const workoutPlan = workoutPrograms[selectedWorkoutName]; //  workouts and program name
+    const plan = workoutPlan.program;          //array of workouts
+    const workoutData = authData?.user?.workoutData;
+    const today = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24))
+    const lastFriday = today - today % 7 + 1;
+
+    //console.log(plan)
     let { day, done } = props;
     if (!day) day = 0;
     const dayName = days[day % 7];
+    // check if this day is today
+    const isToday: boolean = (lastFriday + day === today);
+
+    done = done || workoutData?.history[lastFriday + day] != undefined;
     return (
         <div className={"flex justify-between items-center mt-4 p-2 border-1 dark:border-gray-700 rounded-md"
             + (done ? ' bg-green-50 dark:bg-green-900/20 border-[#CBF8E3]' :
@@ -27,7 +58,7 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
                 <i className="fa-solid fa-circle-check text-green-600"></i>
                 Done
             </div>)}
-            {!done && day == new Date().getDay() - 1 && (<div className="text-prof-text-secondary dark:text-text-primary-dark font-bold text-sm bg-[#D5E7FE] px-2 py-1 rounded-lg">
+            {!done && isToday && (<div className="text-prof-text-secondary dark:text-text-primary-dark font-bold text-sm bg-[#D5E7FE] px-2 py-1 rounded-lg">
                 Today
             </div>)}
         </div>

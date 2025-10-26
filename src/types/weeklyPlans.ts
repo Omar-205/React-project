@@ -27,6 +27,16 @@ type trainingPlan = Workout[];
 
 export const beginnerFullBodyPlan: trainingPlan = [
   {
+    title: "Active Rest Day",
+    calories: 150,
+    level: profileData.fitnessLevel,
+    duration: 25,
+    exercises: [
+      { id: 1, title: "Light Walk or Cycling", sets: 1, minReps: 20, maxReps: 30, rest: 0, time: 900, note: "Keep it casual", completed: false },
+      { id: 2, title: "Stretching Routine", sets: 2, minReps: 10, maxReps: 12, rest: 30, time: 300, note: "Gentle range of motion", completed: false },
+    ],
+  },
+  {
     title: "Upper Body Strength",
     calories: 320,
     level: profileData.fitnessLevel,
@@ -101,19 +111,16 @@ export const beginnerFullBodyPlan: trainingPlan = [
       { id: 3, title: "Foam Rolling", sets: 1, minReps: 10, maxReps: 15, rest: 30, time: 60, note: "Focus on tight spots", completed: false },
     ],
   },
-  {
-    title: "Active Rest Day",
-    calories: 150,
-    level: profileData.fitnessLevel,
-    duration: 25,
-    exercises: [
-      { id: 1, title: "Light Walk or Cycling", sets: 1, minReps: 20, maxReps: 30, rest: 0, time: 900, note: "Keep it casual", completed: false },
-      { id: 2, title: "Stretching Routine", sets: 2, minReps: 10, maxReps: 12, rest: 30, time: 300, note: "Gentle range of motion", completed: false },
-    ],
-  },
 ];
 
 export const strengthBuilderPlan: trainingPlan = [
+  {
+    title: "Complete Rest Day",
+    calories: 0,
+    level: "Intermediate",
+    duration: 0,
+    exercises: [],
+  },
   {
     title: "Upper Body Strength (Push)",
     calories: 350,
@@ -137,16 +144,6 @@ export const strengthBuilderPlan: trainingPlan = [
       { id: 2, title: "Bulgarian Split Squats", sets: 3, minReps: 8, maxReps: 10, rest: 90, time: 60, note: "Per leg. Keep torso upright", completed: false },
       { id: 3, title: "Leg Press", sets: 3, minReps: 10, maxReps: 12, rest: 75, time: 50, note: "Do not lock out knees at the top", completed: false },
       { id: 4, title: "Seated Calf Raises", sets: 4, minReps: 15, maxReps: 20, rest: 45, time: 40, note: "Pause and squeeze at the top", completed: false },
-    ],
-  },
-  {
-    title: "Active Rest Day",
-    calories: 150,
-    level: "Intermediate",
-    duration: 30,
-    exercises: [
-      { id: 1, title: "Light Walk or Cycling", sets: 1, minReps: 25, maxReps: 30, rest: 0, time: 1800, note: "Promote blood flow", completed: false },
-      { id: 2, title: "Stretching Routine", sets: 1, minReps: 10, maxReps: 12, rest: 30, time: 300, note: "Focus on hamstrings and hips", completed: false },
     ],
   },
   {
@@ -186,15 +183,25 @@ export const strengthBuilderPlan: trainingPlan = [
     ],
   },
   {
-    title: "Complete Rest Day",
-    calories: 0,
+    title: "Active Rest Day",
+    calories: 150,
     level: "Intermediate",
-    duration: 0,
-    exercises: [],
+    duration: 30,
+    exercises: [
+      { id: 1, title: "Light Walk or Cycling", sets: 1, minReps: 25, maxReps: 30, rest: 0, time: 1800, note: "Promote blood flow", completed: false },
+      { id: 2, title: "Stretching Routine", sets: 1, minReps: 10, maxReps: 12, rest: 30, time: 300, note: "Focus on hamstrings and hips", completed: false },
+    ],
   },
 ];
 
 export const hiitFatBurnerPlan: trainingPlan = [
+  {
+    title: "Complete Rest Day",
+    calories: 0,
+    level: "Advanced",
+    duration: 0,
+    exercises: [],
+  },
   {
     title: "Full Body HIIT (Tabata)",
     calories: 420,
@@ -213,7 +220,7 @@ export const hiitFatBurnerPlan: trainingPlan = [
     level: "Advanced",
     duration: 40,
     exercises: [
-      { id: 1, title: "Incline Walking or Light Jog", sets: 1, minReps: 35, maxReps: 40, rest: 0, time: 2400, note: "Maintain 60-70% max heart rate", completed: false },
+      { id: 1, title: "Incline Walking or Light Jog", sets: 1, minReps: 35, maxReps: 40, rest: 0, time: 2400, note: "Maintain 60–70% max heart rate", completed: false },
       { id: 2, title: "Stretching", sets: 1, minReps: 5, maxReps: 10, rest: 30, time: 300, note: "Gentle full-body stretch", completed: false },
     ],
   },
@@ -234,7 +241,7 @@ export const hiitFatBurnerPlan: trainingPlan = [
     level: "Advanced",
     duration: 40,
     exercises: [
-      { id: 1, title: "Cycling or Rowing", sets: 1, minReps: 35, maxReps: 40, rest: 0, time: 2400, note: "Maintain 60-70% max heart rate", completed: false },
+      { id: 1, title: "Cycling or Rowing", sets: 1, minReps: 35, maxReps: 40, rest: 0, time: 2400, note: "Maintain 60–70% max heart rate", completed: false },
       { id: 2, title: "Stretching", sets: 1, minReps: 5, maxReps: 10, rest: 30, time: 300, note: "Gentle full-body stretch", completed: false },
     ],
   },
@@ -244,11 +251,11 @@ export const hiitFatBurnerPlan: trainingPlan = [
     level: "Advanced",
     duration: 30,
     exercises: [
-      { id: 1, title: "Minute 1: Devil's Press", sets: 6, minReps: 8, maxReps: 10, rest: 0, time: 60, note: "EMOM: 8-10 reps, rest rest of min. Repeat 6x", completed: false },
-      { id: 2, title: "Minute 2: High Knees", sets: 6, minReps: 50, maxReps: 50, rest: 0, time: 60, note: "EMOM: 50s work, 10s rest. Repeat 6x", completed: false },
-      { id: 3, title: "Minute 3: Dumbbell Snatches", sets: 6, minReps: 12, maxReps: 16, rest: 0, time: 60, note: "EMOM: 6-8/side, rest rest of min. Repeat 6x", completed: false },
-      { id: 4, title: "Minute 4: Plank Jacks", sets: 6, minReps: 50, maxReps: 50, rest: 0, time: 60, note: "EMOM: 50s work, 10s rest. Repeat 6x", completed: false },
-      { id: 5, title: "Minute 5: Complete Rest", sets: 6, minReps: 60, maxReps: 60, rest: 0, time: 60, note: "EMOM: Full rest. Repeat 6x", completed: false },
+      { id: 1, title: "Minute 1: Devil's Press", sets: 6, minReps: 8, maxReps: 10, rest: 0, time: 60, note: "EMOM: 8–10 reps, rest remainder", completed: false },
+      { id: 2, title: "Minute 2: High Knees", sets: 6, minReps: 50, maxReps: 50, rest: 0, time: 60, note: "EMOM: 50s work, 10s rest", completed: false },
+      { id: 3, title: "Minute 3: Dumbbell Snatches", sets: 6, minReps: 12, maxReps: 16, rest: 0, time: 60, note: "6–8 per side", completed: false },
+      { id: 4, title: "Minute 4: Plank Jacks", sets: 6, minReps: 50, maxReps: 50, rest: 0, time: 60, note: "50s work, 10s rest", completed: false },
+      { id: 5, title: "Minute 5: Complete Rest", sets: 6, minReps: 60, maxReps: 60, rest: 0, time: 60, note: "Full rest for 1 min", completed: false },
     ],
   },
   {
@@ -259,20 +266,79 @@ export const hiitFatBurnerPlan: trainingPlan = [
     exercises: [
       { id: 1, title: "Dynamic Stretching", sets: 2, minReps: 8, maxReps: 10, rest: 30, time: 60, note: "Full body flow", completed: false },
       { id: 2, title: "Yoga for Athletes", sets: 3, minReps: 5, maxReps: 8, rest: 30, time: 90, note: "Controlled breathing, deep holds", completed: false },
-      { id: 3, title: "Foam Rolling", sets: 1, minReps: 10, maxReps: 15, rest: 30, time: 60, note: "Focus on IT band, lats, and quads", completed: false },
+      { id: 3, title: "Foam Rolling", sets: 1, minReps: 10, maxReps: 15, rest: 30, time: 60, note: "Focus on IT band, lats, quads", completed: false },
     ],
-  },
-  {
-    title: "Complete Rest Day",
-    calories: 0,
-    level: "Advanced",
-    duration: 0,
-    exercises: [],
   },
 ];
 
-export const workoutPrograms = {
-  beginnerFullBodyPlan: { program: beginnerFullBodyPlan, programName: "Beginner Full Body" },
-  strengthBuilderPlan: { program: strengthBuilderPlan, programName: "Strength Builder" },
-  hiitFatBurnerPlan: { program: hiitFatBurnerPlan, programName: "HIIT Fat Burner" },
+
+export const workoutPrograms: Record<string, { program: trainingPlan, programName: string }> = {
+  "beginnerFullBodyPlan": { program: beginnerFullBodyPlan, programName: "Beginner Full Body" },
+  "strengthBuilderPlan": { program: strengthBuilderPlan, programName: "Strength Builder" },
+  "hiitFatBurnerPlan": { program: hiitFatBurnerPlan, programName: "HIIT Fat Burner" },
 }
+
+interface IWorkoutProgramInfo {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  frequency: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  iconStyle: {
+    background: string;
+    color: string;
+    padding: string;
+    borderRadius: string;
+  };
+  planName: string;
+}
+
+
+export const workoutProgramsInfo: IWorkoutProgramInfo[] = [
+  {
+    id: 1,
+    title: "Beginner Full Body",
+    description: "Perfect for starting your fitness journey",
+    duration: "4 Weeks",
+    frequency: "5x per week",
+    difficulty: "Beginner",
+    iconStyle: {
+      background: "#E5FBE8",
+      color: "#02B945",
+      padding: "8px",
+      borderRadius: "8px",
+    },
+    planName: "beginnerFullBodyPlan",
+  },
+  {
+    id: 2,
+    title: "Strength Builder",
+    description: "Build muscle and increase strength",
+    duration: "4 Weeks",
+    frequency: "5x per week",
+    difficulty: "Intermediate",
+    iconStyle: {
+      background: "#D7E6FF",
+      color: "#3371F8",
+      padding: "8px",
+      borderRadius: "8px",
+    },
+    planName: "strengthBuilderPlan",
+  },
+  {
+    id: 3,
+    title: "HIIT Fat Burner",
+    description: "High-intensity workouts for fat loss",
+    duration: "4 Weeks",
+    frequency: "5x per week",
+    difficulty: "Advanced",
+    iconStyle: {
+      background: "#FFE9CE",
+      color: "#FF8927",
+      padding: "8px",
+      borderRadius: "8px",
+    },
+    planName: "hiitFatBurnerPlan",
+  },
+];
