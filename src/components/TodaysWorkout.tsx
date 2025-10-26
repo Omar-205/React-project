@@ -54,7 +54,7 @@ export function TodaysWorkout() {
           <span className="text-prof-text-secondary">{progressPercent}/{workout.exercises.length} Exercises</span>
         </div>
         <div className="w-full bg-neutral-300 h-4 rounded-lg mt-2 dark:bg-secondary">
-          <div className="h-full bg-blue-600 rounded-lg transition-all duration-300 dark:bg-primary"
+          <div className="h-full bg-primary rounded-lg transition-all duration-300 dark:bg-primary"
             style={{
               width: `${(progressPercent / workout.exercises.length) * 100}%`,
             }}></div>

@@ -150,7 +150,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                         )}
                         <button
                             onClick={startCamera}
-                            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5"
+                            className="mt-6 w-full bg-primary hover:bg-primary/45 text-white rounded-lg py-2.5"
                         >
                             Open Camera
                         </button>
@@ -165,18 +165,20 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                             className="w-full h-full object-cover bg-black"
                         />
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm flex items-center gap-3">
-                            <span>{connected ? "🟢 Connected" : "🔴 Disconnected"}</span>
+                            <span className="text-primary text-lg">{exercise.modelName} Train</span>
                             <span>|</span>
-                            <span>{formStatus}</span>
+                            <span className={connected ? "text-success text-lg" : "text-error text-lg"}>{connected ? "🟢 Connected" : "🔴 Disconnected"}</span>
                             <span>|</span>
-                            <span>Error: {error !== null ? error.toFixed(6) : "—"}</span>
+                            <span className="text-primary text-lg">{formStatus}</span>
+                            <span>|</span>
+                            <span className="text-error text-lg">Error: {error !== null ? error.toFixed(6) : "—"}</span>
                         </div>
                         <button
                             onClick={() => {
                                 onComplete();
                                 handleClose();
                             }}
-                            className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200"
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-success hover:bg-success/80 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200"
                         >
                             End Training
                         </button>
