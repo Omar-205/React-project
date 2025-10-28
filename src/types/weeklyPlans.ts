@@ -12,7 +12,8 @@ export interface Exercise {
   rest: number;
   note: string;
   completed: boolean;
-  time: number
+  time: number;
+  modelName?: string
 }
 // day workout interface: array of excercises + other details
 export interface Workout {
@@ -271,11 +272,78 @@ export const hiitFatBurnerPlan: trainingPlan = [
   },
 ];
 
+const aiRevolution: trainingPlan = [
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
+  {
+    title: "AI Revolution",
+    calories: 400,
+    level: "Intermediate",
+    duration: 55,
+    exercises: [
+      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+    ],
+  },
 
+]
+// object to reference plans
 export const workoutPrograms: Record<string, { program: trainingPlan, programName: string }> = {
   "beginnerFullBodyPlan": { program: beginnerFullBodyPlan, programName: "Beginner Full Body" },
   "strengthBuilderPlan": { program: strengthBuilderPlan, programName: "Strength Builder" },
   "hiitFatBurnerPlan": { program: hiitFatBurnerPlan, programName: "HIIT Fat Burner" },
+  "AI Revolution": { program: aiRevolution, programName: "AI Revolution" }
 }
 
 interface IWorkoutProgramInfo {
@@ -294,7 +362,7 @@ interface IWorkoutProgramInfo {
   planName: string;
 }
 
-
+// info for programs pagein workouts
 export const workoutProgramsInfo: IWorkoutProgramInfo[] = [
   {
     id: 1,
@@ -341,4 +409,22 @@ export const workoutProgramsInfo: IWorkoutProgramInfo[] = [
     },
     planName: "hiitFatBurnerPlan",
   },
+  {
+    id: 4,
+    title: "AI Revolution",
+    description: "High-intensity workouts for fat loss",
+    duration: "4 Weeks",
+    frequency: "5x per week",
+    difficulty: "Advanced",
+    iconStyle: {
+      background: "#FFBFBF",
+      color: "#FE0032",
+      padding: "8px",
+      borderRadius: "8px",
+    },
+    planName: "AI Revolution",
+  },
 ];
+
+
+// HOW to add a new 

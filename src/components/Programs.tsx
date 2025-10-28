@@ -46,6 +46,7 @@ export function Programs() {
 
   return <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
     {workoutProgramsInfo.map((planInfo) => {
+      const isCurrentPlan = planInfo.planName == selectedWorkoutName;
       return (
         <div key={planInfo.id} className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
       flex flex-col justify-between max-w-70 xl:max-w-full">
@@ -60,12 +61,13 @@ export function Programs() {
             <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>{planInfo.duration}</p></div>
             <div className="flex justify-between"><p className="font-semibold">Frequncy: </p> <p>{planInfo.frequency}</p></div>
             <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">{planInfo.difficulty}</p></div>
-            <button className="bg-black text-[#65656F] text-center w-full rounded-sm py-1 cursor-pointer"
+            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700`}
+              disabled={isCurrentPlan}
               onClick={() => {
                 setPlan(planInfo.planName);
                 setSelectedWorkoutName(planInfo.planName)
               }}
-            >{planInfo.planName == selectedWorkoutName ? "Current Plan" : "Start Workout"}</button>
+            >{isCurrentPlan ? "Current Plan" : "Start Workout"}</button>
           </div>
         </div>
       )

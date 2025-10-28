@@ -7,7 +7,7 @@ interface Exercise {
     maxReps: number;
     rest: number;
     note?: string;
-    modelName: string;
+    modelName?: string;
 }
 
 interface TrainPopupProps {
@@ -23,7 +23,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     exercise,
     onComplete,
 }) => {
-    exercise.modelName = "squat";
     const [cameraActive, setCameraActive] = useState(false);
     const [formStatus, setFormStatus] = useState("Analyzing...");
     const [error, setError] = useState<number | null>(null);
@@ -125,8 +124,8 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         >
             <div
                 className={`bg-white text-text dark:bg-input-dark dark:text-text-dark rounded-xl shadow-lg w-full transition-all duration-300 overflow-hidden relative ${cameraActive
-                        ? "max-w-5xl h-[90vh]" // full popup size
-                        : "max-w-md sm:max-w-lg p-6 sm:p-8"
+                    ? "max-w-5xl h-[90vh]" // full popup size
+                    : "max-w-md sm:max-w-lg p-6 sm:p-8"
                     }`}
                 onClick={(e) => e.stopPropagation()}
             >
