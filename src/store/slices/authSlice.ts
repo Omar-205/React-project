@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, type PayloadAction, type WritableDraft } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import type { TraineeData } from "../../types/TraineeData";
 import { getUserData, saveUserData } from "../../services/DatabaseServices";
 

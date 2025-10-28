@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { mealPlans } from "../types/mealPlansData";
 import { Apple, Clock, Coffee, Moon, Utensils } from "lucide-react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../store/slices/authSlice";
-import { saveUserData } from "../services/DatabaseServices";
+
 
 export function TodayMeal() {
     const icons = [
@@ -24,7 +20,7 @@ export function TodayMeal() {
         </div>
     ]
 
-    const authData = useSelector((state: RootState) => state.Authantication);
+    //const authData = useSelector((state: RootState) => state.Authantication);
     //saveUserData(auttData.uid as string, { "targetWeight": [81].toString() })
 
 
