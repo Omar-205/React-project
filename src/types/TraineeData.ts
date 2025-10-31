@@ -1,4 +1,5 @@
 export interface TraineeData {
+    email: string;
     fullName: string;
     gender: string;
     age: string;
@@ -9,4 +10,5 @@ export interface TraineeData {
     activityLevel: string;
     bio: string;
     createdAt: string;
+    bmi: number | null;
 }
