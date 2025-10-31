@@ -1,72 +1,77 @@
-import { Dumbbell, DumbbellIcon } from "lucide-react";
+import { DumbbellIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { workoutPrograms, workoutProgramsInfo } from "../types/weeklyPlans";
+import { saveUserData } from "../services/DatabaseServices";
 import { useDispatch } from "react-redux";
-import { setToBeginnerFullBodyPlan, setToHiitFatBurnerPlan, setToStrengthBuilderPlan } from "../store/slices/workoutProgram";
+import { setUser } from "../store/slices/authSlice";
 
 
 export function Programs() {
-  const dispatch = useDispatch();
+  // default workout plan
+  const defaultWorkoutPlan = "beginnerFullBodyPlan";
+  let [selectedWorkoutName, setSelectedWorkoutName] = useState(defaultWorkoutPlan);
+  const authData = useSelector((state: RootState) => state.Authantication);
+  useEffect(() => {
+    //access the user data inwhich the workoutData exists
+    const userData = authData.user;
+    //hanlde workout name does not exist
+    if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
+      saveUserData(authData.uid as string, { workoutData: { selectedWorkout: userData?.workoutData?.selectedWorkout || defaultWorkoutPlan, history: userData?.workoutData?.history || {} } })
+      return;
+    }
+    // if the selected plan is found ?
+    else {
+      setSelectedWorkoutName(userData.workoutData.selectedWorkout);
+    }
+  }, [])
+  const dispatch = useDispatch()
+  // console.log(selectedWorkoutName);
+  // handle changing the plan
+  function setPlan(planName: string) {
+    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: planName, history: authData.user?.workoutData?.history || {} } })
+    if (authData.user) {
+      dispatch(setUser(
+        {
+          ...authData.user,
+          workoutData: {
+            selectedWorkout: planName
+            , history: authData.user?.workoutData.history || {}
+          },
+        }
+      ));
+    }
+  }
+
   return <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-    <div className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
+    {workoutProgramsInfo.map((planInfo) => {
+      const isCurrentPlan = planInfo.planName == selectedWorkoutName;
+      return (
+        <div key={planInfo.id} className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
       flex flex-col justify-between max-w-70 xl:max-w-full">
-      <div>
-        <DumbbellIcon style={{ background: "#E5FBE8", color: '#02B945', padding: '8px', borderRadius: '8px' }}
-          fill="#E5FBE8" size={40} />
+          <div>
+            <DumbbellIcon style={{ background: planInfo.iconStyle.background, color: planInfo.iconStyle.color, padding: '8px', borderRadius: '8px' }}
+              fill={planInfo.iconStyle.background} size={40} />
 
-        <h3 className="mt-3 font-medium text-slate-700">Beginner Full Body</h3>
-        <p className="pb">Perfect for starting your fitness journey</p>
-      </div>
-      <div className="space-y-1 mt-4">
-        <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>4 Weeks</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Frequncy: </p> <p>5x per week</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">Beginner</p></div>
-        <button className="bg-black text-[#65656F] text-center w-full rounded-sm py-1 cursor-pointer"
-          onClick={() => {
-            dispatch(setToBeginnerFullBodyPlan())
-          }}
-        >Start Program</button>
-      </div>
-    </div>
-
-    <div className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
-      flex flex-col justify-between max-w-70 xl:max-w-full">
-      <div>
-
-        <DumbbellIcon style={{ background: "#D7E6FF", color: '#3371F8', padding: '8px', borderRadius: '8px' }}
-          fill="#D7E6FF" size={40} />
-
-        <h3 className="mt-3 font-medium text-slate-700">Strength Builder</h3>
-        <p className="pb-">Build muscle and increase strength</p>
-      </div>
-      <div className="space-y-1 mt-4">
-        <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>4 Weeks</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Frequncy: </p> <p>5x per week</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">Intermediate</p></div>
-        <button className="bg-black text-[#65656F] text-center w-full rounded-sm py-1 cursor-pointer"
-          onClick={() => {
-            dispatch(setToStrengthBuilderPlan())
-          }}
-        >Start Program</button>      </div>
-    </div>
-    <div className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
-      max-w-70 xl:max-w-full flex flex-col justify-between">
-      <div className="">
-
-        <DumbbellIcon style={{ background: "#FFE9CE", color: '#FF8927', padding: '8px', borderRadius: '8px' }}
-          fill="#FFE9CE" size={40} />
-
-        <h3 className="mt-3 font-medium text-slate-700">Beginner Full Body</h3>
-        <p>High-intensity workouts for fat loss</p>
-      </div>
-      <div className="space-y-1 mt-4">
-        <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>4 Weeks</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Frequncy: </p> <p>5x per week</p></div>
-        <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">Advanced</p></div>
-        <button className="bg-black text-[#65656F] text-center w-full rounded-sm py-1 cursor-pointer"
-          onClick={() => {
-            dispatch(setToHiitFatBurnerPlan())
-          }}
-        >Start Program</button>      </div>
-    </div>
+            <h3 className="mt-3 font-medium text-slate-700">{planInfo.title}</h3>
+            <p className="pb">{planInfo.description}</p>
+          </div>
+          <div className="space-y-1 mt-4">
+            <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>{planInfo.duration}</p></div>
+            <div className="flex justify-between"><p className="font-semibold">Frequncy: </p> <p>{planInfo.frequency}</p></div>
+            <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">{planInfo.difficulty}</p></div>
+            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700`}
+              disabled={isCurrentPlan}
+              onClick={() => {
+                setPlan(planInfo.planName);
+                setSelectedWorkoutName(planInfo.planName)
+              }}
+            >{isCurrentPlan ? "Current Plan" : "Start Workout"}</button>
+          </div>
+        </div>
+      )
+    })}
 
   </div>;
 }

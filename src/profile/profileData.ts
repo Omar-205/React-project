@@ -1,4 +1,3 @@
-import { Weight } from "lucide-react";
 
 interface IProfile {
   name: string;
@@ -36,6 +35,6 @@ let profileData: IProfile = {
 
 export default profileData;
 export function BMI(profileData: IProfile) {
-  const {weight, height} = profileData;
-  return weight / ((height/100) * (height/100));
+  const { weight, height } = profileData;
+  return weight / ((height / 100) * (height / 100));
 }

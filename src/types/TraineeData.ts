@@ -3,7 +3,7 @@ export interface TraineeData {
     fullName: string;
     gender: string;
     age: string;
-    height: string; 
+    height: string;
     currentWeight: string;
     primaryGoal: string;
     targetWeight: string;
@@ -11,4 +11,8 @@ export interface TraineeData {
     bio: string;
     createdAt: string;
     bmi: number | null;
+    workoutData: {
+        selectedWorkout: string;
+        history: Record<number, { caloriesBurned: number }>
+    }
 }

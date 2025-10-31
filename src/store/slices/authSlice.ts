@@ -62,7 +62,7 @@ const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<TraineeData | null>) => {
       state.user = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
