@@ -37,31 +37,42 @@ export function TodaysWorkout() {
     }
   }, [])
 
-  // console.log(selectedProgramName);
+  //console.log(selectedProgramName);
   const selectedProgram = workoutPrograms[selectedProgramName];
   // console.log(selectedProgram)
 
   // todays index
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  // console.log(today);
+
   const todayIndex = (today - 1) % 7;
   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
   const [progressPercent, setProgressPercent] = useState(0);
   const [startWorkout, setStartWorkout] = useState(false);
   const isRestDay = workout.exercises.length === 0;
+  if (isRestDay) {
+    return (
+      <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
+        <div className="flex flex-col justify-center items-center"></div>
+        <h4 className="text-prof-text dark:text-text-dark text-lg"><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
+        <p className="text-prof-text-secondary dark:text-text-secondary-dark mt-4">Today is a rest day! Take time to recover and prepare for your next workout.</p>
+      </div>
+    )
+  }
   // console.log(workout.exercises);
-  const isDone = authData.user?.workoutData?.history?.[today] as unknown as boolean
+  const isDone = authData?.user?.workoutData?.history?.[today] != null
   // console.log(isDone ? "this work out is done" : "this workout isn't done")
 
   function handleFinishedTodaysWorkout() {
     console.log("today's workout is done");
-    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData.history, [today]: { caloriesBurned: workout.calories } } } })
+    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } } } })
     if (authData.user) {
       dispatch(setUser(
         {
           ...authData.user,
           workoutData: {
             selectedWorkout: selectedProgramName
-            , history: { ...authData.user?.workoutData.history, [today]: { caloriesBurned: workout.calories } }
+            , history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } }
           },
         }
       ));
@@ -79,15 +90,7 @@ export function TodaysWorkout() {
     setStartWorkout(!startWorkout);
   };
 
-  if (isRestDay) {
-    return (
-      <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
-        <div className="flex flex-col justify-center items-center"></div>
-        <h4 className="text-prof-text dark:text-text-dark text-lg"><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
-        <p className="text-prof-text-secondary dark:text-text-secondary-dark mt-4">Today is a rest day! Take time to recover and prepare for your next workout.</p>
-      </div>
-    )
-  }
+
   if (isDone) {
     return (
       <div>
@@ -104,9 +107,18 @@ export function TodaysWorkout() {
           </div>
         </div>
         <div className="text-4xl text-center text-text">Keep it up!</div>
-        <div>
-          <div>calories: {authData?.user?.workoutData?.history?.[today]?.caloriesBurned}</div>
-          {/* <div>Reps: {workout.exercises.reduce((acc, wo) => acc + wo.)}</div> */}
+        <div className="mt-8 flex justify-center">
+          <div className="bg-white dark:bg-secondary-dark shadow-md rounded-lg p-6 flex items-center gap-4">
+            <i className="fa-solid fa-fire text-4xl text-orange-500"></i>
+            <div>
+              <p className="text-3xl font-bold text-text dark:text-white">
+                {authData?.user?.workoutData?.history?.[today]?.caloriesBurned}
+              </p>
+              <p className="text-prof-text-secondary dark:text-text-secondary-dark">
+                Calories Burned
+              </p>
+            </div>
+          </div>
         </div>
       </div >
     )
