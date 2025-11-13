@@ -31,6 +31,7 @@ function RegisterPage() {
     const [activityLevel, setActivityLevel] = useState<string>("");
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
+    const [loading, setloading] = useState(false);
     const FormRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
     //error
@@ -103,6 +104,7 @@ function RegisterPage() {
     }
 
     const handleTraineeSubmit = async (e: React.FormEvent) => {
+        setloading(true);
         e.preventDefault();
         const newErrors: typeof errors = {};
         validate({ fullName, email, password, confirmPassword, errors: newErrors });
@@ -117,9 +119,12 @@ function RegisterPage() {
             setErrors(newErrors);
             setAlert(true);
             setAlertMessage("Error: Please fill all fields in the form");
+            setloading(false);
             return;
         }
-        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "", createdAt: new Date().toISOString(), workoutData: { selectedWorkout: "beginnerFullBodyPlan", history: {} } });
+        const bmi = (Number(currentWeight) / ((Number(height) / 100) ** 2)).toFixed(2);
+        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "", createdAt: new Date().toISOString(), workoutData: { selectedWorkout: "beginnerFullBodyPlan", history: {} }, bmi });
+        setloading(false);
         if ('error' in Trainee) {
             setAlert(true);
             setAlertMessage(Trainee.error);
@@ -254,7 +259,7 @@ function RegisterPage() {
                                     {errors.activityLevel && <p className="error">{errors.activityLevel}</p>}
                                     <div className="flex flex-col-reverse md:flex-row md:space-x-40 space-y-10 md:space-y-0 ">
                                         <Button isSecondary type="button" label="Back" margin="mt-10" onClick={prevStep} />
-                                        <Button type="submit" label="Submit" margin="mt-10" icon="submit" />
+                                        <Button type="submit" label="Submit" margin="mt-10" icon="submit" loading={loading} />
                                     </div>
                                 </form>
 
