@@ -2,6 +2,7 @@ import { useState } from "react";
 import { mealPlans } from "../types/mealPlansData";
 import { Apple, Clock, Coffee, Moon, Utensils } from "lucide-react";
 
+
 export function TodayMeal() {
     const icons = [
         <div className="bg-[#FFF1E6] p-2 rounded-xl mr-3">
@@ -18,6 +19,10 @@ export function TodayMeal() {
             <Moon color="#AA2DFD" style={{ backgroundColor: "#EEE2FF" }} />
         </div>
     ]
+
+    //const authData = useSelector((state: RootState) => state.Authantication);
+    //saveUserData(auttData.uid as string, { "targetWeight": [81].toString() })
+
 
     const selectedPlanName = "Weight Loss Plan";
     const plan = mealPlans[selectedPlanName];

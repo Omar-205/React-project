@@ -1,7 +1,6 @@
-
-import profileData from "../profile/profileData";
+import type { TraineeData } from "../types/TraineeData";
 import { useState } from "react";
-export default function ProfileInput(props: { disabled: boolean, content: string | number, type: "text" | "email" | "number"  | "bio" | "select", profile: typeof profileData, setProfile: (value: typeof profileData) => void, field: keyof typeof profileData }) {
+export default function ProfileInput(props: { disabled: boolean, content: string | number, type: "text" | "email" | "number"  | "bio" | "select", profile: TraineeData, setProfile: (value: TraineeData) => void, field: keyof TraineeData }) {
     const { disabled, content, type, profile, setProfile, field } = props;
 
     const [contentState, setContentState] = useState(content);
@@ -43,7 +42,7 @@ export default function ProfileInput(props: { disabled: boolean, content: string
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>)
-            || (type === "select" && field === "primaryGoals" && //primary goals select input
+            || (type === "select" && field === "primaryGoal" && //primary goals select input
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
                     <option value="" disabled>-- select primary goal --</option>
                     <option value="Lose weight">Lose weight</option>

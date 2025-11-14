@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "./store/store";
 import ProtectedRoute from "./Pages/ProtectedRoute";
 import PublicRoute from "./Pages/PublicRoute";
+import NotFoundPage from "./Pages/NotFoundPage";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="*" element={<NotFoundPage/>} />
     </Route>
   </Route>
       <Route element={<ProtectedRoute />}>

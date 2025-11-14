@@ -18,9 +18,10 @@ function LoginPage() {
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setloading] = useState(false);
+
     const FormRef=useRef<HTMLFormElement>(null);
 
-    // Clear specific field error
     const clearError = (field: keyof typeof errors) => {
         setErrors((prev) => {
             const newErrors = { ...prev };
@@ -34,6 +35,7 @@ function LoginPage() {
     };
 
     const handleLogin = async (e: FormEvent) => {
+        setloading(true);
         e.preventDefault();
         const newErrors: { email?: string, password?: string } = {};
         if (!email) {
@@ -41,14 +43,17 @@ function LoginPage() {
         }
         if (!password) {
             newErrors.password = "Password is required";
+            
         }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setAlert(true);
             setAlertMessage("Error: Please fill all fields in the form");
+            setloading(false);
             return;
         }
         const user = await loginUser({ email, password });
+        setloading(false);
         if ("error" in user) {
             setAlert(true);
             setAlertMessage(user.error);
@@ -95,7 +100,7 @@ function LoginPage() {
                             showPassword={showPassword} onTogglePassword={() => setShowPassword(!showPassword)}
                         />
                         {errors.password && <p className="text-sm text-error -mt-2 mb-8">{errors.password}</p>}
-                        <Button type="submit" label="Login" width="w-full text-xl" />
+                        <Button type="submit" label="Login" width="w-full text-xl" loading={loading}/>
                     </form>
                     <p className="mt-5 text-center text-gray-400 text-sm">
                         Don’t have an account?{" "}

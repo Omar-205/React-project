@@ -1,5 +1,4 @@
-import { div } from "framer-motion/client"
-import { Commet, OrbitProgress } from "react-loading-indicators"
+import { Commet } from "react-loading-indicators"
 
 interface LoadingProps {
     size?: "small" | "medium" | "large",
