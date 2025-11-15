@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 import {
   LineChart,
   Line,
@@ -10,22 +12,22 @@ import {
 } from "recharts";
 
 export default function WeightProgress() {
-  const data = [
-    { date: "2025-10-1", weight: 77.5 },
-    { date: "2025-10-5", weight: 80.0 },
-    { date: "2025-10-12", weight: 88.7 },
-    { date: "2025-10-28", weight: 100.5 },
-    { date: "2025-11-1", weight: 98.0 },
-    { date: "2025-11-5", weight: 94.3 },
-    { date: "2025-11-16", weight: 80.3 },
-    { date: "2025-1-19", weight: 67.0 },
-  ];
+  // ✅ Get trainee data from Redux
+  const { user } = useSelector((state: RootState) => state.Authantication);
 
-  // 📝 Weight summary stats
+  // ✅ Sort weight data by date (ascending)
+  const data =
+    user?.progress?.weightData && user.progress.weightData.length > 0
+      ? [...user.progress.weightData].sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        )
+      : [];
+
+  // ✅ Weight summary stats
   const weightStats = [
-    { label: "Starting Weight", value: 80.0 },
-    { label: "Current Weight", value: 76.0 },
-    { label: "Target Weight", value: 72.0 },
+    { label: "Starting Weight", value: user?.startWeight || "—" },
+    { label: "Current Weight", value: user?.currentWeight || "—" },
+    { label: "Target Weight", value: user?.targetWeight || "—" },
   ];
 
   return (
@@ -79,56 +81,62 @@ export default function WeightProgress() {
 
       {/* 📊 Chart */}
       <div className="h-80">
-        <ResponsiveContainer>
-          <LineChart
-            data={data}
-            margin={{ top: 20, right: 20, left: 0, bottom: 40 }}
-          >
-            <CartesianGrid
-              stroke="var(--color-light-border)"
-              className="dark:stroke-[var(--color-secondary-dark)]"
-              strokeDasharray="3 3"
-            />
-            <XAxis
-              dataKey="date"
-              tick={{ fill: "var(--color-text)", fontSize: 12 }}
-              className="dark:[&>text]:fill-[var(--color-text-dark)]"
-              angle={-35}
-              textAnchor="end"
-              interval={0}
-              height={50}
-            />
-            <YAxis
-              tick={{ fill: "var(--color-text)", fontSize: 12 }}
-              className="dark:[&>text]:fill-[var(--color-text-dark)]"
-              label={{
-                value: "Weight (kg)",
-                angle: -90,
-                position: "insideLeft",
-                fill: "var(--color-text)",
-                fontSize: 12,
-              }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "var(--color-white)",
-                border: "1px solid var(--color-light-border)",
-                color: "var(--color-text)",
-              }}
-              labelStyle={{ color: "var(--color-text)" }}
-              wrapperClassName="dark:[&>div]:bg-[var(--color-secondary-dark)] dark:[&>div]:text-[var(--color-text-dark)]"
-            />
-            <Line
-    type="monotone"
-    dataKey="weight"
-   stroke="var(--color-primary)"
-   strokeWidth={3}
-   dot={{ r: 4, fill: "var(--color-primary)" }}
-   fill="none"   
-  className="dark:stroke-[var(--color-secondary)]"
-  />
-          </LineChart>
-        </ResponsiveContainer>
+        {data.length > 0 ? (
+          <ResponsiveContainer>
+            <LineChart
+              data={data}
+              margin={{ top: 20, right: 20, left: 0, bottom: 40 }}
+            >
+              <CartesianGrid
+                stroke="var(--color-light-border)"
+                className="dark:stroke-[var(--color-secondary-dark)]"
+                strokeDasharray="3 3"
+              />
+              <XAxis
+                dataKey="date"
+                tick={{ fill: "var(--color-text)", fontSize: 12 }}
+                className="dark:[&>text]:fill-[var(--color-text-dark)]"
+                angle={-35}
+                textAnchor="end"
+                interval={0}
+                height={50}
+              />
+              <YAxis
+                tick={{ fill: "var(--color-text)", fontSize: 12 }}
+                className="dark:[&>text]:fill-[var(--color-text-dark)]"
+                label={{
+                  value: "Weight (kg)",
+                  angle: -90,
+                  position: "insideLeft",
+                  fill: "var(--color-text)",
+                  fontSize: 12,
+                }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--color-white)",
+                  border: "1px solid var(--color-light-border)",
+                  color: "var(--color-text)",
+                }}
+                labelStyle={{ color: "var(--color-text)" }}
+                wrapperClassName="dark:[&>div]:bg-[var(--color-secondary-dark)] dark:[&>div]:text-[var(--color-text-dark)]"
+              />
+              <Line
+                type="monotone"
+                dataKey="weight"
+                stroke="var(--color-primary)"
+                strokeWidth={3}
+                dot={{ r: 4, fill: "var(--color-primary)" }}
+                fill="none"
+                className="dark:stroke-[var(--color-secondary)]"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex justify-center items-center h-full text-gray-400 dark:text-gray-500">
+            No weight data yet. Start tracking to see your progress!
+          </div>
+        )}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ function LoginPage() {
 
     const FormRef=useRef<HTMLFormElement>(null);
 
+    // Clear specific field error*
     const clearError = (field: keyof typeof errors) => {
         setErrors((prev) => {
             const newErrors = { ...prev };

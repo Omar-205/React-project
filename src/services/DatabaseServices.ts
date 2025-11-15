@@ -2,9 +2,12 @@ import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase/config";
 import type { TraineeData } from "../types/TraineeData";
 
+export const getUserData = async (uid?: string): Promise<TraineeData | null> => {
+  if (!uid) {
+    console.error("❌ getUserData called without a valid UID");
+    return null;
+  }
 
-
-export const getUserData = async (uid: string): Promise<TraineeData | null> => {
   try {
     const traineeRef = doc(db, "Trainees", uid);
     const traineeSnap = await getDoc(traineeRef);
@@ -21,21 +24,32 @@ export const getUserData = async (uid: string): Promise<TraineeData | null> => {
 
       return data as TraineeData;
     } else {
-      console.warn(`No trainee found with UID: ${uid}`);
+      console.warn(`⚠️ No trainee found with UID: ${uid}`);
       return null;
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("❌ Error fetching user data:", error);
     return null;
   }
 };
 
-export const saveUserData = async (uid: string, data: Partial<TraineeData>): Promise<void> => {
+export const saveUserData = async (uid?: string, data?: Partial<TraineeData>): Promise<void> => {
+  if (!uid) {
+    console.error("❌ saveUserData called without a valid UID");
+    return;
+  }
+
+  if (!data) {
+    console.error("❌ saveUserData called without valid data");
+    return;
+  }
+
   try {
     const traineeRef = doc(db, "Trainees", uid);
     await setDoc(traineeRef, data, { merge: true });
+    console.log(`✅ User data saved successfully for UID: ${uid}`);
   } catch (error) {
-    console.error("Error saving user data:", error);
+    console.error("❌ Error saving user data:", error);
     throw error;
   }
-}
+};

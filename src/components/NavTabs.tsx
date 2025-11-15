@@ -40,6 +40,7 @@ export default function NavTabs({ titles, components }: NavTabsProps) {
       </div>
 
       <div className="p-2">
+        
         {components[activeIndex]}
       </div>
     </div>
