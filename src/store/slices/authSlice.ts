@@ -63,6 +63,12 @@ const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<TraineeData | null>) => {
       state.user = action.payload;
+    },
+    setNutritionPlan: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.nutritionData.selectedPlan = action.payload;
+      }
+
     }
   },
   extraReducers: (builder) => {
@@ -100,5 +106,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUid, clearAuth, setUser } = authSlice.actions;
+export const { setUid, clearAuth, setUser, setNutritionPlan } = authSlice.actions;
 export default authSlice.reducer;

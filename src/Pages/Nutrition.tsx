@@ -1,24 +1,44 @@
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { NutritionProgress } from "../components/NutritionProgress";
 import { Target } from "lucide-react";
-import { useState } from "react";
 import { TodayMeal } from "../components/TodayMeal";
 import { MealPlans } from "../components/MealPlans";
 import { FoodLibrary } from "../components/FoodLibrary";
 import NavTabs from "../components/NavTabs";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { saveUserData } from "../services/DatabaseServices";
+import { useEffect } from "react";
+import { mealPlans } from "../types/mealPlansData";
 
 
 export default function Nutrition() {
   const theme = useSelector((state: RootState) => state.theme.theme);
+  const authData = useSelector((state: RootState) => state.Authantication);
+  useEffect(() => {
+    //access the user data inwhich the nutrition exists
+    const userData = authData.user;
+    //hanlde any missing fields
+    if (!userData?.nutritionData || !userData?.nutritionData?.selectedPlan || !userData?.nutritionData.history || !Object.keys(mealPlans).includes(userData.nutritionData.selectedPlan)) {
+      saveUserData(authData.uid as string, { nutritionData: { selectedPlan: userData?.nutritionData?.selectedPlan || Object.keys(mealPlans)[0], history: userData?.nutritionData?.history || {} } })
+      return;
+      console.log('edited');
+
+    }
+    // if the selected plan is found ?
+    else {
+      console.log('found');
+
+    }
+    console.log('done');
+
+  }, [])
 
   const styles = {
     pathColor: "#FF6E00",
     textColor: theme === "dark" ? "#f1f5f9" : "#000",
   };
 
-  const [selectedTab, setSelectedTab] = useState(0);
   const tabsNames = ["Today's Meal", "Meal Plans", "Food Library"];
   const tabs = [<TodayMeal />, <MealPlans />, <FoodLibrary />];
 
@@ -55,8 +75,8 @@ export default function Nutrition() {
     </div>
 
     <div className="p-4">
-            <NavTabs titles={tabsNames} components={tabs} />
-          </div>
+      <NavTabs titles={tabsNames} components={tabs} />
+    </div>
 
 
   </div>

@@ -48,14 +48,14 @@ export function Programs() {
     {workoutProgramsInfo.map((planInfo) => {
       const isCurrentPlan = planInfo.planName == selectedWorkoutName;
       return (
-        <div key={planInfo.id} className="text-text bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
-      flex flex-col justify-between max-w-70 xl:max-w-full">
+        <div key={planInfo.id} className="text-slate-300 bg-[#FEFEFE] border w-max border-gray-200 rounded-lg p-6
+      flex flex-col justify-between max-w-70 xl:max-w-full dark:border-gray-700 dark:bg-primary-dark">
           <div>
             <DumbbellIcon style={{ background: planInfo.iconStyle.background, color: planInfo.iconStyle.color, padding: '8px', borderRadius: '8px' }}
               fill={planInfo.iconStyle.background} size={40} />
 
-            <h3 className="mt-3 font-medium text-slate-700">{planInfo.title}</h3>
-            <p className="pb">{planInfo.description}</p>
+            <h3 className="mt-3 font-semibold text-slate-300">{planInfo.title}</h3>
+            <p className="pb text-slate-400">{planInfo.description}</p>
           </div>
           <div className="space-y-1 mt-4">
             <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>{planInfo.duration}</p></div>

@@ -4,6 +4,10 @@ import type { RootState } from "../store/store";
 import { workoutPrograms } from "../types/weeklyPlans";
 import { saveUserData } from "../services/DatabaseServices";
 import { useEffect, useState } from "react";
+
+function getToday() {
+    return Math.floor((new Date().getTime() + 1000 * 60 * 60 * 3) / (1000 * 60 * 60 * 24))
+}
 const days = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"]
 
 export default function WeeklyExcercise(props: { day?: number, done?: boolean }) {
@@ -27,7 +31,7 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
     const workoutPlan = workoutPrograms[selectedWorkoutName]; //  workouts and program name
     const plan = workoutPlan.program;          //array of workouts
     const workoutData = authData?.user?.workoutData;
-    const today = Math.floor((new Date().getTime() + 1000 * 60 * 60 * 3) / (1000 * 60 * 60 * 24))
+    const today = getToday();
     const lastFriday = today - today % 7 + 1;
 
     //console.log(plan)

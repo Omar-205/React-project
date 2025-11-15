@@ -23,7 +23,6 @@ export function TodayMeal() {
     //const authData = useSelector((state: RootState) => state.Authantication);
     //saveUserData(auttData.uid as string, { "targetWeight": [81].toString() })
 
-
     const selectedPlanName = "Weight Loss Plan";
     const plan = mealPlans[selectedPlanName];
     const meals = plan.meals;

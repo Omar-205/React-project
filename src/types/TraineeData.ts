@@ -1,4 +1,6 @@
 import type { ProgressData } from "./progressData";
+import type { dailyMeal } from "./mealPlansData";
+
 
 export interface TraineeData {
     fullName: string;
@@ -18,6 +20,10 @@ export interface TraineeData {
     workoutData: {
         selectedWorkout: string;
         history: Record<number, { caloriesBurned: number }>
+    };
+    nutritionData: {
+        selectedPlan: string;
+        history: Record<number, dailyMeal>
     }
     tempWeight: string;
     WeightLost: number;
