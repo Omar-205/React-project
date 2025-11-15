@@ -23,7 +23,7 @@ export interface TraineeData {
     };
     nutritionData: {
         selectedPlan: string;
-        history: Record<number, dailyMeal>
+        history: Record<string, dailyMeal>
     }
     tempWeight: string;
     WeightLost: number;

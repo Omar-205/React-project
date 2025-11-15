@@ -1,4 +1,4 @@
-import React, { type JSX } from "react"; // ✅ ensures JSX.Element is recognized in all setups
+import { type JSX } from "react"; // ✅ ensures JSX.Element is recognized in all setups
 
 // 📊 Recommendation / summary box data
 export interface ProgRecData {
