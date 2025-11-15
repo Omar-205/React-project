@@ -82,32 +82,38 @@ export default function Progress() {
         setCurrentWeight(newWeightFromInput);
     } else {
         // 🛑 It's not today. Keep the *existing* "current" weight and "weight lost"
-        finalCurrentWeight = user?.progress?.currentWeight || currentWeight;
-        finalWeightLost = user?.progress?.weightLost || 0;
+        finalCurrentWeight = user?.currentWeight || currentWeight;
+        finalWeightLost = user?.WeightLost || 0;
         
         // Optional: Let the user know what happened
         console.log("Historical weight added to chart, but 'Current Weight' was not updated because the date is not today.");
     }
 
- // --- 5. Create final payloads and dispatch ---
+// --- 5. Create final payloads and dispatch ---
 
- const updatedProgress = {
+const updatedProgress = {
  ...progress,
  currentWeight: finalCurrentWeight, // Conditionally set
  targetWeight: newTargetWeight,     // Always updated
  weightLost: finalWeightLost,       // Conditionally set
  weightData: updatedWeightData,     // Always updated
+ // Ensure optional arrays are explicitly set (no undefined) to satisfy ProgressData type
+ progRecData: progress?.progRecData ?? null,
+ weightStats: progress?.weightStats ?? null,
+ weeklyProgressData: progress?.weeklyProgressData ?? null,
+ // Ensure progressPhotos is never undefined (match ProgressData type which allows array or null)
+ progressPhotos: progress?.progressPhotos ?? null,
       // Preserve existing stats
- workoutsCompleted: progress?.workoutsCompleted ?? 0,
- caloriesBurned: progress?.caloriesBurned ?? 0,
+//  workoutsCompleted: progress?.workoutsCompleted ?? 0,
+//  caloriesBurned: progress?.caloriesBurned ?? 0,
  };
 
- dispatch(updateProgress(updatedProgress));
+dispatch(updateProgress(updatedProgress));
 
- dispatch(
-   updateUser({
-  uid,
-    data: {
+dispatch(
+  updateUser({
+ uid,
+   data: {
  WeightLost: finalWeightLost,
   progress: updatedProgress,
    currentWeight: finalCurrentWeight,
@@ -120,7 +126,7 @@ export default function Progress() {
   // 📊 Cards
   const progRecData = [
     {
-      given: user?.progress.weightLost || 0,
+      given: user?.WeightLost || 0,
       statement: "Weight lost",
       icon: <i className="fa-solid fa-arrow-down text-green-500"></i>,
     },
@@ -130,12 +136,12 @@ export default function Progress() {
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: progress?.workoutsCompleted ?? 0,
+      given: user?.toatalWorkouts ?? 0,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
     {
-      given: progress?.caloriesBurned ?? 0,
+      given:  0,
       statement: "Calories burned",
       icon: <i className="fa-solid fa-heart-pulse text-orange-500"></i>,
     },
@@ -242,7 +248,7 @@ export default function Progress() {
         {progRecData.map((item, index) => (
           <RecCard
             key={index}
-            given={item.given}
+            given={Number(item.given)}
             statement={item.statement}
             icon={item.icon}
           />

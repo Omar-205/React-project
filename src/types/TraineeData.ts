@@ -14,17 +14,9 @@ export interface TraineeData {
     toatalWorkouts: string;
     bio: string;
     createdAt: string;
-<<<<<<< Updated upstream
-    bmi: number | null;
-    workoutData: {
-        selectedWorkout: string;
-        history: Record<number, { caloriesBurned: number }>
-    }
-=======
     tempWeight: string;
     WeightLost: number;
     
 
   progress?: ProgressData | null;
->>>>>>> Stashed changes
 }
