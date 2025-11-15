@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { auth, db } from "../firebase/config.ts";
 import { doc, setDoc } from "firebase/firestore";
 import type { TraineeData } from "../types/TraineeData.ts";
+import { mealPlans } from "../types/mealPlansData.ts";
 
 
 
@@ -30,6 +31,7 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
         const trainee = await createUserWithEmailAndPassword(auth, email, password);
 
         await setDoc(doc(db, "Trainees", trainee.user.uid), {
+            // default data
             fullName,
             email,
             age,
@@ -41,7 +43,9 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
             activityLevel,
             bio,
             createdAt: new Date(),
-            workoutData
+            // initial empty data
+            workoutData,
+            nutritionData: { selectedPlan: Object.keys(mealPlans)[0], history: {} }
         });
         return trainee.user;
     }

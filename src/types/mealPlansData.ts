@@ -123,3 +123,17 @@ export const mealPlans: MealPlans = {
         ],
     },
 };
+
+// important intefaces
+export interface dailyMeal {
+    breakfast?: meal;
+    lunch?: meal;
+    snacks?: meal;
+    dinner?: meal;
+}
+export interface meal {
+    calories: number;
+    protien: number;
+    carbs: number;
+    fat: number;
+}

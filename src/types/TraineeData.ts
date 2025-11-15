@@ -1,3 +1,5 @@
+import type { dailyMeal } from "./mealPlansData";
+
 export interface TraineeData {
     email: string;
     fullName: string;
@@ -14,5 +16,9 @@ export interface TraineeData {
     workoutData: {
         selectedWorkout: string;
         history: Record<number, { caloriesBurned: number }>
+    };
+    nutritionData: {
+        selectedPlan: string;
+        history: Record<number, dailyMeal>
     }
 }
