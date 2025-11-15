@@ -1,5 +1,3 @@
-
-import { Theme } from "./types/theme";
 import MainLayout from "./layouts/MainLayout";
 import { Routes, Route, Navigate } from "react-router-dom";
 import RegisterPage from "./Pages/RegisterPage";
@@ -11,16 +9,12 @@ import Profile from "./Pages/Profile";
 import Progress from "./Pages/Progress";
 import Workouts from "./Pages/Workouts";
 import Nutrition from "./Pages/Nutrition";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "./store/store";
 import ProtectedRoute from "./Pages/ProtectedRoute";
 import PublicRoute from "./Pages/PublicRoute";
 import NotFoundPage from "./Pages/NotFoundPage";
 
 function App() {
 
-  const theme = useSelector((state: RootState) => state.theme.theme);
-  const dispatch = useDispatch();
 
   return (
 

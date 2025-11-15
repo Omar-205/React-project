@@ -16,6 +16,7 @@ const initialState: AuthState = {
   error: null,
 };
 
+
 // --- Async Thunks ---
 export const fetchUser = createAsyncThunk<
   TraineeData | null,

@@ -1,4 +1,4 @@
-import React from "react"; // ✅ ensures JSX.Element is recognized in all setups
+import React, { type JSX } from "react"; // ✅ ensures JSX.Element is recognized in all setups
 
 // 📊 Recommendation / summary box data
 export interface ProgRecData {
@@ -51,7 +51,7 @@ export interface WeeklyProgress {
 
 // 🖼️ Progress photos
 export interface ProgressEntry {
-  month: string | null;
+  date: string | null;
   frontPhoto: string | null;
   sidePhoto: string | null;
 }

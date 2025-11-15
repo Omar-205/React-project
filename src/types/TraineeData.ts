@@ -1,10 +1,10 @@
 import type { ProgressData } from "./progressData";
 
 export interface TraineeData {
-    email: string;
     fullName: string;
     gender: string;
     age: string;
+    email: string;
     height: string;
     currentWeight: string;
     startWeight: string;
@@ -14,9 +14,12 @@ export interface TraineeData {
     toatalWorkouts: string;
     bio: string;
     createdAt: string;
+    bmi: number | null;
+    workoutData: {
+        selectedWorkout: string;
+        history: Record<number, { caloriesBurned: number }>
+    }
     tempWeight: string;
     WeightLost: number;
-    
-
-  progress?: ProgressData | null;
+    progress?: ProgressData | null;
 }

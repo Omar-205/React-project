@@ -34,12 +34,12 @@ export default function Progress() {
   }, [uid, status, dispatch, user]);
 
   // 🔹 Save handler
-// 🔹 Save handler
- const handleSave = () => {
- if (!uid || !date) {
-        // You could add an alert here to tell the user a date is required
-        console.log("A date is required to save a weight entry.");
-        return;
+  // 🔹 Save handler
+  const handleSave = () => {
+    if (!uid || !date) {
+      // You could add an alert here to tell the user a date is required
+      console.log("A date is required to save a weight entry.");
+      return;
     };
 
     // --- 1. Get today's date in 'YYYY-MM-DD' format ---
@@ -59,11 +59,11 @@ export default function Progress() {
 
     // A. New entry for the historical weight chart
     const newEntry = {
- date, // The date the user selected
- weight: parseFloat(newWeightFromInput),
- };
- const existingData = progress?.weightData ?? [];
- const updatedWeightData = [...existingData, newEntry]; // Always add the new entry
+      date, // The date the user selected
+      weight: parseFloat(newWeightFromInput),
+    };
+    const existingData = progress?.weightData ?? [];
+    const updatedWeightData = [...existingData, newEntry]; // Always add the new entry
 
     // B. The user's goal (this can be updated anytime)
     const newTargetWeight = targetWeight;
@@ -73,56 +73,61 @@ export default function Progress() {
     let finalWeightLost;
 
     if (isToday) {
-        // ✅ It's today. Update the official "current" weight and "weight lost"
-        finalCurrentWeight = newWeightFromInput;
-        finalWeightLost =
- parseFloat(user?.startWeight || "0") - parseFloat(newWeightFromInput || "0");
-        
-        // Update local state for the input field
-        setCurrentWeight(newWeightFromInput);
+      // ✅ It's today. Update the official "current" weight and "weight lost"
+      finalCurrentWeight = newWeightFromInput;
+      finalWeightLost =
+        parseFloat(user?.startWeight || "0") - parseFloat(newWeightFromInput || "0");
+
+      // Update local state for the input field
+      setCurrentWeight(newWeightFromInput);
     } else {
-        // 🛑 It's not today. Keep the *existing* "current" weight and "weight lost"
-        finalCurrentWeight = user?.currentWeight || currentWeight;
-        finalWeightLost = user?.WeightLost || 0;
-        
-        // Optional: Let the user know what happened
-        console.log("Historical weight added to chart, but 'Current Weight' was not updated because the date is not today.");
+      // 🛑 It's not today. Keep the *existing* "current" weight and "weight lost"
+      finalCurrentWeight = user?.currentWeight || currentWeight;
+      finalWeightLost = user?.WeightLost || 0;
+
+      // Optional: Let the user know what happened
+      console.log("Historical weight added to chart, but 'Current Weight' was not updated because the date is not today.");
     }
 
-// --- 5. Create final payloads and dispatch ---
+    // --- 5. Create final payloads and dispatch ---
 
-const updatedProgress = {
- ...progress,
- currentWeight: finalCurrentWeight, // Conditionally set
- targetWeight: newTargetWeight,     // Always updated
- weightLost: finalWeightLost,       // Conditionally set
- weightData: updatedWeightData,     // Always updated
- // Ensure optional arrays are explicitly set (no undefined) to satisfy ProgressData type
- progRecData: progress?.progRecData ?? null,
- weightStats: progress?.weightStats ?? null,
- weeklyProgressData: progress?.weeklyProgressData ?? null,
- // Ensure progressPhotos is never undefined (match ProgressData type which allows array or null)
- progressPhotos: progress?.progressPhotos ?? null,
-      // Preserve existing stats
-//  workoutsCompleted: progress?.workoutsCompleted ?? 0,
-//  caloriesBurned: progress?.caloriesBurned ?? 0,
- };
+    const updatedProgress = {
+      ...progress,
+      currentWeight: finalCurrentWeight,
+      targetWeight: newTargetWeight,
+      weightLost: finalWeightLost,
+      weightData: updatedWeightData,
+      progRecData: progress?.progRecData ?? null,
+      weightStats: progress?.weightStats ?? null,
+      weeklyProgressData: progress?.weeklyProgressData ?? null,
+      progressPhotos: progress?.progressPhotos ?? [], // Always array
+    };
+    
+    // ---------- Dispatch Redux (ONLY progress slice fields) ----------
+    dispatch(
+      updateProgress({
+        currentWeight: finalCurrentWeight,
+        targetWeight: newTargetWeight,
+        weightLost: finalWeightLost,
+        progressPhotos: updatedProgress.progressPhotos,
+      })
+    );
+    
+    // ---------- Update user in DB ----------
+    dispatch(
+      updateUser({
+        uid,
+        data: {
+          WeightLost: finalWeightLost,
+          progress: updatedProgress,  // full object for DB
+          currentWeight: finalCurrentWeight,
+          targetWeight: newTargetWeight,
+        },
+      })
+    );
 
-dispatch(updateProgress(updatedProgress));
-
-dispatch(
-  updateUser({
- uid,
-   data: {
- WeightLost: finalWeightLost,
-  progress: updatedProgress,
-   currentWeight: finalCurrentWeight,
- targetWeight: newTargetWeight, },
- })
- );
-
-  setDate(""); // Reset the date input
- };
+    setDate(""); // Reset the date input
+  };
   // 📊 Cards
   const progRecData = [
     {
@@ -141,7 +146,7 @@ dispatch(
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
     {
-      given:  0,
+      given: 0,
       statement: "Calories burned",
       icon: <i className="fa-solid fa-heart-pulse text-orange-500"></i>,
     },

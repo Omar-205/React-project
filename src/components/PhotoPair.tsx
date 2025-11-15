@@ -2,8 +2,8 @@
 import React from "react";
 
 interface PhotoPairProps {
-  frontPhoto: string;
-  sidePhoto: string;
+  frontPhoto: string ;
+  sidePhoto: string ;
 }
 
 const PhotoPair: React.FC<PhotoPairProps> = ({ frontPhoto, sidePhoto }) => {
