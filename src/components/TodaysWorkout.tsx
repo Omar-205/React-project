@@ -45,6 +45,24 @@ export function TodaysWorkout() {
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
   // console.log(today);
 
+  function isExerciseCompletedToday(exercise: any) {
+    const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+    try {
+      if (!localStorage
+        || !localStorage.getItem("workoutHistory")
+        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))).includes(today.toString())
+        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))[today.toString()] || "").includes(exercise.title)
+      ) {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+
+      return false;
+    }
+    return true;
+  }
+
   const todayIndex = (today - 1) % 7;
   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
   const [progressPercent, setProgressPercent] = useState(0);
@@ -89,6 +107,14 @@ export function TodaysWorkout() {
   const handleStartWorkout = () => {
     setStartWorkout(!startWorkout);
   };
+
+  for (let ex of workout.exercises) {
+    if (!isExerciseCompletedToday(ex)) {
+      ex.completed = false;
+    } else {
+      ex.completed = true;
+    }
+  }
 
 
   if (isDone) {

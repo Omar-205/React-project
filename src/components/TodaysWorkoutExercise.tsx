@@ -10,14 +10,29 @@ export function TodaysWorkoutExercise(props: {
     const { exercise, workout, setWorkout, startWorkout } = props;
     const [showPopup, setShowPopup] = useState(false);
 
-    const markExerciseComplete = () => {
+    function markExerciseComplete() {
         setWorkout({
             ...workout,
             exercises: workout.exercises.map((ex: any) =>
                 ex.id === exercise.id ? { ...ex, completed: true } : ex
             ),
         });
+
+        if (!localStorage) return;
+        const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+        const workoutHistory = JSON.parse(localStorage.getItem("workoutHistory") || "{}");
+        if (!Object.keys(workoutHistory).includes(today.toString())) {
+            workoutHistory[today] = {};
+        }
+        workoutHistory[today][exercise.title] = true;
+        localStorage.setItem("workoutHistory", JSON.stringify(workoutHistory));
+
     };
+    console.log(exercise.title);
+
+    // check the local storage if the exercise is completed today before
+
+
 
     return (
         <>

@@ -21,7 +21,7 @@ interface NavbarProps {
 function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu, setHideMenu }: NavbarProps) {
   // const { username, isAuthenticated} = useAuth();
   const theme = useSelector((state: RootState) => state.theme.theme);
-  const { uid ,user} = useSelector((state: RootState) => state.Authantication);
+  const { uid, user } = useSelector((state: RootState) => state.Authantication);
   const dispatch = useDispatch();
   const [isAuthenticated, setAuth] = useState(!!uid);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,6 +34,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
     navigate("/register");
   }
   const handleLogout = () => {
+    localStorage.clear();
     setMenuOpen(false);
     dispatch(clearAuth());
     setAuth(false);
