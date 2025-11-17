@@ -36,7 +36,7 @@ export default function Nutrition() {
     pathColor: "#FF6E00",
     textColor: theme === "dark" ? "#f1f5f9" : "#000",
   };
-
+  // consumbtion data
   const tabsNames = ["Today's Meal", "Meal Plans", "Food Library"];
   const tabs = [<TodayMeal />, <MealPlans />, <FoodLibrary />];
   const selectedPlan = authData.user?.nutritionData?.selectedPlan;
@@ -55,8 +55,12 @@ export default function Nutrition() {
   const consumedFats = plan.meals
     .filter(meal => todayHistory[meal.name as keyof typeof todayHistory])
     .reduce((sum, meal) => sum + (meal.fat || 0), 0);
-    console.log(consumedProtein/ plan.protein * 100);
-
+  console.log(consumedProtein / plan.protein * 100);
+  // excercise data
+  let caloriesBurned = 0;
+  const todayStamp = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  const todayWorkout = authData.user?.workoutData.history?.[todayStamp];
+  if (todayWorkout) caloriesBurned += todayWorkout.caloriesBurned || 0;
   return <div className="max-w-[1000px] text-[#727680] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">
     <h2>Nutrition</h2>
     <p>Track Yout meals and reach your nutrition goals</p>
@@ -81,7 +85,7 @@ export default function Nutrition() {
         <div className="flex flex-col justify-center">
           <div className="bg-[#EFF6FE] p-5 text-[#6379B4] h-fit rounded-xl">
             <h5 className="flex"> <Target color="#70A0FF" className="mr-1" />  Net Calories</h5>
-            <p className="text-2xl font-semibold mt-2 mb-1">{1300}</p>
+            <p className="text-2xl font-semibold mt-2 mb-1">{consumedCalories - caloriesBurned}</p>
             <p className="text-sm">Intake-Excercise</p>
           </div>
         </div>
