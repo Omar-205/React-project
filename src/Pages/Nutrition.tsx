@@ -56,7 +56,7 @@ export default function Nutrition() {
     .filter(meal => todayHistory[meal.name as keyof typeof todayHistory])
     .reduce((sum, meal) => sum + (meal.fat || 0), 0);
   console.log(consumedProtein / plan.protein * 100);
-  // excercise data
+ 
   let caloriesBurned = 0;
   const todayStamp = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
   const todayWorkout = authData.user?.workoutData.history?.[todayStamp];

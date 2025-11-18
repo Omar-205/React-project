@@ -21,7 +21,7 @@ export default function Quick() {
       <h3 className="font-bold text-xl dark:text-white">Quick Actions</h3>
       <p className=" dark:text-text-dark">Jump to your most common tasks</p>
 
-      {/* Buttons */}
+      
       <ButtonsDash actions={quickActions} />
 
     </div>

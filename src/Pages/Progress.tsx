@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { fetchUser, updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
+ import { workoutPrograms } from "../types/weeklyPlans";
 
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
@@ -14,6 +15,14 @@ const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
 export default function Progress() {
+  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  
+    const authData = useSelector((state: RootState) => state.Authantication);
+   const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
+   const selectedProgram = workoutPrograms[selectedProgramName];
+   const todayIndex = (today - 1) % 7;
+  const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
+ 
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user, status } = useSelector(
     (state: RootState) => state.Authantication
@@ -25,7 +34,10 @@ export default function Progress() {
   const [tempW, setTempW] = useState("0");
   const [date, setDate] = useState(""); // 🗓️ New date field
 
-  // 🔹 Load user data once
+
+
+
+  
   useEffect(() => {
     if (uid && status === "idle") {
       dispatch(fetchUser(uid));
@@ -33,63 +45,48 @@ export default function Progress() {
     console.log("User from Redux:", user);
   }, [uid, status, dispatch, user]);
 
-  // 🔹 Save handler
-  // 🔹 Save handler
   const handleSave = () => {
     if (!uid || !date) {
-      // You could add an alert here to tell the user a date is required
-      console.log("A date is required to save a weight entry.");
+     console.log("A date is required to save a weight entry.");
       return;
     };
 
-    // --- 1. Get today's date in 'YYYY-MM-DD' format ---
-    // This format matches the value from <input type="date">
+    
     const today = new Date();
     const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // JS months are 0-11
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     const todayString = `${yyyy}-${mm}-${dd}`;
 
-    // --- 2. Check if the selected date is today ---
     const isToday = (date === todayString);
 
-    const newWeightFromInput = tempW; // The weight from the input field
+    const newWeightFromInput = tempW; 
 
-    // --- 3. Prepare data that *always* gets updated ---
-
-    // A. New entry for the historical weight chart
     const newEntry = {
-      date, // The date the user selected
+      date, 
       weight: parseFloat(newWeightFromInput),
     };
     const existingData = progress?.weightData ?? [];
-    const updatedWeightData = [...existingData, newEntry]; // Always add the new entry
+    const updatedWeightData = [...existingData, newEntry]; 
 
-    // B. The user's goal (this can be updated anytime)
     const newTargetWeight = targetWeight;
 
-    // --- 4. Prepare data that is *conditional* ---
     let finalCurrentWeight;
     let finalWeightLost;
 
     if (isToday) {
-      // ✅ It's today. Update the official "current" weight and "weight lost"
       finalCurrentWeight = newWeightFromInput;
       finalWeightLost =
         parseFloat(user?.startWeight || "0") - parseFloat(newWeightFromInput || "0");
 
-      // Update local state for the input field
       setCurrentWeight(newWeightFromInput);
     } else {
-      // 🛑 It's not today. Keep the *existing* "current" weight and "weight lost"
       finalCurrentWeight = user?.currentWeight || currentWeight;
       finalWeightLost = user?.WeightLost || 0;
 
-      // Optional: Let the user know what happened
       console.log("Historical weight added to chart, but 'Current Weight' was not updated because the date is not today.");
     }
 
-    // --- 5. Create final payloads and dispatch ---
 
     const updatedProgress = {
       ...progress,
@@ -146,7 +143,7 @@ export default function Progress() {
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
     {
-      given: 0,
+      given:authData?.user?.workoutData?.history?.[today]?.caloriesBurned || 0,
       statement: "Calories burned",
       icon: <i className="fa-solid fa-heart-pulse text-orange-500"></i>,
     },

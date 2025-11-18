@@ -12,10 +12,8 @@ import {
 } from "recharts";
 
 export default function WeightProgress() {
-  // ✅ Get trainee data from Redux
   const { user } = useSelector((state: RootState) => state.Authantication);
 
-  // ✅ Sort weight data by date (ascending)
   const data =
     user?.progress?.weightData && user.progress.weightData.length > 0
       ? [...user.progress.weightData].sort(
@@ -23,7 +21,6 @@ export default function WeightProgress() {
         )
       : [];
 
-  // ✅ Weight summary stats
   const weightStats = [
     { label: "Starting Weight", value: user?.startWeight || "—" },
     { label: "Current Weight", value: user?.currentWeight || "—" },
@@ -49,7 +46,7 @@ export default function WeightProgress() {
         📈 Weight Progress
       </h2>
 
-      {/* 🧭 Weight Summary */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
         {weightStats.map((item) => (
           <div
@@ -79,7 +76,7 @@ export default function WeightProgress() {
         ))}
       </div>
 
-      {/* 📊 Chart */}
+      {}
       <div className="h-80">
         {data.length > 0 ? (
           <ResponsiveContainer>

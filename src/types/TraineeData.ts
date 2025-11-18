@@ -13,7 +13,7 @@ export interface TraineeData {
     primaryGoal: string;
     targetWeight: string;
     activityLevel: string;
-    toatalWorkouts: string;
+    toatalWorkouts: number|null;
     bio: string;
     createdAt: string;
     bmi: number | null;
