@@ -45,92 +45,122 @@ export default function Progress() {
     console.log("User from Redux:", user);
   }, [uid, status, dispatch, user]);
 
-  const handleSave = () => {
+ const handleSave = () => {
     if (!uid || !date) {
-     console.log("A date is required to save a weight entry.");
+      console.log("A date is required to save a weight entry.");
       return;
-    };
-
-    
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    const todayString = `${yyyy}-${mm}-${dd}`;
-
-    const isToday = (date === todayString);
-
-    const newWeightFromInput = tempW; 
-
-    const newEntry = {
-      date, 
-      weight: parseFloat(newWeightFromInput),
-    };
-    const existingData = progress?.weightData ?? [];
-    const updatedWeightData = [...existingData, newEntry]; 
-
-    const newTargetWeight = targetWeight;
-
-    let finalCurrentWeight;
-    let finalWeightLost;
-
-    if (isToday) {
-      finalCurrentWeight = newWeightFromInput;
-      finalWeightLost =
-        parseFloat(user?.startWeight || "0") - parseFloat(newWeightFromInput || "0");
-
-      setCurrentWeight(newWeightFromInput);
-    } else {
-      finalCurrentWeight = user?.currentWeight || currentWeight;
-      finalWeightLost = user?.WeightLost || 0;
-
-      console.log("Historical weight added to chart, but 'Current Weight' was not updated because the date is not today.");
     }
 
+    const todayDate = new Date();
+    const yyyy = todayDate.getFullYear();
+    const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(todayDate.getDate()).padStart(2, '0');
+    const todayString = `${yyyy}-${mm}-${dd}`;
 
+    const isToday = date === todayString;
+    
+    // Inputs from state
+    const weightInput = tempW; 
+    const targetInput = targetWeight;
+
+    // --- 1. Set Defaults to EXISTING DB Values (Preserve data) ---
+    let finalCurrentWeight = user?.currentWeight || currentWeight;
+    let finalWeightLost = user?.WeightLost || 0;
+    let finalTargetWeight = user?.targetWeight || "0"; // Default to existing
+    let finalPrimaryGoal = user?.primaryGoal;          // Default to existing
+
+    // --- 2. Overwrite ONLY if Date is Today ---
+    if (isToday) {
+      finalCurrentWeight = weightInput;
+      finalTargetWeight = targetInput; // <--- Only update target if today
+      
+      // Calculate Weight Lost
+      finalWeightLost = parseFloat(user?.startWeight || "0") - parseFloat(weightInput || "0");
+      setCurrentWeight(weightInput);
+
+      // Calculate New Goal based on the NEW target and NEW current
+      const currentVal = parseFloat(weightInput);
+      const targetVal = parseFloat(targetInput);
+
+      if (!isNaN(currentVal) && !isNaN(targetVal)) {
+        if (targetVal > currentVal) {
+          finalPrimaryGoal = "Gain weight";
+        } else if (targetVal < currentVal) {
+          finalPrimaryGoal = "Lose weight";
+        } else {
+          finalPrimaryGoal = "Maintain Weight";
+        }
+      }
+    } else {
+      console.log("Historical entry: Current Weight, Target Weight, and Goal remain unchanged.");
+    }
+
+    // --- 3. Prepare History Entry ---
+    const newEntry = {
+      date,
+      weight: parseFloat(weightInput),
+    };
+    const existingData = progress?.weightData ?? [];
+    const updatedWeightData = [...existingData, newEntry];
+
+    // --- 4. Prepare Full Progress Object ---
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
-      targetWeight: newTargetWeight,
+      targetWeight: finalTargetWeight, // Uses conditional value
       weightLost: finalWeightLost,
       weightData: updatedWeightData,
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
       weeklyProgressData: progress?.weeklyProgressData ?? null,
-      progressPhotos: progress?.progressPhotos ?? [], // Always array
+      progressPhotos: progress?.progressPhotos ?? [],
     };
-    
-    // ---------- Dispatch Redux (ONLY progress slice fields) ----------
+
+    // ---------- Dispatch Redux ----------
     dispatch(
       updateProgress({
         currentWeight: finalCurrentWeight,
-        targetWeight: newTargetWeight,
+        targetWeight: finalTargetWeight,
         weightLost: finalWeightLost,
         progressPhotos: updatedProgress.progressPhotos,
       })
     );
-    
-    // ---------- Update user in DB ----------
+
+    // ---------- Update User in DB ----------
     dispatch(
       updateUser({
         uid,
         data: {
           WeightLost: finalWeightLost,
-          progress: updatedProgress,  // full object for DB
+          progress: updatedProgress,
           currentWeight: finalCurrentWeight,
-          targetWeight: newTargetWeight,
+          targetWeight: finalTargetWeight, // Sent to DB
+          primaryGoal: finalPrimaryGoal,
         },
       })
     );
 
-    setDate(""); // Reset the date input
+    setDate(""); 
   };
-  // 📊 Cards
+   // 1. Calculate Weight Logic
+  const rawWeightDiff = user?.WeightLost || 0; 
+  const hasGained = rawWeightDiff < 0; // If negative, current > start
+
+  // 2. Create Dynamic Cards
   const progRecData = [
     {
-      given: user?.WeightLost || 0,
-      statement: "Weight lost",
-      icon: <i className="fa-solid fa-arrow-down text-green-500"></i>,
+      // Always show absolute number (no negative signs)
+      given: Math.abs(rawWeightDiff), 
+      
+      // Change text based on gain/loss
+      statement: hasGained ? "Weight gained" : "Weight lost",
+      
+      // Change Icon: Up(Red) for gain, Down(Green) for loss
+      icon: hasGained ? (
+        <i className="fa-solid fa-arrow-up text-red-500"></i>
+      ) : (
+        <i className="fa-solid fa-arrow-down text-green-500"></i>
+      ),
     },
     {
       given: targetWeight,
@@ -143,7 +173,7 @@ export default function Progress() {
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
     {
-      given:authData?.user?.workoutData?.history?.[today]?.caloriesBurned || 0,
+      given: authData?.user?.workoutData?.history?.[today]?.caloriesBurned || 0,
       statement: "Calories burned",
       icon: <i className="fa-solid fa-heart-pulse text-orange-500"></i>,
     },
