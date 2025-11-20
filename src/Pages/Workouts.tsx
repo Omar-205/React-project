@@ -12,9 +12,11 @@ import { setUser } from "../store/slices/authSlice";
 
 export default function Workouts() {
 
+  // fallback if some data is missing 
   const defaultWorkoutPlan = "beginnerFullBodyPlan";
-  const authData = useSelector((state: RootState) => state.Authantication);
+  const authData = useSelector((state: RootState) => state.Authantication); // the user's data
   const dispatch = useDispatch();
+
   useEffect(() => {
     //access the user data inwhich the workoutData exists
     const userData = authData.user;
@@ -40,6 +42,7 @@ export default function Workouts() {
     }
   }, [])
 
+  // subpages
   const titles = ["Today's Workout", "Weekly Plan", "Programs"];
   const components = [
     <TodaysWorkout />,

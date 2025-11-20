@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
 import { CheckCheck, } from "lucide-react";
 export function TodaysWorkout() {
-  const authData = useSelector((state: RootState) => state.Authantication);
+  const authData = useSelector((state: RootState) => state.Authantication); // Authentication Data
   const dispatch = useDispatch();
   const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
   // console.log(selectedProgramName);
@@ -36,38 +36,20 @@ export function TodaysWorkout() {
       setSelectedProgramName(userData?.workoutData?.selectedWorkout);
     }
   }, [])
-
-  //console.log(selectedProgramName);
+  // workoutPrograms has the workout programs data {program, programName}
   const selectedProgram = workoutPrograms[selectedProgramName];
   // console.log(selectedProgram)
 
-  // todays index
+  // today's timestamb for the history 
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-  // console.log(today);
 
-  function isExerciseCompletedToday(exercise: any) {
-    const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-    try {
-      if (!localStorage
-        || !localStorage.getItem("workoutHistory")
-        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))).includes(today.toString())
-        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))[today.toString()] || "").includes(exercise.title)
-      ) {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-
-      return false;
-    }
-    return true;
-  }
-
-  const todayIndex = (today - 1) % 7;
-  const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
+  // accessing today's workout 
+  const todayIndex = (today - 1) % 7; // index to access the weekly workouts array
+  const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]); // select todat's workout
   const [progressPercent, setProgressPercent] = useState(0);
   const [startWorkout, setStartWorkout] = useState(false);
-  const isRestDay = workout.exercises.length === 0;
+  // hangle rest days
+  const isRestDay = workout.exercises.length === 0; // today is a rest day if the excercises arrau is empty
   if (isRestDay) {
     return (
       <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
@@ -77,51 +59,8 @@ export function TodaysWorkout() {
       </div>
     )
   }
-  // console.log(workout.exercises);
+  // handle workout is already done before
   const isDone = authData?.user?.workoutData?.history?.[today] != null
-  // console.log(isDone ? "this work out is done" : "this workout isn't done")
-
-  function handleFinishedTodaysWorkout() {
-    console.log("today's workout is done");
-    // const nettotalWorkouts = authData.user?.toatalWorkouts || 0;
-   
-      // authData.user.toatalWorkouts = String(Number(authData.user.toatalWorkouts || "0") + 1);
-    const  nettotalWorkouts = (authData?.user?.toatalWorkouts || 0) + 1;
-    
-    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } } } })
-    if (authData.user) {
-      dispatch(setUser(
-        {
-          toatalWorkouts: nettotalWorkouts,
-          ...authData.user,
-          workoutData: {
-            selectedWorkout: selectedProgramName
-            , history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } }
-          },
-        }
-      ));
-    }
-  }
-  useEffect(() => {
-    const progress = workout.exercises.filter(ex => ex.completed).length;
-    setProgressPercent(progress);
-    if (progress === workout.exercises.length) {
-      handleFinishedTodaysWorkout()
-    }
-  }, [workout]);
-
-  const handleStartWorkout = () => {
-    setStartWorkout(!startWorkout);
-  };
-
-  for (let ex of workout.exercises) {
-    if (!isExerciseCompletedToday(ex)) {
-      ex.completed = false;
-    } else {
-      ex.completed = true;
-    }
-  }
-
 
   if (isDone) {
     return (
@@ -155,6 +94,65 @@ export function TodaysWorkout() {
       </div >
     )
   }
+  // when the user finishs their workout
+  function handleFinishedTodaysWorkout() {
+    // increment the total wokrouts done
+    const nettotalWorkouts = (authData?.user?.toatalWorkouts || 0) + 1;
+    // save to the the global state and the data base
+    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } } } })
+    if (authData.user) {
+      dispatch(setUser(
+        {
+          ...authData.user,
+          toatalWorkouts: nettotalWorkouts,
+          workoutData: {
+            selectedWorkout: selectedProgramName
+            , history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } }
+          },
+        }
+      ));
+    }
+  }
+  // updating the excercises progress
+  useEffect(() => {
+    const progress = workout.exercises.filter(ex => ex.completed).length;
+    setProgressPercent(progress);
+    if (progress === workout.exercises.length) {
+      handleFinishedTodaysWorkout()
+    }
+  }, [workout]);
+  // starting the workout
+  const handleStartWorkout = () => {
+    setStartWorkout(!startWorkout);
+  };
+  // check if there is a record of today in the database (workout finished before)
+  function isExerciseCompletedToday(exercise: any): boolean {
+    try {
+      if (!localStorage
+        || !localStorage.getItem("workoutHistory")
+        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))).includes(today.toString())
+        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))[today.toString()] || "").includes(exercise.title)
+      ) {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+
+      return false;
+    }
+    return true;
+  }
+  // initialization
+  for (let ex of workout.exercises) {
+    if (!isExerciseCompletedToday(ex)) {
+      ex.completed = false;
+    } else {
+      ex.completed = true;
+    }
+  }
+
+
+
 
   return (
     <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
@@ -180,7 +178,7 @@ export function TodaysWorkout() {
             }}></div>
         </div>
       </div>
-
+      {/* mapping today's excercises */}
       <div>
         {
           workout.exercises.map((exercise) => (
