@@ -36,11 +36,9 @@ export default function WorkoutStats() {
   const createdAtDay = dayNumberFromDate(authData.user.createdAt);
   const history = workoutData.history;
 
-  // Convert keys to numbers
   const keys = Object.keys(history).map(Number);
   const lastDay = keys.length > 0 ? Math.max(...keys) : createdAtDay;
 
-  // Build daily chart data
   const dailyData: { date: string; calories: number }[] = [];
 
   for (let day = createdAtDay; day <= lastDay; day++) {
@@ -75,10 +73,10 @@ export default function WorkoutStats() {
               className="dark:stroke-[var(--color-border-dark)]"
             />
 
-            {/* X Axis - Date */}
+            
             <XAxis dataKey="date" />
 
-            {/* Y Axis - Calories */}
+            
             <YAxis
               label={{
                 value: "Calories Burned",
@@ -100,7 +98,7 @@ export default function WorkoutStats() {
 
             <Legend />
 
-            {/* Single Daily Calories Bar */}
+           
             <Bar
               dataKey="calories"
               fill="#22c55e"

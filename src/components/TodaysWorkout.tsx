@@ -83,10 +83,16 @@ export function TodaysWorkout() {
 
   function handleFinishedTodaysWorkout() {
     console.log("today's workout is done");
+    // const nettotalWorkouts = authData.user?.toatalWorkouts || 0;
+   
+      // authData.user.toatalWorkouts = String(Number(authData.user.toatalWorkouts || "0") + 1);
+    const  nettotalWorkouts = (authData?.user?.toatalWorkouts || 0) + 1;
+    
     saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } } } })
     if (authData.user) {
       dispatch(setUser(
         {
+          toatalWorkouts: nettotalWorkouts,
           ...authData.user,
           workoutData: {
             selectedWorkout: selectedProgramName
