@@ -1,16 +1,17 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import.meta.env.VITE_API_URL
 
-// Your web app's Firebase configuration
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyBiuRUf-zVEthtS-nfLdgSNqWZcP8y1pFo",
-    authDomain: "coach-project-b2752.firebaseapp.com",
-    projectId: "coach-project-b2752",
-    storageBucket: "coach-project-b2752.firebasestorage.app",
-    messagingSenderId: "1019518174830",
-    appId: "1:1019518174830:web:8d3b90265f908f291e087f"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase

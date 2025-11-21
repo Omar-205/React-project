@@ -9,7 +9,7 @@ export const store = configureStore({
     theme: themeReducer,
     Authantication: authReducer,
     WorkoutProgram: workoutProgramsReducer,
-    Progress: progressReducer, // ✅ added
+    Progress: progressReducer, 
 
   }
 });

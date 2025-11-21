@@ -7,13 +7,11 @@ import SelectField from "../components/SelectField";
 import { registerTrainee, registerTrainer } from "../services/AuthServices";
 import { validate } from "../utils/helper";
 import AlertCard from "../components/AlertCard";
-import { Weight } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
-    // states
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
     const [selected, setSelected] = useState<string>("Trainee");
@@ -122,8 +120,7 @@ function RegisterPage() {
             setloading(false);
             return;
         }
-        const bmi = (Number(currentWeight) / ((Number(height) / 100) ** 2)).toFixed(2);
-        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "", createdAt: new Date().toISOString(), workoutData: { selectedWorkout: "beginnerFullBodyPlan", history: {} }, bmi });
+        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "" });
         setloading(false);
         if ('error' in Trainee) {
             setAlert(true);

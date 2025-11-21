@@ -3,42 +3,56 @@ import bgImage from "../assets/landing-page-bg.jpg";
 import Button from "../components/Button";
 import LandingCard from "../components/LandingCard";
 import { motion } from "framer-motion";
+import { easeInOut, easeOut } from "framer-motion";
 
 // Animation Variants
 const sentence = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    transition: { delayChildren: 0.2, staggerChildren: 0.15 },
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.8, ease: easeOut },
+  },
+};
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: easeOut },
   },
 };
 
 const word = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] } },
-};
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: easeInOut },
+  },
 };
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
-  visible: {
+  visible: (custom: number) => ({
     opacity: 1,
     y: 0,
-    transition: (custom: number) => ({
+    transition: {
       delay: custom * 0.2,
       duration: 0.6,
-      ease: "easeOut",
-    }),
-  },
+      ease: easeOut,
+    },
+  }),
 };
 
 function LandingPage() {

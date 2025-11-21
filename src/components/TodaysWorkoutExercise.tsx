@@ -7,17 +7,20 @@ export function TodaysWorkoutExercise(props: {
     setWorkout: any;
     startWorkout: any;
 }) {
+    // recieving the workouts data
     const { exercise, workout, setWorkout, startWorkout } = props;
+    // initial state for the AI pop up
     const [showPopup, setShowPopup] = useState(false);
-
+    // marking the excercise done and saving in the local storage
     function markExerciseComplete() {
+        // updating the workout state
         setWorkout({
             ...workout,
             exercises: workout.exercises.map((ex: any) =>
                 ex.id === exercise.id ? { ...ex, completed: true } : ex
             ),
         });
-
+        // saving in the local storage
         if (!localStorage) return;
         const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
         const workoutHistory = JSON.parse(localStorage.getItem("workoutHistory") || "{}");
@@ -28,10 +31,6 @@ export function TodaysWorkoutExercise(props: {
         localStorage.setItem("workoutHistory", JSON.stringify(workoutHistory));
 
     };
-    console.log(exercise.title);
-
-    // check the local storage if the exercise is completed today before
-
 
 
     return (

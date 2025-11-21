@@ -14,7 +14,7 @@ export function Programs() {
   let [selectedWorkoutName, setSelectedWorkoutName] = useState(defaultWorkoutPlan);
   const authData = useSelector((state: RootState) => state.Authantication);
   useEffect(() => {
-    //access the user data inwhich the workoutData exists
+    //access the user data in which the workoutData exists
     const userData = authData.user;
     //hanlde workout name does not exist
     if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
@@ -27,8 +27,7 @@ export function Programs() {
     }
   }, [])
   const dispatch = useDispatch()
-  // console.log(selectedWorkoutName);
-  // handle changing the plan
+  // setting the plan in the global state (for immediate effects) and in the database
   function setPlan(planName: string) {
     saveUserData(authData.uid as string, { workoutData: { selectedWorkout: planName, history: authData.user?.workoutData?.history || {} } })
     if (authData.user) {

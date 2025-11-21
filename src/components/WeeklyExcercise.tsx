@@ -11,11 +11,14 @@ function getToday() {
 const days = ["Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"]
 
 export default function WeeklyExcercise(props: { day?: number, done?: boolean }) {
+    let { day, done } = props;
+
     const defaultWorkoutPlan = "beginnerFullBodyPlan";
     const authData = useSelector((state: RootState) => state.Authantication);
+    // loading the selected plan name form the global state
     let [selectedWorkoutName, setSelectedWorkoutName] = useState(defaultWorkoutPlan);
     useEffect(() => {
-        //access the user data inwhich the workoutData exists
+        //access the user data in which the workoutData exists
         const userData = authData.user;
         //hanlde workout name does not exist
         if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
@@ -30,17 +33,20 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
     //get plan data and workouts names
     const workoutPlan = workoutPrograms[selectedWorkoutName]; //  workouts and program name
     const plan = workoutPlan.program;          //array of workouts
-    const workoutData = authData?.user?.workoutData;
+    const workoutData = authData?.user?.workoutData; // wokrout data including history and plan name
+    /**
+     * using last friday as a refernce because we assume the week starts on frydays
+     * the time stamp of thursdays moodulo 7 = 0
+     * we exploit this to get the last friday = last thursday + 1
+     * so the week starts at index 0 (fridays) for easier calculations
+     */
     const today = getToday();
-    const lastFriday = today - today % 7 + 1;
+    const lastFriday = today - today % 7 + 1; // timestamp of last friday (index 0)
 
-    //console.log(plan)
-    let { day, done } = props;
     if (!day) day = 0;
     const dayName = days[day % 7];
-    // check if this day is today
     const isToday: boolean = (lastFriday + day === today);
-
+    // checking if the excersice in the last occurance of this day is done
     done = done || workoutData?.history[lastFriday + day] != undefined;
     return (
         <div className={"flex justify-between items-center mt-4 p-2 border-1 dark:border-gray-700 rounded-md"

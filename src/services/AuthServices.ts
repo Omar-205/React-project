@@ -26,12 +26,11 @@ export const registerTrainer = async ({ fullName, email, password }: { fullName:
         return { error: "An unknown error occurred" };
     }
 };
-export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio }: { email: string, password: string } & TraineeData) => {
+export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio }: { email: string, password: string } & Partial<TraineeData>) => {
     try {
         const trainee = await createUserWithEmailAndPassword(auth, email, password);
 
         await setDoc(doc(db, "Trainees", trainee.user.uid), {
-            // default data
             fullName,
             email,
             age,
@@ -46,7 +45,6 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
             startWeight: currentWeight,
             workoutData: { selectedProgram: "beginnerFullBodyPlan", history: {} },
             nutritionData: { selectedPlan: Object.keys(mealPlans)[0], history: {} }
-
         });
         return trainee.user;
     }

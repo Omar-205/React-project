@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { fetchUser, updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
- import { workoutPrograms } from "../types/weeklyPlans";
+import { workoutPrograms } from "../types/weeklyPlans";
 
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
@@ -42,6 +42,7 @@ export default function Progress() {
   const [tempW, setTempW] = useState("0");
   const [date, setDate] = useState(""); 
 
+  console.log(user?.totalWorkouts)
 
 
 
@@ -53,7 +54,7 @@ export default function Progress() {
     console.log("User from Redux:", user);
   }, [uid, status, dispatch, user]);
 
- const handleSave = () => {
+  const handleSave = () => {
     if (!uid || !date) {
       console.log("A date is required to save a weight entry.");
       return;
@@ -66,9 +67,9 @@ export default function Progress() {
     const todayString = `${yyyy}-${mm}-${dd}`;
 
     const isToday = date === todayString;
-    
+
     // Inputs from state
-    const weightInput = tempW; 
+    const weightInput = tempW;
     const targetInput = targetWeight;
 
     //1. Set Defaults to EXISTING DB Values (Preserve data) 
@@ -149,21 +150,21 @@ export default function Progress() {
       })
     );
 
-    setDate(""); 
+    setDate("");
   };
-   // 1. Calculate Weight Logic
-  const rawWeightDiff = user?.WeightLost || 0; 
+  // 1. Calculate Weight Logic
+  const rawWeightDiff = user?.WeightLost || 0;
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
   // 2. Create Dynamic Cards
   const progRecData = [
     {
       // Always show absolute number (no negative signs)
-      given: Math.abs(rawWeightDiff), 
-      
+      given: Math.abs(rawWeightDiff),
+
       // Change text based on gain/loss
       statement: hasGained ? "Weight gained" : "Weight lost",
-      
+
       // Change Icon: Up(Red) for gain, Down(Green) for loss
       icon: hasGained ? (
         <i className="fa-solid fa-arrow-up text-red-500"></i>
@@ -177,7 +178,7 @@ export default function Progress() {
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: user?.toatalWorkouts ?? 0,
+      given: user?.totalWorkouts ?? 0,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },

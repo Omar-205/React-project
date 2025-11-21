@@ -1,127 +1,131 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { TodaysWorkoutExercise } from "./TodaysWorkoutExercise";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
 import { workoutPrograms } from "../types/weeklyPlans";
 import { saveUserData } from "../services/DatabaseServices";
-import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
-import { CheckCheck, } from "lucide-react";
+import { CheckCheck } from "lucide-react";
+
 export function TodaysWorkout() {
   const authData = useSelector((state: RootState) => state.Authantication);
   const dispatch = useDispatch();
-  const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
-  // console.log(selectedProgramName);
+
+  const [selectedProgramName, setSelectedProgramName] = useState(
+    authData.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan"
+  );
+
   useLayoutEffect(() => {
-    //access the user data inwhich the workoutData exists
-    const userData = authData.user;
-    //hanlde workout name does not exist
-    if (!userData?.workoutData || !userData?.workoutData?.selectedWorkout || !userData?.workoutData?.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
-      saveUserData(authData.uid as string, { workoutData: { selectedWorkout: userData?.workoutData?.selectedWorkout || "beginnerFullBodyPlan", history: userData?.workoutData?.history || {} } })
-      if (authData.user) {
-        dispatch(setUser(
-          {
-            ...authData.user,
-            workoutData: {
-              selectedWorkout: "beginnerFullBodyPlan"
-              , history: authData.user?.workoutData?.history || {}
-            },
-          }
-        ));
-      }
-      return;
-    }
-    // if the selected plan is found ?
-    else {
-      setSelectedProgramName(userData?.workoutData?.selectedWorkout);
-    }
-  }, [])
+    const user = authData.user;
 
-  //console.log(selectedProgramName);
+    const invalid =
+      !user?.workoutData ||
+      !user.workoutData.selectedWorkout ||
+      !user.workoutData.history ||
+      !Object.keys(workoutPrograms).includes(user.workoutData.selectedWorkout);
+
+    if (invalid) {
+      const selectedWorkout = user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan";
+      const history = user?.workoutData?.history || {};
+
+      saveUserData(authData.uid!, {
+        workoutData: { selectedWorkout, history },
+      });
+
+      dispatch(
+        setUser({
+          ...user!,
+          workoutData: { selectedWorkout, history },
+        })
+      );
+
+      setSelectedProgramName(selectedWorkout);
+    } else {
+      setSelectedProgramName(user.workoutData.selectedWorkout);
+    }
+  }, []);
+
   const selectedProgram = workoutPrograms[selectedProgramName];
-  // console.log(selectedProgram)
-
-  // todays index
-  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-  // console.log(today);
-
-  function isExerciseCompletedToday(exercise: any) {
-    const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-    try {
-      if (!localStorage
-        || !localStorage.getItem("workoutHistory")
-        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))).includes(today.toString())
-        || !Object.keys((JSON.parse(localStorage.getItem("workoutHistory") || "{}"))[today.toString()] || "").includes(exercise.title)
-      ) {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-
-      return false;
-    }
-    return true;
-  }
-
+  const today = Math.floor((Date.now() + 3 * 3600 * 1000) / 86400000);
   const todayIndex = (today - 1) % 7;
+
   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
   const [progressPercent, setProgressPercent] = useState(0);
   const [startWorkout, setStartWorkout] = useState(false);
-  const isRestDay = workout.exercises.length === 0;
-  if (isRestDay) {
-    return (
-      <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
-        <div className="flex flex-col justify-center items-center"></div>
-        <h4 className="text-prof-text dark:text-text-dark text-lg"><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
-        <p className="text-prof-text-secondary dark:text-text-secondary-dark mt-4">Today is a rest day! Take time to recover and prepare for your next workout.</p>
-      </div>
-    )
-  }
-  // console.log(workout.exercises);
-  const isDone = authData?.user?.workoutData?.history?.[today] != null
-  // console.log(isDone ? "this work out is done" : "this workout isn't done")
 
-  function handleFinishedTodaysWorkout() {
-    console.log("today's workout is done");
-    // const nettotalWorkouts = authData.user?.toatalWorkouts || 0;
-   
-      // authData.user.toatalWorkouts = String(Number(authData.user.toatalWorkouts || "0") + 1);
-    const  nettotalWorkouts = (authData?.user?.toatalWorkouts || 0) + 1;
-    
-    saveUserData(authData.uid as string, { workoutData: { selectedWorkout: selectedProgramName, history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } } } })
-    if (authData.user) {
-      dispatch(setUser(
-        {
-          toatalWorkouts: nettotalWorkouts,
-          ...authData.user,
-          workoutData: {
-            selectedWorkout: selectedProgramName
-            , history: { ...authData.user?.workoutData?.history, [today]: { caloriesBurned: workout.calories } }
-          },
-        }
-      ));
+  useEffect(() => {
+    setWorkout(selectedProgram.program[todayIndex]);
+  }, [selectedProgramName]);
+
+  const isRestDay = workout.exercises.length === 0;
+  const isDone = authData.user?.workoutData?.history?.[today] != null;
+
+  function isExerciseCompletedToday(exercise: any) {
+    try {
+      const history = JSON.parse(localStorage.getItem("workoutHistory") || "{}");
+      return !!history?.[today]?.[exercise.title];
+    } catch {
+      return false;
     }
   }
+
   useEffect(() => {
-    const progress = workout.exercises.filter(ex => ex.completed).length;
-    setProgressPercent(progress);
-    if (progress === workout.exercises.length) {
-      handleFinishedTodaysWorkout()
+    setWorkout((prev) => ({
+      ...prev,
+      exercises: prev.exercises.map((ex) => ({
+        ...ex,
+        completed: isExerciseCompletedToday(ex),
+      })),
+    }));
+  }, []);
+
+  function handleFinishedTodaysWorkout() {
+    const netTotalWorkouts = (authData.user?.totalWorkouts || 0) + 1;
+
+    const newHistory = {
+      ...authData.user?.workoutData?.history,
+      [today]: { caloriesBurned: workout.calories },
+    };
+
+    saveUserData(authData.uid!, {
+      workoutData: {
+        selectedWorkout: selectedProgramName,
+        history: newHistory,
+      },
+    });
+
+    dispatch(
+      setUser({
+        ...authData.user!,
+        totalWorkouts: netTotalWorkouts,
+        workoutData: {
+          selectedWorkout: selectedProgramName,
+          history: newHistory,
+        },
+      })
+    );
+  }
+
+  useEffect(() => {
+    const count = workout.exercises.filter((ex) => ex.completed).length;
+    setProgressPercent(count);
+
+    if (count === workout.exercises.length && workout.exercises.length > 0) {
+      setTimeout(handleFinishedTodaysWorkout, 300);
     }
   }, [workout]);
 
-  const handleStartWorkout = () => {
-    setStartWorkout(!startWorkout);
-  };
+  const handleStartWorkout = () => setStartWorkout(true);
 
-  for (let ex of workout.exercises) {
-    if (!isExerciseCompletedToday(ex)) {
-      ex.completed = false;
-    } else {
-      ex.completed = true;
-    }
+
+  if (isRestDay) {
+    return (
+      <div className="p-4 shadow-xl rounded-lg bg-white">
+        <h4><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
+        <p>Today is a rest day. Recover well!</p>
+      </div>
+    );
   }
-
 
   if (isDone) {
     return (
@@ -157,37 +161,42 @@ export function TodaysWorkout() {
   }
 
   return (
-    <div className="w-full shadow-xl rounded-lg p-4 bg-white dark:bg-primary-dark">
+    <div className="w-full shadow-xl rounded-lg p-4 bg-white">
       <div className="flex justify-between items-center">
         <div>
-          <h4 className="text-prof-text dark:text-text-dark text-lg"><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
-          <div className="flex gap-4 mt-4 text-prof-text-secondary dark:text-text-secondary-dark">
-            <p><i className="fa-solid fa-bowl-food"></i>{workout.calories} kcal</p>
-            <p><i className="fa-solid fa-level-up-alt"></i>{workout.level}</p>
+          <h4><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
+          <div className="flex gap-4 mt-4">
+            <p>{workout.calories} kcal</p>
+            <p>{workout.level}</p>
           </div>
         </div>
-        <button className="bg-black text-white rounded-lg px-4 py-2 hover:bg-slate-900 dark:bg-primary" onClick={handleStartWorkout}>{startWorkout ? 'Workout Started' : 'Start Workout'}</button>
+
+        <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={handleStartWorkout}>
+          {startWorkout ? "Workout Started" : "Start Workout"}
+        </button>
       </div>
-      <div>
-        <div className="flex justify-between items-center mt-4">
-          <h6 className="text-prof-text-secondary">Progress</h6>
-          <span className="text-prof-text-secondary">{progressPercent}/{workout.exercises.length} Exercises</span>
-        </div>
-        <div className="w-full bg-neutral-300 h-4 rounded-lg mt-2 dark:bg-secondary">
-          <div className="h-full bg-primary rounded-lg transition-all duration-300 dark:bg-primary"
-            style={{
-              width: `${(progressPercent / workout.exercises.length) * 100}%`,
-            }}></div>
+
+      <div className="mt-4">
+        <span>{progressPercent}/{workout.exercises.length} Exercises</span>
+        <div className="w-full bg-neutral-300 h-4 rounded-lg mt-2">
+          <div
+            className="h-full bg-primary rounded-lg transition-all duration-300"
+            style={{ width: `${(progressPercent / workout.exercises.length) * 100}%` }}
+          />
         </div>
       </div>
 
-      <div>
-        {
-          workout.exercises.map((exercise) => (
-            <TodaysWorkoutExercise key={exercise.id} exercise={exercise} workout={workout} setWorkout={setWorkout} startWorkout={startWorkout} />
-          ))}
+      <div className="mt-4">
+        {workout.exercises.map((exercise) => (
+          <TodaysWorkoutExercise
+            key={exercise.id}
+            exercise={exercise}
+            workout={workout}
+            setWorkout={setWorkout}
+            startWorkout={startWorkout}
+          />
+        ))}
       </div>
     </div>
-  )
-
+  );
 }

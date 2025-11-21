@@ -25,7 +25,7 @@ const initialState: ProgressState = {
   workoutsCompleted: 0,
   caloriesBurned: 0,
 
-  progressPhotos: [], // 👈 added
+  progressPhotos: [], 
 };
 
 const progressSlice = createSlice({
