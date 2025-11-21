@@ -1,3 +1,7 @@
+
+// try to make progress editable by the user  but didn't use it
+
+
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
@@ -5,7 +9,7 @@ import { updateProgress } from "../store/slices/progressSlice";
 
 export const EditProgress: React.FC = () => {
   const dispatch = useDispatch();
-  const trainee = useSelector((state: RootState) => state.Authantication.user); // assuming user info stored here
+  const trainee = useSelector((state: RootState) => state.Authantication.user); 
   const progress = trainee?.progress;
 
   const [currentWeight, setCurrentWeight] = useState(progress?.currentWeight || "");

@@ -1,3 +1,4 @@
+//imports
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
@@ -11,33 +12,40 @@ import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
 
+//progress elements in its nav
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
+
 export default function Progress() {
-  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-  
-    const authData = useSelector((state: RootState) => state.Authantication);
+    //today's date index
+   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+    //auth Data
+   const authData = useSelector((state: RootState) => state.Authantication);
+   //use state for setting the programname
    const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
+  //set the selected program based on the name
    const selectedProgram = workoutPrograms[selectedProgramName];
    const todayIndex = (today - 1) % 7;
-  const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
- 
+   //set the workout for today
+   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
+   //redux dispatch and selector
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user, status } = useSelector(
     (state: RootState) => state.Authantication
   );
 
+  //data of progress 
   const progress = user?.progress;
   const [currentWeight, setCurrentWeight] = useState("0");
   const [targetWeight, setTargetWeight] = useState("0");
   const [tempW, setTempW] = useState("0");
-  const [date, setDate] = useState(""); // 🗓️ New date field
+  const [date, setDate] = useState(""); 
 
 
 
 
-  
+  //update everytime user changes or uid changes
   useEffect(() => {
     if (uid && status === "idle") {
       dispatch(fetchUser(uid));
@@ -50,7 +58,7 @@ export default function Progress() {
       console.log("A date is required to save a weight entry.");
       return;
     }
-
+    // Check if the date is today
     const todayDate = new Date();
     const yyyy = todayDate.getFullYear();
     const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
@@ -63,17 +71,17 @@ export default function Progress() {
     const weightInput = tempW; 
     const targetInput = targetWeight;
 
-    // --- 1. Set Defaults to EXISTING DB Values (Preserve data) ---
+    //1. Set Defaults to EXISTING DB Values (Preserve data) 
     let finalCurrentWeight = user?.currentWeight || currentWeight;
     let finalWeightLost = user?.WeightLost || 0;
     let finalTargetWeight = user?.targetWeight || "0"; // Default to existing
     let finalPrimaryGoal = user?.primaryGoal;          // Default to existing
 
-    // --- 2. Overwrite ONLY if Date is Today ---
+    // 2. Overwrite ONLY if Date is Today 
     if (isToday) {
       finalCurrentWeight = weightInput;
-      finalTargetWeight = targetInput; // <--- Only update target if today
-      
+      finalTargetWeight = targetInput; 
+     
       // Calculate Weight Lost
       finalWeightLost = parseFloat(user?.startWeight || "0") - parseFloat(weightInput || "0");
       setCurrentWeight(weightInput);
@@ -82,6 +90,7 @@ export default function Progress() {
       const currentVal = parseFloat(weightInput);
       const targetVal = parseFloat(targetInput);
 
+      //change primary goal based on weight comparison
       if (!isNaN(currentVal) && !isNaN(targetVal)) {
         if (targetVal > currentVal) {
           finalPrimaryGoal = "Gain weight";
@@ -95,7 +104,7 @@ export default function Progress() {
       console.log("Historical entry: Current Weight, Target Weight, and Goal remain unchanged.");
     }
 
-    // --- 3. Prepare History Entry ---
+    // 3. Prepare History Entry 
     const newEntry = {
       date,
       weight: parseFloat(weightInput),
@@ -103,11 +112,11 @@ export default function Progress() {
     const existingData = progress?.weightData ?? [];
     const updatedWeightData = [...existingData, newEntry];
 
-    // --- 4. Prepare Full Progress Object ---
+    // 4. Prepare Full Progress Object 
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
-      targetWeight: finalTargetWeight, // Uses conditional value
+      targetWeight: finalTargetWeight, 
       weightLost: finalWeightLost,
       weightData: updatedWeightData,
       progRecData: progress?.progRecData ?? null,
@@ -116,7 +125,7 @@ export default function Progress() {
       progressPhotos: progress?.progressPhotos ?? [],
     };
 
-    // ---------- Dispatch Redux ----------
+    //  Dispatch Redux
     dispatch(
       updateProgress({
         currentWeight: finalCurrentWeight,
@@ -126,7 +135,7 @@ export default function Progress() {
       })
     );
 
-    // ---------- Update User in DB ----------
+    //  Update User in DB
     dispatch(
       updateUser({
         uid,
@@ -134,7 +143,7 @@ export default function Progress() {
           WeightLost: finalWeightLost,
           progress: updatedProgress,
           currentWeight: finalCurrentWeight,
-          targetWeight: finalTargetWeight, // Sent to DB
+          targetWeight: finalTargetWeight, 
           primaryGoal: finalPrimaryGoal,
         },
       })
@@ -188,7 +197,6 @@ export default function Progress() {
         </p>
       </h3>
 
-      {/* ⚙️ Edit Section */}
       <div
         className="
           flex flex-col md:flex-row justify-between items-center mt-4 p-4 
@@ -198,7 +206,7 @@ export default function Progress() {
           transition-all
         "
       >
-        {/* 🏋️ Current Weight */}
+        {/*  Current Weight */}
         <div className="flex flex-col mb-3 md:mb-0">
           <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
             Current Weight (kg)
@@ -219,7 +227,7 @@ export default function Progress() {
           />
         </div>
 
-        {/* 🎯 Goal Weight */}
+        {/*  Goal Weight */}
         <div className="flex flex-col mb-3 md:mb-0">
           <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
             Goal Weight (kg)
@@ -240,7 +248,7 @@ export default function Progress() {
           />
         </div>
 
-        {/* 📅 Date */}
+        {/*  Date */}
         <div className="flex flex-col mb-3 md:mb-0">
           <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
             Date (YYYY-DD-MM)
@@ -261,7 +269,7 @@ export default function Progress() {
           />
         </div>
 
-        {/* 💾 Save Button */}
+        {/*  Save Button */}
         <button
           onClick={handleSave}
           className="

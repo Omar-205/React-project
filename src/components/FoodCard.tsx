@@ -7,7 +7,7 @@ interface FoodCardProps {
 
 export function FoodCard({ food }: FoodCardProps) {
   const [grams, setGrams] = useState(100);
-
+// Calculate nutritional values based on grams
   const factor = grams / 100;
 
   return (

@@ -16,6 +16,7 @@ export default function ButtonsDash({ actions }: Props) {
 
   return (
     <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full ">
+      
       {actions.map((action, idx) => (
         <li
           key={idx}

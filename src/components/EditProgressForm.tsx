@@ -1,3 +1,5 @@
+//didnt use this component
+
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProgress } from "../store/slices/progressSlice";

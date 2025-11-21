@@ -4,7 +4,7 @@ import { FoodCard } from "./FoodCard";
 
 export function FoodLibrary() {
   const [search, setSearch] = useState("");
-
+// Filter foods based on search query
   const filteredFoods = allFood.filter((food) =>
     food.name.toLowerCase().includes(search.toLowerCase())
   );
