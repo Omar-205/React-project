@@ -1,4 +1,3 @@
-// src/layouts/AuthLayout.tsx
 import { Outlet ,useLocation} from "react-router-dom";
 import Navbar from "../components/Navbar";
 function AuthLayout() {

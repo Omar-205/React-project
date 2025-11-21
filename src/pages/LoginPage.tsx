@@ -22,7 +22,7 @@ function LoginPage() {
 
     const FormRef=useRef<HTMLFormElement>(null);
 
-    // Clear specific field error*
+    // Clear specific field error
     const clearError = (field: keyof typeof errors) => {
         setErrors((prev) => {
             const newErrors = { ...prev };
@@ -34,7 +34,7 @@ function LoginPage() {
         setEmail("");
         setPassword("");
     };
-
+    // Handle Login
     const handleLogin = async (e: FormEvent) => {
         setloading(true);
         e.preventDefault();
@@ -72,7 +72,7 @@ function LoginPage() {
         navigator("/trainee");
         }, 1000);
     }
-
+    // Render
     return (
         <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-71px)]">
             <h1 className="heading mt-10">

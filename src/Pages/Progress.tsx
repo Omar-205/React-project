@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { fetchUser, updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
- import { workoutPrograms } from "../types/weeklyPlans";
+import { workoutPrograms } from "../types/weeklyPlans";
 
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
@@ -11,18 +11,18 @@ import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
 
-const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
+const titles = ["Weight Progress", "Calories Progress", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
 export default function Progress() {
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-  
-    const authData = useSelector((state: RootState) => state.Authantication);
-   const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
-   const selectedProgram = workoutPrograms[selectedProgramName];
-   const todayIndex = (today - 1) % 7;
+
+  const authData = useSelector((state: RootState) => state.Authantication);
+  const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
+  const selectedProgram = workoutPrograms[selectedProgramName];
+  const todayIndex = (today - 1) % 7;
   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
- 
+
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user, status } = useSelector(
     (state: RootState) => state.Authantication
@@ -34,10 +34,8 @@ export default function Progress() {
   const [tempW, setTempW] = useState("0");
   const [date, setDate] = useState(""); // 🗓️ New date field
 
+  console.log(user?.totalWorkouts)
 
-
-
-  
   useEffect(() => {
     if (uid && status === "idle") {
       dispatch(fetchUser(uid));
@@ -45,7 +43,7 @@ export default function Progress() {
     console.log("User from Redux:", user);
   }, [uid, status, dispatch, user]);
 
- const handleSave = () => {
+  const handleSave = () => {
     if (!uid || !date) {
       console.log("A date is required to save a weight entry.");
       return;
@@ -58,9 +56,9 @@ export default function Progress() {
     const todayString = `${yyyy}-${mm}-${dd}`;
 
     const isToday = date === todayString;
-    
+
     // Inputs from state
-    const weightInput = tempW; 
+    const weightInput = tempW;
     const targetInput = targetWeight;
 
     // --- 1. Set Defaults to EXISTING DB Values (Preserve data) ---
@@ -73,7 +71,7 @@ export default function Progress() {
     if (isToday) {
       finalCurrentWeight = weightInput;
       finalTargetWeight = targetInput; // <--- Only update target if today
-      
+
       // Calculate Weight Lost
       finalWeightLost = parseFloat(user?.startWeight || "0") - parseFloat(weightInput || "0");
       setCurrentWeight(weightInput);
@@ -140,21 +138,21 @@ export default function Progress() {
       })
     );
 
-    setDate(""); 
+    setDate("");
   };
-   // 1. Calculate Weight Logic
-  const rawWeightDiff = user?.WeightLost || 0; 
+  // 1. Calculate Weight Logic
+  const rawWeightDiff = user?.WeightLost || 0;
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
   // 2. Create Dynamic Cards
   const progRecData = [
     {
       // Always show absolute number (no negative signs)
-      given: Math.abs(rawWeightDiff), 
-      
+      given: Math.abs(rawWeightDiff),
+
       // Change text based on gain/loss
       statement: hasGained ? "Weight gained" : "Weight lost",
-      
+
       // Change Icon: Up(Red) for gain, Down(Green) for loss
       icon: hasGained ? (
         <i className="fa-solid fa-arrow-up text-red-500"></i>
@@ -168,7 +166,7 @@ export default function Progress() {
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: user?.toatalWorkouts ?? 0,
+      given: user?.totalWorkouts ?? 0,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },

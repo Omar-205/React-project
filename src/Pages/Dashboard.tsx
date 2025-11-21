@@ -1,29 +1,14 @@
 import "react-circular-progressbar/dist/styles.css";
 import RoundedProgressBar from "../components/RoundedProgressBar";
-import RecCard from "../components/RecCard";
 import Quick from "../components/Quick";
-import type { JSX } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import DailyStreak from "../components/Dashboard Components/DailyStreak";
 import ThisWeek from "../components/Dashboard Components/ThisWeek";
 import CaloriesBurned from "../components/Dashboard Components/CaloriesBurned";
 import { mealPlans } from "../types/mealPlansData";
+import GoalAchieved from "../components/Dashboard Components/GoalAchieved";
 
-
-interface RecData {
-  given: number;
-  statement: string;
-  icon: JSX.Element;
-}
-
-
-const recData: RecData[] = [
-  // { given: 0, statement: "Day streak", icon: <i className="fa-solid fa-bolt text-orange-500"></i> },
-  //{ given: 0, statement: "This week", icon: <i className="fa-solid fa-calendar-week text-blue-500"></i> },
-  // { given: 2400, statement: "Calories burned", icon: <i className="fa-solid fa-fire text-red-500"></i> },
-  { given: 0, statement: "Goal achieved", icon: <i className="fa-solid fa-trophy text-green-500"></i> },
-];
 
 
 export default function Dashboard() {
@@ -71,20 +56,9 @@ export default function Dashboard() {
       <DailyStreak />
       <ThisWeek />
       <CaloriesBurned />
-      {recData.map((item, index) => (
-        <RecCard
-          key={index}
-          given={item.given}
-          statement={item.statement}
-          icon={item.icon}
-        />
-      ))}
+      <GoalAchieved />
     </div>
     <Quick />
-
-
-
-
 
   </div>
 }
