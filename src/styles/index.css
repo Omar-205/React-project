@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap; 
+}
+
+@theme {
+  /* fonts */
+  --font-sans: "Lexend", sans-serif;
+  /* light theme colors */
+  --color-primary:  #215482;
+  --color-secondary: #C7E1FC;
+  --color-input:   #E8EDF0;
+  --color-text: #57738F;
+  --color-white: #FAFAFA;
+  --color-black: #0F141A;
+  --color-menu-white: #FFFFFF;
+  --color-light-bg: #F6F8FB;
+  --color-light-border: #CAD5E2;
+  --color-prof-text: oklch(37.1% 0 0);
+  --color-prof-text-secondary: oklch(55.6% 0 0);
+  --color-hover: #2A6DA7;
+  --color-secondary-hover: #90C3F9;
+  --color-error: #D10000;
+  --color-success: #00A600;
+  /* dark theme colors */
+  --color-primary-dark:  #121A21;
+  --color-secondary-dark: #293642;
+  --color-input-dark:   #293642;
+  --color-text-dark: #99B0C2;
+  --color-text-secondary-dark: #C7E1FC;
+  --color-input-locked-dark: #2A3C4E; /* slightly brighter, looks editable */
+  --color-input-unlocked-dark:   #18232E; /* deeper, dimmed, feels disabled */
+
+}
+
+@layer utilities {
+  .heading {
+    @apply mt-5 text-4xl font-bold text-primary dark:text-text-dark mb-5 md:mb-1;
+  }
+  .label{
+    @apply block mb-2  text-[18px] font-medium dark:text-white;
+  }
+  .small-label{
+    @apply block mb-2  text-[14px] font-normal dark:text-white;
+  }
+  .error{
+    @apply text-error text-sm mb-2 font-thin;
+  }
+
+}
+
+@layer base {
+  html {
+    @apply transition-colors duration-300;
+    font-family: var(--font-sans);
+  }
+  input:focus {
+    outline: none;             /* remove default */
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
+  }
+  select:focus {
+    outline: none;             /* remove default */
+    border: 2px solid var(--color-primary); 
+    box-shadow: 0 0 4px var(--color-primary); 
+  }
+}
+
+
+
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
