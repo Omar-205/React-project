@@ -14,11 +14,14 @@ export default function WeightProgress() {
   const { user } = useSelector((state: RootState) => state.Authantication);
 
   const data =
-    user?.progress?.weightData && user.progress.weightData.length > 0
-      ? [...user.progress.weightData].sort(
-          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-        )
-      : [];
+  user?.progress?.weightData && user.progress.weightData.length > 0
+    ? [...user.progress.weightData].sort(
+        (a, b) =>
+          new Date(a.date ?? "").getTime() -
+          new Date(b.date ?? "").getTime()
+      )
+    : [];
+
 
   const weightStats = [
     { label: "Starting Weight", value: user?.startWeight || "—" },

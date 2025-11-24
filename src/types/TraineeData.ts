@@ -3,6 +3,7 @@ import type { dailyMeal } from "./mealPlansData";
 
 
 export interface TraineeData {
+    bmi?: number;
     fullName: string;
     gender: string;
     age: string;
@@ -26,5 +27,6 @@ export interface TraineeData {
     }
     tempWeight: string;
     WeightLost: number;
-    progress?: ProgressData | null;
+    progress?: Partial<ProgressData> | null;
+
 }

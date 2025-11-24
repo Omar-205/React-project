@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { fetchUser, updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
-import { workoutPrograms } from "../types/weeklyPlans";
 
 import NavTabs from "../components/NavTabs";
 import ProgressPhotos from "../components/ProgressPhotos";
@@ -23,12 +22,8 @@ export default function Progress() {
     //auth Data
    const authData = useSelector((state: RootState) => state.Authantication);
    //use state for setting the programname
-   const [selectedProgramName, setSelectedProgramName] = useState(authData?.user?.workoutData?.selectedWorkout || "beginnerFullBodyPlan");
   //set the selected program based on the name
-   const selectedProgram = workoutPrograms[selectedProgramName];
-   const todayIndex = (today - 1) % 7;
    //set the workout for today
-   const [workout, setWorkout] = useState(selectedProgram.program[todayIndex]);
    //redux dispatch and selector
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user, status } = useSelector(

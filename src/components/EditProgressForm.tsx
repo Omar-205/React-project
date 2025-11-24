@@ -32,12 +32,13 @@ export default function EditProgressForm() {
               currentWeight,
               targetWeight,
               weightLost,
-              workoutsCompleted: progress.workoutsCompleted,
-              caloriesBurned: progress.caloriesBurned,
+              workoutsCompleted: progress.workoutsCompleted ?? 0,
+              caloriesBurned: progress.caloriesBurned ?? 0,
             },
           },
         })
       );
+      
     }
   };
 

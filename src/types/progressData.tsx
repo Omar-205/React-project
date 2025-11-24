@@ -56,14 +56,22 @@ export interface ProgressEntry {
   sidePhoto: string | null;
 }
 
-// 🔗 Combine all into a unified progress interface
 export interface ProgressData {
   progRecData: ProgRecData[] | null;
   weightData: WeightEntry[] | null;
   weightStats: WeightStat[] | null;
   weeklyProgressData: WeeklyProgress[] | null;
   progressPhotos: ProgressEntry[] | null;
+
+  currentWeight?: string | number | null;
+  targetWeight?: string | number | null;
+  initialWeight?: string | number | null;
+  weightLost?: number | null;
+  workoutsCompleted?: number | null;
+  caloriesBurned?: number | null;
 }
+
+
 
 // 🧩 Default empty object (initial value)
 export const initialProgressData: ProgressData = {
