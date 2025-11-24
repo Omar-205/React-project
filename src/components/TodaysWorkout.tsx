@@ -161,42 +161,66 @@ export function TodaysWorkout() {
   }
 
   return (
-    <div className="w-full shadow-xl rounded-lg p-4 bg-white">
-      <div className="flex justify-between items-center">
-        <div>
-          <h4><i className="fa-solid fa-dumbbell mr-2"></i>{workout.title}</h4>
-          <div className="flex gap-4 mt-4">
-            <p>{workout.calories} kcal</p>
-            <p>{workout.level}</p>
-          </div>
-        </div>
+    <div className="w-full shadow-xl rounded-lg p-4 
+  bg-white dark:bg-input-dark 
+  text-prof-text dark:text-text-dark
+  transition-colors duration-300"
+>
+  <div className="flex justify-between items-center">
+    <div>
+      <h4 className="font-semibold text-lg dark:text-text-dark">
+        <i className="fa-solid fa-dumbbell mr-2 text-black dark:text-primary"></i>
+        {workout.title}
+      </h4>
 
-        <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={handleStartWorkout}>
-          {startWorkout ? "Workout Started" : "Start Workout"}
-        </button>
-      </div>
-
-      <div className="mt-4">
-        <span>{progressPercent}/{workout.exercises.length} Exercises</span>
-        <div className="w-full bg-neutral-300 h-4 rounded-lg mt-2">
-          <div
-            className="h-full bg-primary rounded-lg transition-all duration-300"
-            style={{ width: `${(progressPercent / workout.exercises.length) * 100}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="mt-4">
-        {workout.exercises.map((exercise) => (
-          <TodaysWorkoutExercise
-            key={exercise.id}
-            exercise={exercise}
-            workout={workout}
-            setWorkout={setWorkout}
-            startWorkout={startWorkout}
-          />
-        ))}
+      <div className="flex gap-4 mt-4 text-prof-text-secondary dark:text-text-secondary-dark">
+        <p>{workout.calories} kcal</p>
+        <p>{workout.level}</p>
       </div>
     </div>
+
+    <button
+      className={`px-4 py-2 rounded-lg transition-colors duration-200 
+        text-white 
+        ${
+          startWorkout
+            ? "bg-green-600 dark:bg-green-700 cursor-not-allowed"
+            : "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/90"
+        }`}
+      onClick={handleStartWorkout}
+      disabled={startWorkout}
+    >
+      {startWorkout ? "Workout Started" : "Start Workout"}
+    </button>
+  </div>
+
+  <div className="mt-4">
+    <span className="text-prof-text dark:text-text-dark">
+      {progressPercent}/{workout.exercises.length} Exercises
+    </span>
+
+    <div className="w-full bg-neutral-300 dark:bg-input-locked-dark h-4 rounded-lg mt-2">
+      <div
+        className="h-full bg-primary dark:bg-primary rounded-lg transition-all duration-300"
+        style={{
+          width: `${(progressPercent / workout.exercises.length) * 100}%`,
+        }}
+      />
+    </div>
+  </div>
+
+  <div className="mt-4">
+    {workout.exercises.map((exercise) => (
+      <TodaysWorkoutExercise
+        key={exercise.id}
+        exercise={exercise}
+        workout={workout}
+        setWorkout={setWorkout}
+        startWorkout={startWorkout}
+      />
+    ))}
+  </div>
+</div>
+
   );
 }

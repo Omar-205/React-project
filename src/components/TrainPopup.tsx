@@ -25,9 +25,8 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 }) => {
     const [cameraActive, setCameraActive] = useState(false);
     const [formStatus, setFormStatus] = useState("Analyzing...");
-    const [error, setError] = useState<number | null>(null);
     const [connected, setConnected] = useState(false);
-
+    const [repsCompleted, setRepsCompleted] = useState(0);
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const wsRef = useRef<WebSocket | null>(null);
@@ -64,7 +63,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
     useEffect(() => {
         if (!cameraActive) return;
-        const ws = new WebSocket("ws://localhost:8000/ws");
+        const ws = new WebSocket( import.meta.env.VITE_BACKEND_API_KEY);
         wsRef.current = ws;
         ws.onopen = () => {
             setConnected(true);
@@ -76,10 +75,9 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                 if (data.error) {
                     console.error("Backend error:", data.error);
                     setFormStatus("Error");
-                    setError(null);
                 } else {
                     setFormStatus(data.form_status || "Unknown");
-                    setError(data.reconstruction_error ?? null);
+                    setRepsCompleted(data.rep_state.rep_counter || 0);
                 }
             } catch (e) {
                 console.error("Invalid message", e);
@@ -89,7 +87,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         ws.onerror = () => setConnected(false);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-
         const sendFrame = () => {
             if (!videoRef.current || ws.readyState !== WebSocket.OPEN) return;
             const v = videoRef.current;
@@ -116,7 +113,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     };
 
     if (!isOpen) return null;
-
+    console.log()
     return (
         <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4"
@@ -163,15 +160,43 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                             muted
                             className="w-full h-full object-cover bg-black"
                         />
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm flex items-center gap-3">
-                            <span className="text-primary text-lg">{exercise.modelName} Train</span>
+                        <div
+                            className={`
+    absolute top-4 left-1/2 -translate-x-1/2 
+    bg-input text-text rounded-lg 
+    p-2.5 pr-10 text-sm
+    flex flex-nowrap items-center gap-3
+    whitespace-nowrap
+    dark:bg-input-dark dark:text-text-dark
+    h-15
+  `}
+                        >
+                            <span className="dark:text-secondary text-primary text-xl">{exercise.title} Train</span>
                             <span>|</span>
-                            <span className={connected ? "text-success text-lg" : "text-error text-lg"}>{connected ? "🟢 Connected" : "🔴 Disconnected"}</span>
+
+                            <span className={connected ? "text-success text-xl" : "text-error text-xl"}>
+                                {connected ? "🟢 Connected" : "🔴 Disconnected"}
+                            </span>
                             <span>|</span>
-                            <span className="text-primary text-lg">{formStatus}</span>
+
+                            <span
+                                className={
+                                    `text-3xl ${formStatus.toLowerCase().includes("good")
+                                        ? "dark:text-green-500 text-green-700"
+                                        : "dark:text-red-500 text-red-700"
+                                    }`
+                                }
+                            >
+                                {formStatus}
+                            </span>
                             <span>|</span>
-                            <span className="text-error text-lg">Error: {error !== null ? error.toFixed(6) : "—"}</span>
+
+                            <span className="dark:text-secondary text-primary  text-2xl">
+                                Reps: {repsCompleted}
+                            </span>
                         </div>
+
+
                         <button
                             onClick={() => {
                                 onComplete();

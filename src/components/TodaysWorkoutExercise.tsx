@@ -36,34 +36,44 @@ export function TodaysWorkoutExercise(props: {
     return (
         <>
             <div
-                className={`flex justify-between items-center w-full border border-gray-300 rounded-lg p-4 mt-4 
-        ${startWorkout
+                className={`flex justify-between items-center w-full border rounded-lg p-4 mt-4
+    ${startWorkout
                         ? "bg-input dark:bg-input-unlocked-dark text-prof-text dark:text-text-dark"
                         : "bg-neutral-300 dark:bg-input-locked-dark text-prof-text-secondary dark:text-text-secondary-dark"
-                    }`}
+                    }
+    ${startWorkout
+                        ? "border-gray-300 dark:border-text-dark"
+                        : "border-gray-300 dark:border-text-secondary-dark"
+                    }
+  `}
             >
                 <div>
-                    <h5 className="font-bold dark:text-text-dark">{exercise.title}</h5>
-                    <p className="text-sm">
-                        {exercise.sets} sets × {exercise.minReps} - {exercise.maxReps} reps -{" "}
-                        {exercise.rest}s rest
+                    <h5 className="font-bold text-prof-text dark:text-text-dark">
+                        {exercise.title}
+                    </h5>
+
+                    <p className="text-sm text-prof-text dark:text-text-dark">
+                        {exercise.sets} sets × {exercise.minReps} - {exercise.maxReps} reps – {exercise.rest}s rest
                     </p>
+
                     {exercise.note && (
-                        <p className="text-sm">
-                            <i className="fa-solid fa-lightbulb mr-1"></i>
+                        <p className="text-sm text-prof-text dark:text-text-dark">
+                            <i className="fa-solid fa-lightbulb mr-1 text-yellow-400 dark:text-yellow-300"></i>
                             {exercise.note}
                         </p>
                     )}
                 </div>
 
                 <button
-                    className={`text-white rounded-lg px-4 py-2 transition-colors duration-200 
-            ${exercise.completed
-                            ? "bg-green-500 cursor-not-allowed"
+                    className={`rounded-lg px-4 py-2 transition-colors duration-200
+      text-white
+      ${exercise.completed
+                            ? "bg-green-500 dark:bg-green-600 cursor-not-allowed"
                             : startWorkout
-                                ? "bg-black dark:bg-primary hover:bg-slate-900"
-                                : "bg-gray-400 cursor-not-allowed"
-                        }`}
+                                ? "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/90"
+                                : "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
+                        }
+    `}
                     onClick={() => {
                         if (startWorkout && !exercise.completed) {
                             setShowPopup(true);
@@ -82,6 +92,7 @@ export function TodaysWorkoutExercise(props: {
                 exercise={exercise}
                 onComplete={markExerciseComplete}
             />
+
         </>
     );
 }

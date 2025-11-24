@@ -279,7 +279,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -288,7 +341,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -297,7 +403,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -306,7 +465,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -315,7 +527,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -324,7 +589,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
   {
@@ -333,7 +651,60 @@ const aiRevolution: trainingPlan = [
     level: "Intermediate",
     duration: 55,
     exercises: [
-      { id: 1, title: "Squats", sets: 4, minReps: 6, maxReps: 8, rest: 120, time: 70, note: "Hit parallel or just below", completed: false, modelName: "squat" },
+       {
+        id: 1,
+        title: "Squats",
+        sets: 4,
+        minReps: 6,
+        maxReps: 8,
+        rest: 120,
+        time: 70,
+        note: "Hit parallel or just below",
+        completed: false,
+        modelName: "squat"
+      },
+      
+      // Push Ups
+      {
+        id: 2,
+        title: "Push Ups",
+        sets: 4,
+        minReps: 10,
+        maxReps: 15,
+        rest: 90,
+        time: 60,
+        note: "Keep core tight, full range of motion",
+        completed: false,
+        modelName: "push_ups"
+      },
+      
+      // Lateral Raises
+      {
+        id: 3,
+        title: "Lateral Raises",
+        sets: 3,
+        minReps: 12,
+        maxReps: 15,
+        rest: 60,
+        time: 50,
+        note: "Lift to shoulder height only, controlled reps",
+        completed: false,
+        modelName: "lateral_raises"
+      },
+      
+      // Biceps Curl
+      {
+        id: 4,
+        title: "Biceps Curl",
+        sets: 3,
+        minReps: 8,
+        maxReps: 12,
+        rest: 60,
+        time: 45,
+        note: "Elbows fixed, squeeze at top",
+        completed: false,
+        modelName: "biceps_curl"
+      } ,
     ],
   },
 
