@@ -12,7 +12,7 @@ export const EditProgress: React.FC = () => {
   const trainee = useSelector((state: RootState) => state.Authantication.user); 
   const progress = trainee?.progress;
 
-  const [currentWeight, setCurrentWeight] = useState(progress?.currentWeight || "");
+  const [currentWeight, setCurrentWeight] = useState(trainee?.currentWeight?|| "");
   const [goal, setGoal] = useState(trainee?.targetWeight || "");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,8 +27,8 @@ export const EditProgress: React.FC = () => {
         currentWeight: newWeight.toString(),
         targetWeight: goal,
         weightLost: weightLost > 0 ? weightLost : 0,
-        workoutsCompleted: progress?.workoutsCompleted || 0,
-        caloriesBurned: progress?.caloriesBurned || 0,
+        workoutsCompleted: ?.workoutsCompleted || 0,
+        caloriesBurned: progress?. || 0,
       })
     );
   };

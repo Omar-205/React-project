@@ -1,4 +1,4 @@
-import { ChefHat, DumbbellIcon } from "lucide-react";
+import { ChefHat } from "lucide-react";
 import { mealPlans } from "../types/mealPlansData";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";

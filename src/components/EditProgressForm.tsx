@@ -9,7 +9,7 @@ import type { RootState, AppDispatch } from "../store/store";
 export default function EditProgressForm() {
   const dispatch = useDispatch<AppDispatch>();
   const progress = useSelector((state: RootState) => state.Progress);
-  const { uid, user } = useSelector((state: RootState) => state.Authantication);
+  const { uid } = useSelector((state: RootState) => state.Authantication);
 
   const [currentWeight, setCurrentWeight] = useState(progress.currentWeight);
   const [targetWeight, setTargetWeight] = useState(progress.targetWeight);

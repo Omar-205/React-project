@@ -10,7 +10,7 @@ export default function EditProfileButton(props: {
     user: TraineeData,
     uid: string
 }) {
-    const { profile, disabled, setDisabled, user, uid } = props;
+    const { profile, disabled, setDisabled, uid } = props;
     const dispatch = useDispatch<AppDispatch>();
 
     const updateProfile = (uid: string, data: TraineeData) => {
