@@ -110,7 +110,7 @@ function RegisterPage() {
         if (!height || isNaN(Number(height))) newErrors.height = "Please enter a valid height";
         if (!currentWeight || isNaN(Number(currentWeight))) newErrors.currentWeight = "Please enter a valid current weight";
         if (!targetWeight || isNaN(Number(targetWeight))) newErrors.targetWeight = "Please enter a valid target weight";
-        if (!gender) newErrors.gender = "Gander is required";
+        if (!gender) newErrors.gender = "Gender is required";
         if (!primaryGoal) newErrors.primaryGoal = "Primary Goal is required";
         if (!activityLevel) newErrors.activityLevel = "Activity Level is required";
         if (Object.keys(newErrors).length > 0) {
@@ -131,7 +131,7 @@ function RegisterPage() {
             setAlert(true);
             setAlertMessage("Trainee registered successfully!");
         }
-        FormRef.current?.reset;
+        FormRef.current?.reset();
         clearAllFields();
         setTimeout(() => {
             navigate("/login")
@@ -215,14 +215,16 @@ function RegisterPage() {
                                     label="Trainee"
                                     image="src/assets/trainee.png"
                                     selected={selected === "Trainee"}
-                                    onSelect={() => setSelected("Trainee")}
+                                    onSelect={() => {
+                                        //setSelected("Trainee")
+                                    }}
                                 />
-                                <SelectionCard
-                                    label="Trainer"
-                                    image="src/assets/trainer.png"
-                                    selected={selected === "Trainer"}
-                                    onSelect={() => setSelected("Trainer")}
-                                />
+                                {/*<SelectionCard*/}
+                                {/*    label="Trainer"*/}
+                                {/*    image="src/assets/trainer.png"*/}
+                                {/*    selected={selected === "Trainer"}*/}
+                                {/*    onSelect={() => setSelected("Trainer")}*/}
+                                {/*/>*/}
                             </div>
                         </div>
 
