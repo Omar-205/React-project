@@ -48,8 +48,7 @@ const ProgressPhotos: React.FC = () => {
         sidePhoto: sideUrl,
       };
       
-      console.log("New Progress Entry:", newEntry);
-      // 👉 Save locally in Redux
+      // Save locally in Redux
       dispatch(addProgressPhoto(newEntry));
 
       dispatch(updateUser({ 
@@ -126,21 +125,23 @@ const ProgressPhotos: React.FC = () => {
       </div>
 
       {/* Photos Grid */}
-      <div className="grid grid-cols-3 gap-6 mt-6">
-        {(progress?.progressPhotos ?? []).map((entry) => (
-          <div
-            key={entry.date}
-            className="bg-light-bg dark:bg-secondary-dark p-4 rounded-xl border border-light-border dark:border-input-dark transition-colors duration-300"
-          >
-            <h3 className="text-center font-semibold text-primary dark:text-text-dark mb-3">
-              {entry.date}
-            </h3>
-            {entry.frontPhoto && entry.sidePhoto && (
-              <PhotoPair frontPhoto={entry.frontPhoto} sidePhoto={entry.sidePhoto} />
-            )}
-          </div>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+  {(progress?.progressPhotos ?? []).map((entry) => (
+    <div
+      key={entry.date}
+      className="bg-light-bg dark:bg-secondary-dark p-4 rounded-xl border border-light-border dark:border-input-dark transition-colors duration-300 w-full"
+    >
+      <h3 className="text-center font-semibold text-primary dark:text-text-dark mb-3">
+        {entry.date}
+      </h3>
+
+      {entry.frontPhoto && entry.sidePhoto && (
+        <PhotoPair frontPhoto={entry.frontPhoto} sidePhoto={entry.sidePhoto} />
+      )}
+    </div>
+  ))}
+</div>
+
 
       {/* Tips Rectangle */}
       <div className="bg-secondary dark:bg-secondary-dark border border-light-border dark:border-input-dark rounded-xl mt-8 p-4 transition-colors duration-300">

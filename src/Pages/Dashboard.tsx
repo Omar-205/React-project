@@ -51,7 +51,7 @@ export default function Dashboard() {
       />
       <div className="sm:max-lg:col-span-full">
         <RoundedProgressBar title="Progress percentage" total={Abs(Number(userData?.targetWeight)-Number(userData?.startWeight))} progress={Number(userData?.startWeight)-Number(userData?.currentWeight)}
-          type={"Progress"} color="#217BFF"
+          type={"Kilo"} color="#217BFF"
           svg={<i className="fa-solid fa-heart-pulse" style={{ color: "#217BFF" }}></i>}
         />
 

@@ -1,8 +1,8 @@
 //imports
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
-import { fetchUser, updateUser } from "../store/slices/authSlice";
+import { updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
 
 import NavTabs from "../components/NavTabs";
@@ -21,37 +21,23 @@ export default function Progress() {
    const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
     //auth Data
    const authData = useSelector((state: RootState) => state.Authantication);
-   //use state for setting the programname
-  //set the selected program based on the name
-   //set the workout for today
-   //redux dispatch and selector
+ 
   const dispatch = useDispatch<AppDispatch>();
-  const { uid, user, status } = useSelector(
+  const { uid, user } = useSelector(
     (state: RootState) => state.Authantication
   );
 
   //data of progress 
   const progress = user?.progress;
-  const [currentWeight, setCurrentWeight] = useState("0");
-  const [targetWeight, setTargetWeight] = useState("0");
-  const [tempW, setTempW] = useState("0");
+  const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "0");
+  const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
+  const [tempW, setTempW] = useState(currentWeight || "0");
   const [date, setDate] = useState(""); 
 
-  console.log(user?.totalWorkouts)
 
-
-
-  //update everytime user changes or uid changes
-  useEffect(() => {
-    if (uid && status === "idle") {
-      dispatch(fetchUser(uid));
-    }
-    console.log("User from Redux:", user);
-  }, [uid, status, dispatch, user]);
 
   const handleSave = () => {
     if (!uid || !date) {
-      console.log("A date is required to save a weight entry.");
       return;
     }
     // Check if the date is today
@@ -96,9 +82,7 @@ export default function Progress() {
           finalPrimaryGoal = "Maintain Weight";
         }
       }
-    } else {
-      console.log("Historical entry: Current Weight, Target Weight, and Goal remain unchanged.");
-    }
+    } 
 
     // 3. Prepare History Entry 
     const newEntry = {
@@ -212,7 +196,7 @@ export default function Progress() {
             value={tempW}
             onChange={(e) => setTempW(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-44 outline-none
@@ -233,7 +217,7 @@ export default function Progress() {
             value={targetWeight}
             onChange={(e) => setTargetWeight(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-44 outline-none
@@ -254,7 +238,7 @@ export default function Progress() {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-48 outline-none

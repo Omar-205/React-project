@@ -43,8 +43,9 @@ export const registerTrainee = async ({ email, password, targetWeight, height, c
             bio,
             createdAt: new Date(),
             startWeight: currentWeight,
-            workoutData: { selectedProgram: "beginnerFullBodyPlan", history: {} },
+            workoutData: { selectedWorkout: "AI Revolution", history: {} },
             nutritionData: { selectedPlan: Object.keys(mealPlans)[0], history: {} }
+
         });
         return trainee.user;
     }

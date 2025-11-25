@@ -63,7 +63,6 @@ function LoginPage() {
         if (user && !("error" in user)) {
             setAlert(true);
             setAlertMessage("Login Successful");
-            console.log(user);
         }
         FormRef.current?.reset();
         clearAllFields();

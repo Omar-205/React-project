@@ -34,7 +34,6 @@ export default function Workouts() {
           }
         ));
       }
-      console.log("added messing field")
       return;
     }
     // if the selected plan is found ?
@@ -49,8 +48,6 @@ export default function Workouts() {
     <WeeklyPlan />,
     <Programs />,
   ];
-
-  console.log(authData);
 
 
   return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">

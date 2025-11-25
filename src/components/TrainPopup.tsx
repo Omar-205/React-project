@@ -63,12 +63,15 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
     useEffect(() => {
         if (!cameraActive) return;
-        const ws = new WebSocket( import.meta.env.VITE_BACKEND_API_KEY);
+
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
         wsRef.current = ws;
+
         ws.onopen = () => {
             setConnected(true);
             ws.send(JSON.stringify({ model: exercise.modelName }));
         };
+
         ws.onmessage = (ev) => {
             try {
                 const data = JSON.parse(ev.data);
@@ -77,33 +80,45 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                     setFormStatus("Error");
                 } else {
                     setFormStatus(data.form_status || "Unknown");
-                    setRepsCompleted(data.rep_state.rep_counter || 0);
+                    setRepsCompleted(data.rep_state?.rep_counter || 0);
                 }
             } catch (e) {
                 console.error("Invalid message", e);
             }
         };
+
         ws.onclose = () => setConnected(false);
         ws.onerror = () => setConnected(false);
+
+        // Canvas used for resizing
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
+
         const sendFrame = () => {
             if (!videoRef.current || ws.readyState !== WebSocket.OPEN) return;
+
             const v = videoRef.current;
             if (v.videoWidth === 0 || v.videoHeight === 0) return;
-            canvas.width = v.videoWidth;
-            canvas.height = v.videoHeight;
+
+            // 🔥 Bigger resolution → 480 × 480
+            canvas.width = 480;
+            canvas.height = 480;
+
             ctx?.drawImage(v, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
             ws.send(JSON.stringify({ frame: dataUrl }));
         };
 
         intervalRef.current = setInterval(sendFrame, 100);
+
         return () => {
             ws.close();
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
     }, [cameraActive, exercise.modelName]);
+
 
     const handleClose = () => {
         stopCamera();
@@ -161,40 +176,51 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                             className="w-full h-full object-cover bg-black"
                         />
                         <div
-                            className={`
-    absolute top-4 left-1/2 -translate-x-1/2 
-    bg-input text-text rounded-lg 
-    p-2.5 pr-10 text-sm
-    flex flex-nowrap items-center gap-3
-    whitespace-nowrap
-    dark:bg-input-dark dark:text-text-dark
-    h-15
-  `}
+                            className="
+                   absolute top-4 left-1/2 -translate-x-1/2
+                   bg-input dark:bg-input-dark 
+                   text-text dark:text-text-dark
+                   rounded-xl px-4 py-3
+                   flex flex-wrap lg:flex-nowrap
+                   whitespace-normal lg:whitespace-nowrap
+                   items-center justify-center
+                   gap-x-4 gap-y-1
+                   max-w-[90%]
+                   text-sm sm:text-base
+               "
                         >
-                            <span className="dark:text-secondary text-primary text-xl">{exercise.title} Train</span>
-                            <span>|</span>
+                            <span className="dark:text-secondary text-primary font-semibold text-lg sm:text-xl">
+                                {exercise.title} Train
+                            </span>
 
-                            <span className={connected ? "text-success text-xl" : "text-error text-xl"}>
+                            <span className="hidden sm:inline">|</span>
+
+                            <span className={connected ? "text-success font-semibold" : "text-error font-semibold"}>
                                 {connected ? "🟢 Connected" : "🔴 Disconnected"}
                             </span>
-                            <span>|</span>
+
+                            <span className="hidden sm:inline">|</span>
 
                             <span
-                                className={
-                                    `text-3xl ${formStatus.toLowerCase().includes("good")
+                                className={`
+      font-bold 
+      text-xl sm:text-2xl
+      ${formStatus.toLowerCase().includes("good")
                                         ? "dark:text-green-500 text-green-700"
                                         : "dark:text-red-500 text-red-700"
-                                    }`
-                                }
+                                    }
+    `}
                             >
                                 {formStatus}
                             </span>
-                            <span>|</span>
 
-                            <span className="dark:text-secondary text-primary  text-2xl">
+                            <span className="hidden sm:inline">|</span>
+
+                            <span className="dark:text-secondary text-primary font-semibold text-lg sm:text-2xl">
                                 Reps: {repsCompleted}
                             </span>
                         </div>
+
 
 
                         <button

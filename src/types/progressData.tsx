@@ -63,12 +63,7 @@ export interface ProgressData {
   weeklyProgressData: WeeklyProgress[] | null;
   progressPhotos: ProgressEntry[] | null;
 
-  currentWeight?: string | number | null;
-  targetWeight?: string | number | null;
-  initialWeight?: string | number | null;
-  weightLost?: number | null;
-  workoutsCompleted?: number | null;
-  caloriesBurned?: number | null;
+  
 }
 
 

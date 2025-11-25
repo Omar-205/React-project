@@ -32,18 +32,21 @@ export default function Profile() {
                     </p>
                 </div>
                 <div>
-                    <EditProfileButton 
-                    profile={profile}
-                    disabled={disabled} 
-                    setDisabled={setDisabled} 
-                    user={user!} 
-                    uid={uid!} />
+                    <EditProfileButton
+                        profile={profile}
+                        disabled={disabled}
+                        setDisabled={setDisabled}
+                        user={user!}
+                        uid={uid!} />
                 </div>
             </div>
 
             {/* Grid Section */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-2 mt-8 auto-rows-[150px]">
-                {/* Profile Picture */}
+            <div className="
+    grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 
+    gap-2 mt-8 
+    auto-rows-auto sm:auto-rows-auto lg:auto-rows-[150px]
+">                {/* Profile Picture */}
                 <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-3 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark">
                     <h4 className="m-4 text-prof-text font-bold dark:text-text-dark">Profile Picture</h4>
                     <div className="flex justify-center mt-5">
@@ -66,14 +69,17 @@ export default function Profile() {
                 </div>
 
                 {/* Personal Information */}
-                <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-5 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark">
+                <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-5 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark h-auto">
                     <h4 className="m-4 mb-2 text-prof-text font-bold dark:text-text-dark">Personal Information</h4>
                     <p className="text-prof-text-secondary ml-4 dark:text-text-secondary-dark">
                         Your basic profile details.
                     </p>
-                    <div className="grid grid-cols-2 gap-2 m-4 auto-rows-[80px]">
-                        <div>
-                            <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Full Name</h4>
+
+                    {/* FIXED GRID */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 pb-4 pt-1 w-full min-w-0">
+
+                        <div className="w-full">
+                            <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Full Name</h4>
                             <ProfileInput
                                 disabled={disabled}
                                 type="text"
@@ -83,8 +89,9 @@ export default function Profile() {
                                 field="fullName"
                             />
                         </div>
-                         <div>
-                            <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Email</h4>
+
+                        <div className="w-full">
+                            <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Email</h4>
                             <ProfileInput
                                 disabled={true}
                                 type="text"
@@ -94,8 +101,9 @@ export default function Profile() {
                                 field="email"
                             />
                         </div>
-                        <div>
-                            <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Age</h4>
+                    
+                        <div className="w-full">
+                            <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Age</h4>
                             <ProfileInput
                                 disabled={disabled}
                                 type="number"
@@ -105,8 +113,9 @@ export default function Profile() {
                                 field="age"
                             />
                         </div>
-                        <div>
-                            <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Gender</h4>
+
+                        <div className="w-full">
+                            <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Gender</h4>
                             <ProfileInput
                                 disabled={disabled}
                                 type="select"
@@ -116,8 +125,9 @@ export default function Profile() {
                                 field="gender"
                             />
                         </div>
-                        <div className="col-span-2">
-                            <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Bio</h4>
+
+                        <div className="col-span-1 sm:col-span-2">
+                            <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Bio</h4>
                             <ProfileInput
                                 disabled={disabled}
                                 type="bio"
@@ -127,8 +137,11 @@ export default function Profile() {
                                 field="bio"
                             />
                         </div>
+
+
                     </div>
                 </div>
+
 
                 {/* Physical Measurement */}
                 <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-4 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark">

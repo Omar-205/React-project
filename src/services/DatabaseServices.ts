@@ -47,7 +47,6 @@ export const saveUserData = async (uid?: string, data?: Partial<TraineeData>): P
   try {
     const traineeRef = doc(db, "Trainees", uid);
     await setDoc(traineeRef, data, { merge: true });
-    console.log(`✅ User data saved successfully for UID: ${uid}`);
   } catch (error) {
     console.error("❌ Error saving user data:", error);
     throw error;

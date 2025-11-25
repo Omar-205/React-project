@@ -12,7 +12,6 @@ const ActivityItem: React.FC<ActivityItemProps> = ({ activity }) => {
   const toggleStatus = () => {
     const newStatus = status === "Completed" ? "Pending" : "Completed";
     setStatus(newStatus);
-    console.log(`${activity.title} status changed to ${newStatus}`);
   };
 
   const isCompleted = status === "Completed";
