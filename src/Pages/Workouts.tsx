@@ -18,9 +18,9 @@ export default function Workouts() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //access the user data inwhich the workoutData exists
+    //access the user data in which the workoutData exists
     const userData = authData.user;
-    //hanlde workout name does not exist
+    //handle workout name does not exist
     if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
       saveUserData(authData.uid as string, { workoutData: { selectedWorkout: userData?.workoutData?.selectedWorkout || defaultWorkoutPlan, history: userData?.workoutData?.history || {} } })
       if (authData.user) {
@@ -37,8 +37,7 @@ export default function Workouts() {
       return;
     }
     // if the selected plan is found ?
-    else {
-    }
+    // do nothing
   }, [])
 
   // subpages

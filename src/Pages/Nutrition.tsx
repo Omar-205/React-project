@@ -1,15 +1,16 @@
-import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import { NutritionProgress } from "../components/NutritionProgress";
-import { Target } from "lucide-react";
-import { TodayMeal } from "../components/TodayMeal";
-import { MealPlans } from "../components/MealPlans";
-import { FoodLibrary } from "../components/FoodLibrary";
+import {buildStyles, CircularProgressbar} from "react-circular-progressbar";
+import {NutritionProgress} from "../components/NutritionProgress";
+import {Target} from "lucide-react";
+import {TodayMeal} from "../components/TodayMeal";
+import {MealPlans} from "../components/MealPlans";
+import {FoodLibrary} from "../components/FoodLibrary";
 import NavTabs from "../components/NavTabs";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
-import { saveUserData } from "../services/DatabaseServices";
-import { useEffect } from "react";
-import { mealPlans } from "../types/mealPlansData";
+import {useSelector} from "react-redux";
+import type {RootState} from "../store/store";
+import {saveUserData} from "../services/DatabaseServices";
+import {useEffect} from "react";
+import {mealPlans} from "../types/mealPlansData";
+import {getToady} from "../utils/helper.ts";
 
 
 export default function Nutrition() {
@@ -31,12 +32,14 @@ export default function Nutrition() {
     pathColor: "#FF6E00",
     textColor: theme === "dark" ? "#f1f5f9" : "#000",
   };
-  // consumbtion data
+  // consumption data
   const tabsNames = ["Today's Meal", "Meal Plans", "Food Library"];
   const tabs = [<TodayMeal />, <MealPlans />, <FoodLibrary />];
   const selectedPlan = authData.user?.nutritionData?.selectedPlan;
   const plan = selectedPlan ? mealPlans[selectedPlan] : mealPlans[Object.keys(mealPlans)[0]];
-  const today = new Date().toISOString().split("T")[0];
+
+
+  const today = getToady();
   const todayHistory = authData.user?.nutritionData.history?.[today] || {};
   const consumedCalories = plan.meals
     .filter(meal => todayHistory[meal.name as keyof typeof todayHistory])

@@ -264,7 +264,7 @@ export default function Progress() {
       </div>
 
       {/* 📊 Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
         {progRecData.map((item, index) => (
           <RecCard
             key={index}
@@ -275,7 +275,7 @@ export default function Progress() {
         ))}
       </div>
 
-      <div className="p-4">
+      <div className="p-1">
         <NavTabs titles={titles} components={components} />
       </div>
     </div>
