@@ -27,15 +27,23 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     const [formStatus, setFormStatus] = useState("Analyzing...");
     const [connected, setConnected] = useState(false);
     const [repsCompleted, setRepsCompleted] = useState(0);
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const wsRef = useRef<WebSocket | null>(null);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+    // ========================
+    // ☑ Start camera
+    // ========================
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "user" },
+                video: {
+                    width: 480,
+                    height: 480,
+                    facingMode: "user",
+                },
                 audio: false,
             });
             streamRef.current = stream;
@@ -57,68 +65,84 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     useEffect(() => {
         if (cameraActive && videoRef.current && streamRef.current) {
             videoRef.current.srcObject = streamRef.current;
-            videoRef.current.play().catch((err) => console.warn("Autoplay blocked:", err));
+            videoRef.current.play().catch(() => {});
         }
     }, [cameraActive]);
+
 
     useEffect(() => {
         if (!cameraActive) return;
 
+        // Create WebSocket
         const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
+        ws.binaryType = "arraybuffer"; // important
         wsRef.current = ws;
 
         ws.onopen = () => {
             setConnected(true);
+            // send initial JSON model selection
             ws.send(JSON.stringify({ model: exercise.modelName }));
         };
 
         ws.onmessage = (ev) => {
+            let data;
             try {
-                const data = JSON.parse(ev.data);
-                if (data.error) {
-                    console.error("Backend error:", data.error);
-                    setFormStatus("Error");
-                } else {
-                    setFormStatus(data.form_status || "Unknown");
-                    setRepsCompleted(data.rep_state?.rep_counter || 0);
-                }
-            } catch (e) {
-                console.error("Invalid message", e);
+                data = JSON.parse(ev.data);
+            } catch {
+                console.warn("Non-JSON message from server:", ev.data);
+                return;
             }
+
+            if (data.error) {
+                console.error("Backend error:", data.error);
+                setFormStatus("Error");
+                return;
+            }
+
+            setFormStatus(data.form_status || "Unknown");
+            setRepsCompleted(data.rep_state?.rep_counter || 0);
         };
 
-        ws.onclose = () => setConnected(false);
         ws.onerror = () => setConnected(false);
+        ws.onclose = () => setConnected(false);
 
-        // Canvas used for resizing
+        // canvas to compress frames
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
         const sendFrame = () => {
-            if (!videoRef.current || ws.readyState !== WebSocket.OPEN) return;
+            if (!videoRef.current) return;
+            if (ws.readyState !== WebSocket.OPEN) return;
 
-            const v = videoRef.current;
-            if (v.videoWidth === 0 || v.videoHeight === 0) return;
+            const video = videoRef.current;
+            if (video.videoWidth === 0 || video.videoHeight === 0) return;
 
-            // 🔥 Bigger resolution → 480 × 480
+            // Resize to 480×480 (you can change)
             canvas.width = 480;
             canvas.height = 480;
 
-            ctx?.drawImage(v, 0, 0, canvas.width, canvas.height);
+            ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
-
-            ws.send(JSON.stringify({ frame: dataUrl }));
+            // 📌 SEND RAW BINARY (JPEG)
+            canvas.toBlob(
+                (blob) => {
+                    if (blob && ws.readyState === WebSocket.OPEN) {
+                        ws.send(blob);
+                    }
+                },
+                "image/jpeg",
+                0.7
+            );
         };
 
-        intervalRef.current = setInterval(sendFrame, 100);
+        // FPS limiter
+        intervalRef.current = setInterval(sendFrame, 100); // 10 FPS
 
         return () => {
             ws.close();
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
     }, [cameraActive, exercise.modelName]);
-
 
     const handleClose = () => {
         stopCamera();
@@ -128,7 +152,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     };
 
     if (!isOpen) return null;
-    console.log()
     return (
         <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4"
@@ -193,13 +216,13 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                                 {exercise.title} Train
                             </span>
 
-                            <span className="hidden sm:inline">|</span>
+                            <span className=" sm:inline">|</span>
 
                             <span className={connected ? "text-success font-semibold" : "text-error font-semibold"}>
                                 {connected ? "🟢 Connected" : "🔴 Disconnected"}
                             </span>
 
-                            <span className="hidden sm:inline">|</span>
+                            <span className=" sm:inline">|</span>
 
                             <span
                                 className={`
@@ -214,7 +237,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                                 {formStatus}
                             </span>
 
-                            <span className="hidden sm:inline">|</span>
+                            <span className=" sm:inline">|</span>
 
                             <span className="dark:text-secondary text-primary font-semibold text-lg sm:text-2xl">
                                 Reps: {repsCompleted}

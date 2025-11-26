@@ -32,7 +32,7 @@ export function MealPlans() {
             <div className="flex justify-between"><p className="font-semibold">Protein: </p> <p>{planInfo.protein}g</p></div>
             <div className="flex justify-between"><p className="font-semibold">Carbs: </p> <p>{planInfo.carbs}g</p></div>
             <div className="flex justify-between"><p className="font-semibold">Fat: </p> <p>{planInfo.fat}g</p></div>
-            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700`}
+            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700  dark:bg-input-locked-dark dark:text-text-secondary-dark dark:hover:bg-secondary mt-4 font-semibold`}
               disabled={isCurrentPlan}
               onClick={() => {
                 handleSelectPlan(planName);

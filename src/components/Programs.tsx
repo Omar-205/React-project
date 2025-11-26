@@ -60,7 +60,7 @@ export function Programs() {
             <div className="flex justify-between"><p className="font-semibold">Duration: </p> <p>{planInfo.duration}</p></div>
             <div className="flex justify-between"><p className="font-semibold">Frequency: </p> <p>{planInfo.frequency}</p></div>
             <div className="flex justify-between"><p className="font-semibold">Difficulty: </p> <p className="border-1 rounded-md font-bold h-fit text-[12px] text-[#7F7F7F] text-center px-1 bg-[#FBFBFB]">{planInfo.difficulty}</p></div>
-            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700`}
+            <button className={`bg-black ${isCurrentPlan ? "text-[#65656F]" : "text-white"} text-center w-full rounded-sm py-1 cursor-pointer hover:bg-slate-700 dark:bg-input-locked-dark dark:text-text-secondary-dark dark:hover:bg-secondary mt-4 font-semibold`}
               disabled={isCurrentPlan}
               onClick={() => {
                 setPlan(planInfo.planName);

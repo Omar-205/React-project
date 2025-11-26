@@ -90,8 +90,8 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
             :
             <div className="flex items-center gap-4 w-min-[250px]">
               {!isLandingPage && <NavLink to="/" className="text-black cursor-pointer dark:text-white text-xs lg:text-lg"> Overview</NavLink>}
-              <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel === "Login" ? "md:w-[90px] w-[60px]" : "md:w-[135px]"} />
-              {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true} width=" w-[40px]  " />}
+              <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel === "Login" ? "md:w-[90px] w-[60px]" : "md:w-[90px] w-[60px]"} />
+              {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true}  />}
             </div>
           }
 

@@ -152,7 +152,7 @@ export default function Progress() {
       ),
     },
     {
-      given: targetWeight,
+      given: Number(currentWeight)-Number(targetWeight),
       statement: "To goal",
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
