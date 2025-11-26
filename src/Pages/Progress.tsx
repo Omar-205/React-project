@@ -139,7 +139,7 @@ const handleSave = () => {
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: user?.totalWorkouts ?? 0,
+      given: Object.keys(user?.workoutData?.history || {}).length ?? 0,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
