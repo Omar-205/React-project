@@ -40,19 +40,16 @@ export function TodayMeal() {
 
         const today = new Date().toISOString().split("T")[0];
 
-        // 1️⃣ Build new daily meal object
         const todayMeals = {
             ...((user.nutritionData.history?.[today] ?? {}) as Record<string, boolean>),
             [mealName]: true,
         };
 
-        // 2️⃣ Build full new nutrition history object
         const updatedHistory = {
             ...user.nutritionData.history,
             [today]: todayMeals,
         };
 
-        // 3️⃣ Dispatch updateUser → saves to Firebase + Redux
         dispatch(updateUser({
             uid,
             data: {
@@ -64,14 +61,12 @@ export function TodayMeal() {
         }));
     };
     const handleConsume = async (index: number, mealName: string) => {
-        // 1️⃣ Update local UI
         setConsumed(prev => {
             const updated = [...prev];
             updated[index] = true;
             return updated;
         });
 
-        // 2️⃣ Save to Redux + Firebase
         await updateMealHistory(mealName);
     };
 
@@ -87,14 +82,11 @@ export function TodayMeal() {
                     >
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 
-                            {/* LEFT SECTION: icon + name + time */}
                             <div className="flex items-center gap-4">
-                                {/* Icon */}
                                 <div className="flex-shrink-0">
                                     {icons[index]}
                                 </div>
 
-                                {/* Name + Time */}
                                 <div className="flex flex-col">
                                     <p className="text-lg font-semibold">{meal.name}</p>
                                     <span className="text-sm opacity-80 flex items-center">
@@ -103,7 +95,6 @@ export function TodayMeal() {
                                 </div>
                             </div>
 
-                            {/* CONSUME BUTTON */}
                             <div className="sm:ml-auto">
                                 <button
                                     onClick={() => handleConsume(index, meal.name)}
@@ -118,7 +109,6 @@ export function TodayMeal() {
                                 </button>
                             </div>
 
-                            {/* CALORIES + DETAILS */}
                             <div className="flex flex-row justify-between sm:flex-col sm:items-end">
                                 <div className="font-semibold">{meal.calories} Cal</div>
 
@@ -131,7 +121,6 @@ export function TodayMeal() {
                             </div>
                         </div>
 
-                        {/* DETAILS */}
                         {open && (
                             <p className="mt-4 font-medium leading-relaxed">
                                 {meal.content}

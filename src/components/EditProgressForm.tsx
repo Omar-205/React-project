@@ -1,4 +1,4 @@
-//didnt use this component
+//didnt use this component not useddddddd
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,14 +15,11 @@ export default function EditProgressForm() {
   const [targetWeight, setTargetWeight] = useState(progress.targetWeight);
 
   const handleSave = () => {
-    // 🧩 Update Redux state
     dispatch(updateProgress({ currentWeight, targetWeight }));
 
-    // 🧠 Compute weight lost for DB
     const initialWeight = parseFloat(progress.initialWeight ?? currentWeight);
     const weightLost = Math.max(initialWeight - parseFloat(currentWeight), 0);
 
-    // 🔥 Update user data in DB (under progress)
     if (uid) {
       dispatch(
         updateUser({

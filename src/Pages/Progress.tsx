@@ -11,7 +11,6 @@ import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
 
-//progress elements in its nav
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
@@ -19,7 +18,6 @@ const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 export default function Progress() {
     //today's date index
    const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-    //auth Data
    const authData = useSelector((state: RootState) => state.Authantication);
  
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +25,6 @@ export default function Progress() {
     (state: RootState) => state.Authantication
   );
 
-  //data of progress 
   const progress = user?.progress;
   const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "0");
   const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
@@ -38,13 +35,11 @@ const handleSave = () => {
       return;
     }
 
-    // Inputs from state
     const weightInput = tempW;
     const targetInput = targetWeight;
 
-    // --- NEW LOGIC START ---
     
-    // 1. Get Today's Date in YYYY-MM-DD format (Local Time)
+    // 1. Get Today's Date 
     const d = new Date();
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -54,13 +49,12 @@ const handleSave = () => {
     // 2. Check if the selected date is today
     const isToday = date === todayString;
 
-    // 3. Determine Final Values
     // If it IS today, use the input. If NOT today, keep the existing DB value.
     const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
     const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
     
     // 4. Determine Primary Goal
-    // Only recalculate the goal if we are actually updating the current stats (i.e., it is today)
+    // Only recalculate the goal if we are actually updating the current stats 
     let finalPrimaryGoal = user?.primaryGoal; 
 
     if (isToday) {
@@ -77,14 +71,10 @@ const handleSave = () => {
         }
       }
     }
-    // --- NEW LOGIC END ---
-
-    // 5. Update Local State (Only if today, otherwise keep showing what was there)
     if (isToday) {
         setCurrentWeight(finalCurrentWeight);
     }
 
-    // 6. Prepare History Entry (This happens regardless of date)
     const newEntry = {
       date,
       weight: parseFloat(weightInput),
@@ -92,7 +82,6 @@ const handleSave = () => {
     const existingData = progress?.weightData ?? [];
     const updatedWeightData = [...existingData, newEntry];
 
-    // 7. Prepare Full Progress Object
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
@@ -104,7 +93,6 @@ const handleSave = () => {
       progressPhotos: progress?.progressPhotos ?? [],
     };
 
-    //  Dispatch Redux
     dispatch(
       updateProgress({
         currentWeight: finalCurrentWeight,
@@ -113,7 +101,6 @@ const handleSave = () => {
       })
     );
 
-    //  Update User in DB
     dispatch(
       updateUser({
         uid,
@@ -128,20 +115,18 @@ const handleSave = () => {
 
     setDate("");
   };
-  // 1. Calculate Weight Logic
+  // 1. Calculate Weight Difference since the beging  
   const rawWeightDiff = Number(user?.startWeight)-Number(currentWeight);
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
-  // 2. Create Dynamic Cards
   const progRecData = [
     {
-      // Always show absolute number (no negative signs)
+      //show absolute number
       given: Math.abs(rawWeightDiff),
 
-      // Change text based on gain/loss
       statement: hasGained ? "Weight gained" : "Weight lost",
 
-      // Change Icon: Up(Red) for gain, Down(Green) for loss
+      // Up for gain, Down for loss
       icon: hasGained ? (
         <i className="fa-solid fa-arrow-up text-red-500"></i>
       ) : (

@@ -25,7 +25,7 @@ function SelectionCard({ label, image, selected, onSelect }: SelectionCardProps)
               className="w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30 object-contain mb-4 sm:mb-6"
           />
 
-          {/* FIXED HEIGHT TEXT CONTAINER */}
+       
 <div className="flex flex-col items-center justify-start text-center text-primary min-h-[50px]">
   <p className="text-sm sm:text-base md:text-lg font-medium">
     {label}
