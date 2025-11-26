@@ -33,8 +33,7 @@ export default function Progress() {
   const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
   const [tempW, setTempW] = useState(currentWeight || "0");
   const [date, setDate] = useState(""); 
-
-  const handleSave = () => {
+const handleSave = () => {
     if (!uid || !date) {
       return;
     }
@@ -43,23 +42,31 @@ export default function Progress() {
     const weightInput = tempW;
     const targetInput = targetWeight;
 
-    //1. Set Defaults to EXISTING DB Values (Preserve data) 
-    let finalCurrentWeight = user?.currentWeight || currentWeight;
-    let finalTargetWeight = user?.targetWeight || "0"; // Default to existing
-    let finalPrimaryGoal = user?.primaryGoal;          // Default to existing
-
-    // 2. Overwrite ONLY if Date is Today 
+    // --- NEW LOGIC START ---
     
-      finalCurrentWeight = weightInput;
-      finalTargetWeight = targetInput; 
-     
-      setCurrentWeight(finalCurrentWeight);
+    // 1. Get Today's Date in YYYY-MM-DD format (Local Time)
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const todayString = `${year}-${month}-${day}`;
 
-      // Calculate New Goal based on the NEW target and NEW current
+    // 2. Check if the selected date is today
+    const isToday = date === todayString;
+
+    // 3. Determine Final Values
+    // If it IS today, use the input. If NOT today, keep the existing DB value.
+    const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
+    const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
+    
+    // 4. Determine Primary Goal
+    // Only recalculate the goal if we are actually updating the current stats (i.e., it is today)
+    let finalPrimaryGoal = user?.primaryGoal; 
+
+    if (isToday) {
       const currentVal = parseFloat(weightInput);
       const targetVal = parseFloat(targetInput);
 
-      //change primary goal based on weight comparison
       if (!isNaN(currentVal) && !isNaN(targetVal)) {
         if (targetVal > currentVal) {
           finalPrimaryGoal = "Gain weight";
@@ -69,9 +76,15 @@ export default function Progress() {
           finalPrimaryGoal = "Maintain Weight";
         }
       }
-    
+    }
+    // --- NEW LOGIC END ---
 
-    // 3. Prepare History Entry 
+    // 5. Update Local State (Only if today, otherwise keep showing what was there)
+    if (isToday) {
+        setCurrentWeight(finalCurrentWeight);
+    }
+
+    // 6. Prepare History Entry (This happens regardless of date)
     const newEntry = {
       date,
       weight: parseFloat(weightInput),
@@ -79,11 +92,11 @@ export default function Progress() {
     const existingData = progress?.weightData ?? [];
     const updatedWeightData = [...existingData, newEntry];
 
-    // 4. Prepare Full Progress Object 
+    // 7. Prepare Full Progress Object
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
-      targetWeight: finalTargetWeight, 
+      targetWeight: finalTargetWeight,
       weightData: updatedWeightData,
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
@@ -107,14 +120,13 @@ export default function Progress() {
         data: {
           progress: updatedProgress,
           currentWeight: finalCurrentWeight,
-          targetWeight: finalTargetWeight, 
+          targetWeight: finalTargetWeight,
           primaryGoal: finalPrimaryGoal,
         },
       })
     );
 
     setDate("");
-    setCurrentWeight(finalCurrentWeight);
   };
   // 1. Calculate Weight Logic
   const rawWeightDiff = Number(user?.startWeight)-Number(currentWeight);
@@ -172,7 +184,7 @@ export default function Progress() {
         "
       >
         {/*  Current Weight */}
-        <div className="flex flex-col mb-3 md:mb-0">
+        <div className="flex flex-col mb-3 md:mb-0 dark:text-white">
           <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
             Current Weight (kg)
           </label>
@@ -235,12 +247,12 @@ export default function Progress() {
         </div>
 
         {/*  Save Button */}
-        <button
+        <button 
           onClick={handleSave}
           className="
             px-6 py-2 mt-4 md:mt-0 font-semibold rounded-xl transition-all
             bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-[var(--color-black)]
-            dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-hover)]
+            dark:bg-[var(--color-primary)] dark:text-white dark:hover:bg-[var(--color-hover)]
             shadow-sm
           "
         >
