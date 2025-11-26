@@ -33,9 +33,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     const wsRef = useRef<WebSocket | null>(null);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // ========================
-    // ☑ Start camera
-    // ========================
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -73,14 +70,12 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     useEffect(() => {
         if (!cameraActive) return;
 
-        // Create WebSocket
         const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
-        ws.binaryType = "arraybuffer"; // important
+        ws.binaryType = "arraybuffer";
         wsRef.current = ws;
 
         ws.onopen = () => {
             setConnected(true);
-            // send initial JSON model selection
             ws.send(JSON.stringify({ model: exercise.modelName }));
         };
 
@@ -106,7 +101,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         ws.onerror = () => setConnected(false);
         ws.onclose = () => setConnected(false);
 
-        // canvas to compress frames
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
@@ -117,13 +111,11 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             const video = videoRef.current;
             if (video.videoWidth === 0 || video.videoHeight === 0) return;
 
-            // Resize to 480×480 (you can change)
             canvas.width = 480;
             canvas.height = 480;
 
             ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 📌 SEND RAW BINARY (JPEG)
             canvas.toBlob(
                 (blob) => {
                     if (blob && ws.readyState === WebSocket.OPEN) {
@@ -135,8 +127,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             );
         };
 
-        // FPS limiter
-        intervalRef.current = setInterval(sendFrame, 100); // 10 FPS
+        intervalRef.current = setInterval(sendFrame, 100); 
 
         return () => {
             ws.close();
