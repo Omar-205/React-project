@@ -26,7 +26,6 @@ export interface TraineeData {
         history: Record<string, dailyMeal>
     }
     tempWeight: string;
-    WeightLost: number;
     progress?: Partial<ProgressData> | null;
 
 }

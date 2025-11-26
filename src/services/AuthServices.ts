@@ -6,26 +6,7 @@ import { mealPlans } from "../types/mealPlansData.ts";
 
 
 
-// Sign up
-export const registerTrainer = async ({ fullName, email, password }: { fullName: string, email: string, password: string }) => {
-    try {
-        const trainer = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "Trainers", trainer.user.uid), {
-            fullName,
-            email,
-            createdAt: new Date()
-        });
-        return trainer.user;
-    }
-    catch (err) {
-        if (err instanceof Error) {
-            if (err.message === "Firebase: Error (auth/email-already-in-use).") {
-                return { error: "Error: Email already in use" };
-            }
-        }
-        return { error: "An unknown error occurred" };
-    }
-};
+
 export const registerTrainee = async ({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio }: { email: string, password: string } & Partial<TraineeData>) => {
     try {
         const trainee = await createUserWithEmailAndPassword(auth, email, password);

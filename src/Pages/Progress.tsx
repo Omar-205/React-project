@@ -34,20 +34,10 @@ export default function Progress() {
   const [tempW, setTempW] = useState(currentWeight || "0");
   const [date, setDate] = useState(""); 
 
-
-
   const handleSave = () => {
     if (!uid || !date) {
       return;
     }
-    // Check if the date is today
-    const todayDate = new Date();
-    const yyyy = todayDate.getFullYear();
-    const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(todayDate.getDate()).padStart(2, '0');
-    const todayString = `${yyyy}-${mm}-${dd}`;
-
-    const isToday = date === todayString;
 
     // Inputs from state
     const weightInput = tempW;
@@ -55,18 +45,15 @@ export default function Progress() {
 
     //1. Set Defaults to EXISTING DB Values (Preserve data) 
     let finalCurrentWeight = user?.currentWeight || currentWeight;
-    let finalWeightLost = user?.WeightLost || 0;
     let finalTargetWeight = user?.targetWeight || "0"; // Default to existing
     let finalPrimaryGoal = user?.primaryGoal;          // Default to existing
 
     // 2. Overwrite ONLY if Date is Today 
-    if (isToday) {
+    
       finalCurrentWeight = weightInput;
       finalTargetWeight = targetInput; 
      
-      // Calculate Weight Lost
-      finalWeightLost = parseFloat(user?.startWeight || "0") - parseFloat(weightInput || "0");
-      setCurrentWeight(weightInput);
+      setCurrentWeight(finalCurrentWeight);
 
       // Calculate New Goal based on the NEW target and NEW current
       const currentVal = parseFloat(weightInput);
@@ -82,7 +69,7 @@ export default function Progress() {
           finalPrimaryGoal = "Maintain Weight";
         }
       }
-    } 
+    
 
     // 3. Prepare History Entry 
     const newEntry = {
@@ -97,7 +84,6 @@ export default function Progress() {
       ...progress,
       currentWeight: finalCurrentWeight,
       targetWeight: finalTargetWeight, 
-      weightLost: finalWeightLost,
       weightData: updatedWeightData,
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
@@ -110,7 +96,6 @@ export default function Progress() {
       updateProgress({
         currentWeight: finalCurrentWeight,
         targetWeight: finalTargetWeight,
-        weightLost: finalWeightLost,
         progressPhotos: updatedProgress.progressPhotos,
       })
     );
@@ -120,7 +105,6 @@ export default function Progress() {
       updateUser({
         uid,
         data: {
-          WeightLost: finalWeightLost,
           progress: updatedProgress,
           currentWeight: finalCurrentWeight,
           targetWeight: finalTargetWeight, 
@@ -130,9 +114,10 @@ export default function Progress() {
     );
 
     setDate("");
+    setCurrentWeight(finalCurrentWeight);
   };
   // 1. Calculate Weight Logic
-  const rawWeightDiff = user?.WeightLost || 0;
+  const rawWeightDiff = Number(user?.startWeight)-Number(currentWeight);
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
   // 2. Create Dynamic Cards

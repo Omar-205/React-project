@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import AlertCard from "../components/AlertCard";
 import { loginUser } from "../services/AuthServices";
 import { useDispatch, useSelector } from "react-redux";
+import login from "../assets/Login.png"
+import logindark from "../assets/Logindark.png"
+
 import type { RootState } from "../store/store";
 import { setUid } from "../store/slices/authSlice";
 
@@ -113,7 +116,7 @@ function LoginPage() {
                 {/* image */}
                 <div className="w-full max-w-96 flex justify-center">
                     <img
-                        src={theme === "dark" ? "src/assets/Logindark.png" : "src/assets/Login.png"}
+                        src={theme === "dark" ? logindark :login}
                         alt="Ready to train"
                         className="rounded-[100px] w-full object-cover ring-2 ring-text-dark dark:ring-text hidden md:block"
                     />

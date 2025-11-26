@@ -4,17 +4,20 @@ import InputField from "../components/InputField";
 import SelectionCard from "../components/SelectionCard";
 import Button from "../components/Button";
 import SelectField from "../components/SelectField";
-import { registerTrainee, registerTrainer } from "../services/AuthServices";
 import { validate } from "../utils/helper";
 import AlertCard from "../components/AlertCard";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
-
+import registerdark from "../assets/Registerdark.png";
+import register from "../assets/Register.png";
+import traine from "../assets/trainee.png";
+import trainer from "../assets/trainer.png";
+import { registerTrainee } from "../services/AuthServices";
 function RegisterPage() {
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
-    const [selected, setSelected] = useState<string>("Trainee");
+    const [selected,setSelected] = useState<string>("Trainee");
     const theme = useSelector((state: RootState) => state.theme.theme);
     const [fullName, setFullName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -74,32 +77,7 @@ function RegisterPage() {
     const nextStep = () => setStep((prev) => prev + 1);
     const prevStep = () => setStep((prev) => prev - 1);
 
-    // handle form submission for trainer and trainee
-    const handleTrainerSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        alert && setAlert(false);
-        const newErrors: typeof errors = {};
-        validate({ fullName, email, password, confirmPassword, errors: newErrors });
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            setAlert(true);
-            setAlertMessage("Error: Please fill all fields in the form");
-            return;
-        }
-        const Trainer = await registerTrainer({ fullName, email, password });
-        if ('error' in Trainer) {
-            setAlert(true);
-            setAlertMessage(Trainer.error);
-            return;
-        }
-        if (Trainer && !('error' in Trainer)) {
-            setAlert(true);
-            setAlertMessage("Trainer registered successfully!");
-        }
-        FormRef.current?.reset();
-        clearAllFields();
 
-    }
 
     const handleTraineeSubmit = async (e: React.FormEvent) => {
         setloading(true);
@@ -161,7 +139,7 @@ function RegisterPage() {
                         <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl md:space-x-30 space-y-10 md:space-y-0">
                             {/* form */}
                             <div className="w-full max-w-[550px] space-y-4">
-                                <form onSubmit={(e) => handleTrainerSubmit(e)} ref={FormRef} >
+                                <form ref={FormRef} >
                                     <InputField type="text" name="Full Name" id="fullName" placeholder="Enter Your full name" value={fullName} onChange={(e) => { setFullName(e.target.value); clearError("fullName"); }} error={errors.fullName} />
                                     {errors.fullName && <p className="error">{errors.fullName}</p>}
                                     <InputField type="email" name="Email" id="email" placeholder="Enter Your email" value={email} onChange={(e) => { setEmail(e.target.value); clearError("email") }} error={errors.email} />
@@ -213,18 +191,18 @@ function RegisterPage() {
                             <div className="flex justify-center items-center space-x-10 mb-10 p-2">
                                 <SelectionCard
                                     label="Trainee"
-                                    image="src/assets/trainee.png"
+                                    image={traine}
                                     selected={selected === "Trainee"}
-                                    onSelect={() => {
-                                        //setSelected("Trainee")
-                                    }}
+                                    onSelect={() => setSelected("Trainee")}
                                 />
-                                {/*<SelectionCard*/}
-                                {/*    label="Trainer"*/}
-                                {/*    image="src/assets/trainer.png"*/}
-                                {/*    selected={selected === "Trainer"}*/}
-                                {/*    onSelect={() => setSelected("Trainer")}*/}
-                                {/*/>*/}
+
+                                <SelectionCard
+                                    label="Trainer"
+                                    image={trainer}
+                                    selected={selected === "Trainer"}
+                                    onSelect={() => setSelected("Trainer")}
+                                />
+
                             </div>
                         </div>
 
@@ -233,7 +211,7 @@ function RegisterPage() {
                             <Button type="button" label="Next" icon="next" width="md:w-150 w-full" onClick={nextStep} />
                         )}
                         {selected === "Trainer" && (
-                            <><Button type="submit" label="Submit" icon="submit" width="md:w-150 w-full" onClick={handleTrainerSubmit} />
+                            <><Button type="submit" label="Coming Soon" icon="submit" width="md:w-150 w-full" disabled />
                                 <div></div>
                             </>
                         )}
@@ -267,7 +245,7 @@ function RegisterPage() {
                             <div className="justify-center items-center">
                                 <div className="w-full max-w-96 flex justify-center mt-22">
                                     <img
-                                        src={theme === "dark" ? "src/assets/Registerdark.png" : "src/assets/Register.png"}
+                                        src={theme === "dark" ? registerdark : register}
                                         alt="Ready to train"
                                         className="rounded-[100px] w-full object-cover ring-1 ring-text-dark dark:ring-text hidden md:block"
                                     />

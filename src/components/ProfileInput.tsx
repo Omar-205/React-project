@@ -45,11 +45,10 @@ export default function ProfileInput(props: { disabled: boolean, content: string
             || (type === "select" && field === "primaryGoal" && //primary goals select input
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
                     <option value="" disabled>-- select primary goal --</option>
-                    <option value="Lose weight">Lose weight</option>
-                    <option value="Build muscle">Build muscle</option>
-                    <option value="Improve endurance">Improve endurance</option>
-                    <option value="Enhance flexibility">Enhance flexibility</option>
-                    <option value="General fitness">General fitness</option>
+                    <option value="Lose Weight">Lose Weight</option>
+                    <option value="Maintain Weight">Maintain Weight</option>
+                    <option value="Gain Weight">Gain Weight</option>
+
                 </select>)
             || (type === "select" && field === "activityLevel" && //activity level select input
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
