@@ -23,7 +23,6 @@ export default function DailyStreak() {
             }
             return (streakCounter);
         } catch (error) {
-            console.log(error);
             return 0;
         }
     }

@@ -1,8 +1,8 @@
 //imports
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
-import { fetchUser, updateUser } from "../store/slices/authSlice";
+import { updateUser } from "../store/slices/authSlice";
 import { updateProgress } from "../store/slices/progressSlice";
 
 import NavTabs from "../components/NavTabs";
@@ -11,82 +11,56 @@ import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
 
-//progress elements in its nav
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
 
 export default function Progress() {
-    //today's date index
-   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-    //auth Data
-   const authData = useSelector((state: RootState) => state.Authantication);
-   //use state for setting the programname
-  //set the selected program based on the name
-   //set the workout for today
-   //redux dispatch and selector
+  //today's date index
+  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  const authData = useSelector((state: RootState) => state.Authantication);
+
   const dispatch = useDispatch<AppDispatch>();
-  const { uid, user, status } = useSelector(
+  const { uid, user } = useSelector(
     (state: RootState) => state.Authantication
   );
 
-  //data of progress 
   const progress = user?.progress;
-  const [currentWeight, setCurrentWeight] = useState("0");
-  const [targetWeight, setTargetWeight] = useState("0");
-  const [tempW, setTempW] = useState("0");
-  const [date, setDate] = useState(""); 
-
-  console.log(user?.totalWorkouts)
-
-
-
-  //update everytime user changes or uid changes
-  useEffect(() => {
-    if (uid && status === "idle") {
-      dispatch(fetchUser(uid));
-    }
-    console.log("User from Redux:", user);
-  }, [uid, status, dispatch, user]);
-
+  const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "0");
+  const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
+  const [tempW, setTempW] = useState(currentWeight || "0");
+  const [date, setDate] = useState("");
   const handleSave = () => {
     if (!uid || !date) {
-      console.log("A date is required to save a weight entry.");
       return;
     }
-    // Check if the date is today
-    const todayDate = new Date();
-    const yyyy = todayDate.getFullYear();
-    const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(todayDate.getDate()).padStart(2, '0');
-    const todayString = `${yyyy}-${mm}-${dd}`;
 
-    const isToday = date === todayString;
-
-    // Inputs from state
     const weightInput = tempW;
     const targetInput = targetWeight;
 
-    //1. Set Defaults to EXISTING DB Values (Preserve data) 
-    let finalCurrentWeight = user?.currentWeight || currentWeight;
-    let finalWeightLost = user?.WeightLost || 0;
-    let finalTargetWeight = user?.targetWeight || "0"; // Default to existing
-    let finalPrimaryGoal = user?.primaryGoal;          // Default to existing
 
-    // 2. Overwrite ONLY if Date is Today 
+    // 1. Get Today's Date 
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const todayString = `${year}-${month}-${day}`;
+
+    // 2. Check if the selected date is today
+    const isToday = date === todayString;
+
+    // If it IS today, use the input. If NOT today, keep the existing DB value.
+    const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
+    const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
+
+    // 4. Determine Primary Goal
+    // Only recalculate the goal if we are actually updating the current stats 
+    let finalPrimaryGoal = user?.primaryGoal;
+
     if (isToday) {
-      finalCurrentWeight = weightInput;
-      finalTargetWeight = targetInput; 
-     
-      // Calculate Weight Lost
-      finalWeightLost = parseFloat(user?.startWeight || "0") - parseFloat(weightInput || "0");
-      setCurrentWeight(weightInput);
-
-      // Calculate New Goal based on the NEW target and NEW current
       const currentVal = parseFloat(weightInput);
       const targetVal = parseFloat(targetInput);
 
-      //change primary goal based on weight comparison
       if (!isNaN(currentVal) && !isNaN(targetVal)) {
         if (targetVal > currentVal) {
           finalPrimaryGoal = "Gain weight";
@@ -96,11 +70,11 @@ export default function Progress() {
           finalPrimaryGoal = "Maintain Weight";
         }
       }
-    } else {
-      console.log("Historical entry: Current Weight, Target Weight, and Goal remain unchanged.");
+    }
+    if (isToday) {
+      setCurrentWeight(finalCurrentWeight);
     }
 
-    // 3. Prepare History Entry 
     const newEntry = {
       date,
       weight: parseFloat(weightInput),
@@ -108,12 +82,10 @@ export default function Progress() {
     const existingData = progress?.weightData ?? [];
     const updatedWeightData = [...existingData, newEntry];
 
-    // 4. Prepare Full Progress Object 
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
-      targetWeight: finalTargetWeight, 
-      weightLost: finalWeightLost,
+      targetWeight: finalTargetWeight,
       weightData: updatedWeightData,
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
@@ -121,25 +93,21 @@ export default function Progress() {
       progressPhotos: progress?.progressPhotos ?? [],
     };
 
-    //  Dispatch Redux
     dispatch(
       updateProgress({
         currentWeight: finalCurrentWeight,
         targetWeight: finalTargetWeight,
-        weightLost: finalWeightLost,
         progressPhotos: updatedProgress.progressPhotos,
       })
     );
 
-    //  Update User in DB
     dispatch(
       updateUser({
         uid,
         data: {
-          WeightLost: finalWeightLost,
           progress: updatedProgress,
           currentWeight: finalCurrentWeight,
-          targetWeight: finalTargetWeight, 
+          targetWeight: finalTargetWeight,
           primaryGoal: finalPrimaryGoal,
         },
       })
@@ -147,20 +115,18 @@ export default function Progress() {
 
     setDate("");
   };
-  // 1. Calculate Weight Logic
-  const rawWeightDiff = user?.WeightLost || 0;
+  // 1. Calculate Weight Difference since the beging  
+  const rawWeightDiff = Number(user?.startWeight) - Number(currentWeight);
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
-  // 2. Create Dynamic Cards
   const progRecData = [
     {
-      // Always show absolute number (no negative signs)
+      //show absolute number
       given: Math.abs(rawWeightDiff),
 
-      // Change text based on gain/loss
       statement: hasGained ? "Weight gained" : "Weight lost",
 
-      // Change Icon: Up(Red) for gain, Down(Green) for loss
+      // Up for gain, Down for loss
       icon: hasGained ? (
         <i className="fa-solid fa-arrow-up text-red-500"></i>
       ) : (
@@ -168,12 +134,12 @@ export default function Progress() {
       ),
     },
     {
-      given: targetWeight,
+      given: Number(currentWeight) - Number(targetWeight),
       statement: "To goal",
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: user?.totalWorkouts ?? 0,
+      given: Object.keys(user?.workoutData?.history || {}).length ?? 0,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
@@ -199,11 +165,11 @@ export default function Progress() {
           border border-4-[var(--color-light-border)] dark:border-4-[var(--color-secondary-dark)] 
           rounded-2xl shadow-md
           bg-[var(--color-light-bg)] dark:bg-[var(--color-secondary-dark)]
-          transition-all
+          transition-all md:max-lg:grid md:max-lg:grid-cols-2
         "
       >
         {/*  Current Weight */}
-        <div className="flex flex-col mb-3 md:mb-0">
+        <div className="flex flex-col mb-3 md:mb-0 dark:text-white">
           <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
             Current Weight (kg)
           </label>
@@ -212,7 +178,7 @@ export default function Progress() {
             value={tempW}
             onChange={(e) => setTempW(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-44 outline-none
@@ -233,7 +199,7 @@ export default function Progress() {
             value={targetWeight}
             onChange={(e) => setTargetWeight(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-44 outline-none
@@ -254,7 +220,7 @@ export default function Progress() {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="
-              border border-[var(--color-light-border)] dark:border-[var(--color-input-dark)]
+              border border-[var(--color-light-border)] dark:border-secondary
               bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
               text-[var(--color-black)] dark:text-[var(--color-text-dark)]
               rounded-xl p-2 w-48 outline-none
@@ -271,7 +237,7 @@ export default function Progress() {
           className="
             px-6 py-2 mt-4 md:mt-0 font-semibold rounded-xl transition-all
             bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-[var(--color-black)]
-            dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-hover)]
+            dark:bg-[var(--color-primary)] dark:text-white dark:hover:bg-[var(--color-hover)]
             shadow-sm
           "
         >
@@ -280,7 +246,7 @@ export default function Progress() {
       </div>
 
       {/* 📊 Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
         {progRecData.map((item, index) => (
           <RecCard
             key={index}
@@ -291,7 +257,7 @@ export default function Progress() {
         ))}
       </div>
 
-      <div className="p-4">
+      <div className="p-1">
         <NavTabs titles={titles} components={components} />
       </div>
     </div>

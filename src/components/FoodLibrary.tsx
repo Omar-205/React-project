@@ -18,7 +18,7 @@ export function FoodLibrary() {
         placeholder="Search food..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full flex justify-between rounded-full p-1 mb-4
+        className="w-full flex justify-between rounded-full p-3 mb-4
           bg-gray-200 
           dark:bg-secondary
           text-gray-700 

@@ -24,7 +24,6 @@ export default function ThisWeek() {
             }
             return (streakCounter);
         } catch (error) {
-            console.log(error);
             return 0;
         }
     }

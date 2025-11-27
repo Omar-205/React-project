@@ -47,3 +47,7 @@ export async function uploadImageToImgbb(imageFile: File): Promise<string> {
         throw new Error("Failed to upload image");
     }
 }
+
+export function getToady() {
+    return new Date().toISOString().split("T")[0];
+}

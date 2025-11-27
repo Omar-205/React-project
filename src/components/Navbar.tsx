@@ -53,11 +53,11 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
             className="flex items-center cursor-pointer"
           >
             <img src={logo} alt="Logo" className="w-12 h-12" />
-            <span className=" text-primary text-3xl font-bold dark:text-white">Coachy</span>
+            <span className=" text-primary text-xl font-bold dark:text-white lg:text-3xl">Coachy</span>
           </div>
         </div>
         {/* Right side */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center lg:gap-6">
           {/* theme toggle */}
           <button
             onClick={() => dispatch(toggleTheme())}
@@ -89,9 +89,9 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
             </div>
             :
             <div className="flex items-center gap-4 w-min-[250px]">
-              {!isLandingPage && <NavLink to="/" className="text-black cursor-pointer dark:text-white"> Overview</NavLink>}
-              <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel === "Login" ? "md:w-[90px] w-[60px]" : "md:w-[135px]"} />
-              {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true} width="md:w-[135px]  w-[80px]" />}
+              {!isLandingPage && <NavLink to="/" className="text-black cursor-pointer dark:text-white text-xs lg:text-lg"> Overview</NavLink>}
+              <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel === "Login" ? "md:w-[90px] w-[60px]" : "md:w-[90px] w-[60px]"} />
+              {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true}  />}
             </div>
           }
 

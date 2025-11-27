@@ -6,8 +6,8 @@ export function WeeklyPlan() {
     <p className=" dark:text-text-dark">Your Structured Workout Schedule</p>
     {/**
      * weeklt excercise has it's index to reference the weekly workouts array
-     * 0 index is for friday 
-     * 6 index is for thursday 
+     * 0  friday 
+     * 6 thursday 
      * */  }
     <WeeklyExcercise day={0} />
     <WeeklyExcercise day={1} />

@@ -18,10 +18,14 @@ export default function GoalAchieved() {
             {/* Text */}
             <div className="flex flex-col">
                 <p className="font-bold text-2xl text-black dark:text-white">
-                    {userData?.currentWeight==userData?.targetWeight ? "1" : "0"}
+                    {userData?.primaryGoal === "Lose Weight" 
+                        ? Number(userData?.currentWeight) <= Number(userData?.targetWeight) 
+                            ? "1" 
+                            : "0" 
+                        : Number(userData?.currentWeight) >= Number(userData?.targetWeight) ? "1" : "0"}
                 </p>
                 <p className="text-black dark:text-white">
-                    Goals Achieved
+                    Goal Achieved
                 </p>
             </div>
         </div>

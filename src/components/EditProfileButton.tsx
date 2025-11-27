@@ -19,11 +19,9 @@ export default function EditProfileButton(props: {
 
     const handleClick = () => {
         if (!disabled) {
-            console.log("user data saved");
             updateProfile(uid, profile);
             setDisabled(true);
         } else {
-            console.log("editing profile");
             setDisabled(false);
         }
     };

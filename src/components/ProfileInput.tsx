@@ -9,9 +9,9 @@ export default function ProfileInput(props: { disabled: boolean, content: string
 
 
 
-    const handleChange = (val: string | number) => { //show the written content amd save it
+    const handleChange = (val: string | number) => {
         if (type === "number") {
-            setNumberState(val as string); // as string to enable writing decimal points
+            setNumberState(val as string); 
             const parsed = Number(val);
             if (!isNaN(parsed)) {
                 setProfile({ ...profile, [field]: parsed }); 
@@ -26,32 +26,30 @@ export default function ProfileInput(props: { disabled: boolean, content: string
 
 
 
-    // show depending on disabled state
-    if (disabled) { //if disabled, show the content without the ability to change it
+    if (disabled) {
         return (
             <div className={`bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full ${field === "bmi" ? 'text-green-500 font-bold' : 'text-neutral-500 dark:text-[#738899]'}`}>
                 {type === "number" ? numberState : contentState}
             </div>
         )
     }
-    else { //if not disabled, check the type passed from the parent and depending on it show the content with the ability to change it
-        return (
-            (type === "select" && field === "gender" && //gender select input
+    else {
+                return (
+            (type === "select" && field === "gender" && 
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
                     <option value="" disabled>-- select gender --</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>)
-            || (type === "select" && field === "primaryGoal" && //primary goals select input
+            || (type === "select" && field === "primaryGoal" && 
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
                     <option value="" disabled>-- select primary goal --</option>
-                    <option value="Lose weight">Lose weight</option>
-                    <option value="Build muscle">Build muscle</option>
-                    <option value="Improve endurance">Improve endurance</option>
-                    <option value="Enhance flexibility">Enhance flexibility</option>
-                    <option value="General fitness">General fitness</option>
+                    <option value="Lose Weight">Lose Weight</option>
+                    <option value="Maintain Weight">Maintain Weight</option>
+                    <option value="Gain Weight">Gain Weight</option>
+
                 </select>)
-            || (type === "select" && field === "activityLevel" && //activity level select input
+            || (type === "select" && field === "activityLevel" && 
                 <select className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full text-neutral-700 dark:text-text-dark h-[42px]" value={contentState} onChange={(e) => handleChange(e.target.value)} required>
                     <option value="" disabled>-- select activity level --</option>
                     <option value="Sedentary">Sedentary(1 day/week)</option>
@@ -59,10 +57,10 @@ export default function ProfileInput(props: { disabled: boolean, content: string
                     <option value="Moderately active">Moderately active(3-5 days/week)</option>
                     <option value="Very active">Very active(5-7 days/week)</option>
                 </select>)
-            || (type === "number" && //number input
+            || (type === "number" && 
                 <input type="number" step="any" className={`bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full min-w-0 ${field === "bmi" ? 'text-green-500 font-bold' : 'text-neutral-700 dark:text-text-dark'}`} value={numberState} onChange={(e) => handleChange(Number(e.target.value))} required />
             )
-            || (type === "bio" && //bio textarea input
+            || (type === "bio" && 
                 <textarea
                     className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full min-w-0 text-neutral-700 resize-none dark:text-text-dark"
                     rows={3}
@@ -71,7 +69,7 @@ export default function ProfileInput(props: { disabled: boolean, content: string
                     onChange={(e) => handleChange(e.target.value)}
                 />
             )
-            || ((type === "email" || type === "text") && //text and email input
+            || ((type === "email" || type === "text") && 
                 <input type={type} className="bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full min-w-0 text-neutral-700 dark:text-text-dark" value={contentState} onChange={(e) => handleChange(e.target.value)} required />
             )
         )

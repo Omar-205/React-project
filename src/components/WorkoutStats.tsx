@@ -32,15 +32,15 @@ export default function WorkoutStats() {
   if (!workoutData || !authData.user?.createdAt) {
     return <p>No workout data found.</p>;
   }
-
+// Prepare data for the chart
   const createdAtDay = dayNumberFromDate(authData.user.createdAt);
   const history = workoutData.history;
 
   const keys = Object.keys(history).map(Number);
   const lastDay = keys.length > 0 ? Math.max(...keys) : createdAtDay;
-
+// daily data array
   const dailyData: { date: string; calories: number }[] = [];
-
+// Fill in data from createdAt to lastDay
   for (let day = createdAtDay; day <= lastDay; day++) {
     dailyData.push({
       date: dateFromDayNumber(day),
@@ -62,6 +62,7 @@ export default function WorkoutStats() {
       </h2>
 
       <div className="h-80">
+        {/* Chart Container */}
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={dailyData}

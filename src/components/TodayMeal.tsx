@@ -40,19 +40,16 @@ export function TodayMeal() {
 
         const today = new Date().toISOString().split("T")[0];
 
-        // 1️⃣ Build new daily meal object
         const todayMeals = {
             ...((user.nutritionData.history?.[today] ?? {}) as Record<string, boolean>),
             [mealName]: true,
         };
 
-        // 2️⃣ Build full new nutrition history object
         const updatedHistory = {
             ...user.nutritionData.history,
             [today]: todayMeals,
         };
 
-        // 3️⃣ Dispatch updateUser → saves to Firebase + Redux
         dispatch(updateUser({
             uid,
             data: {
@@ -64,14 +61,12 @@ export function TodayMeal() {
         }));
     };
     const handleConsume = async (index: number, mealName: string) => {
-        // 1️⃣ Update local UI
         setConsumed(prev => {
             const updated = [...prev];
             updated[index] = true;
             return updated;
         });
 
-        // 2️⃣ Save to Redux + Firebase
         await updateMealHistory(mealName);
     };
 
@@ -79,21 +74,33 @@ export function TodayMeal() {
         <div className="mb-14">
             {meals.map((meal, index) => {
                 const [open, setOpen] = useState(false);
+
                 return (
-                    <div key={index} className="bg-menu-white dark:bg-primary-dark border-light-border dark:border-transparent border-1 rounded-lg p-4 mt-2">
-                        <div className="flex justify-between items-center ">
-                            <div className="flex items-center gap-5">
-                                {icons[index]}
-                                <div className="flex flex-col ">
-                                    <p className="text-lg">{meal.name}</p>
-                                    <span><Clock className="inline" size={18} /> {meal.time}</span>
+                    <div
+                        key={index}
+                        className="bg-menu-white dark:bg-primary-dark border-light-border dark:border-transparent border rounded-lg p-4 mt-3"
+                    >
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+
+                            <div className="flex items-center gap-4">
+                                <div className="flex-shrink-0">
+                                    {icons[index]}
                                 </div>
-                                {/* Consume Button (green + disabled after click) */}
+
+                                <div className="flex flex-col">
+                                    <p className="text-lg font-semibold">{meal.name}</p>
+                                    <span className="text-sm opacity-80 flex items-center">
+                                        <Clock size={16} className="mr-1" /> {meal.time}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="sm:ml-auto">
                                 <button
                                     onClick={() => handleConsume(index, meal.name)}
                                     disabled={consumed[index]}
                                     className={`px-4 py-1.5 rounded-full shadow-sm font-semibold transition
-        ${consumed[index]
+                      ${consumed[index]
                                             ? "bg-green-500 text-white cursor-not-allowed opacity-90"
                                             : "bg-primary text-white hover:opacity-90 active:scale-95"
                                         }`}
@@ -101,23 +108,29 @@ export function TodayMeal() {
                                     {consumed[index] ? "Consumed ✓" : "Consume"}
                                 </button>
                             </div>
-                            <div>
+
+                            <div className="flex flex-row justify-between sm:flex-col sm:items-end">
                                 <div className="font-semibold">{meal.calories} Cal</div>
+
                                 <button
                                     onClick={() => setOpen(!open)}
-                                    className="text-sm text-primary mt-2 font-semibold cursor-pointer"
+                                    className="text-sm text-primary font-semibold mt-1"
                                 >
-                                    {open ? "Hide Details" : "Show Details ⇓"}
+                                    {open ? "Hide Details ▲" : "Show Details ▼"}
                                 </button>
                             </div>
                         </div>
 
-                        {open && <p className="mt-4 font-semibold">{meal.content}</p>}
+                        {open && (
+                            <p className="mt-4 font-medium leading-relaxed">
+                                {meal.content}
+                            </p>
+                        )}
                     </div>
                 );
             })}
-
-
         </div>
+
+
     )
 }

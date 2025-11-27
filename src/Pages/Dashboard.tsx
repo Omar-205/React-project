@@ -8,6 +8,7 @@ import ThisWeek from "../components/Dashboard Components/ThisWeek";
 import CaloriesBurned from "../components/Dashboard Components/CaloriesBurned";
 import { mealPlans } from "../types/mealPlansData";
 import GoalAchieved from "../components/Dashboard Components/GoalAchieved";
+import {getToady} from "../utils/helper.ts";
 
 
 
@@ -23,7 +24,7 @@ export default function Dashboard() {
   // get the consumed calories from nutrition data
   const selectedPlan = authData.user?.nutritionData?.selectedPlan;
   const plan = selectedPlan ? mealPlans[selectedPlan] : mealPlans[Object.keys(mealPlans)[0]];
-  const today = new Date().toISOString().split("T")[0];
+  const today = getToady()
   const todayHistory = authData.user?.nutritionData.history?.[today] || {};
   const consumedCalories = plan.meals
     .filter(meal => todayHistory[meal.name as keyof typeof todayHistory])
@@ -50,14 +51,14 @@ export default function Dashboard() {
         svg={<i className="fa-solid fa-dumbbell" style={{ color: "#00B97F" }}></i>}
       />
       <div className="sm:max-lg:col-span-full">
-        <RoundedProgressBar title="Progress percentage" total={Abs(Number(userData?.targetWeight)-Number(userData?.startWeight))} progress={Number(userData?.startWeight)-Number(userData?.currentWeight)}
-          type={"Progress"} color="#217BFF"
+        <RoundedProgressBar title="Progress percentage" total={Abs(Number(userData?.targetWeight)-Number(userData?.startWeight))} progress={Math.abs(Number(userData?.startWeight)-Number(userData?.currentWeight))}
+          type={"Kilo"} color="#217BFF"
           svg={<i className="fa-solid fa-heart-pulse" style={{ color: "#217BFF" }}></i>}
         />
 
       </div>
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 w-full ">
+    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full -my-4">
       <DailyStreak />
       <ThisWeek />
       <CaloriesBurned />

@@ -14,19 +14,21 @@ export interface TraineeData {
     primaryGoal: string;
     targetWeight: string;
     activityLevel: string;
-    totalWorkouts: number|null;
+    totalWorkouts: number | null;
     bio: string;
     createdAt: string;
     workoutData: {
         selectedWorkout: string;
-        history: Record<number, { caloriesBurned: number }>
+        history: Record<number, {
+            caloriesBurned: number,
+            type?: string
+        }>
     };
     nutritionData: {
         selectedPlan: string;
         history: Record<string, dailyMeal>
     }
     tempWeight: string;
-    WeightLost: number;
     progress?: Partial<ProgressData> | null;
 
 }

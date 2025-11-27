@@ -9,6 +9,7 @@ import { workoutPrograms } from "../types/weeklyPlans";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
+import WorkoutHistory from "../components/WorkoutHistory";
 
 export default function Workouts() {
 
@@ -18,9 +19,9 @@ export default function Workouts() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //access the user data inwhich the workoutData exists
+    //access the user data in which the workoutData exists
     const userData = authData.user;
-    //hanlde workout name does not exist
+    //handle workout name does not exist
     if (!userData?.workoutData || !userData.workoutData.selectedWorkout || !userData.workoutData.history || !Object.keys(workoutPrograms).includes(userData.workoutData.selectedWorkout)) {
       saveUserData(authData.uid as string, { workoutData: { selectedWorkout: userData?.workoutData?.selectedWorkout || defaultWorkoutPlan, history: userData?.workoutData?.history || {} } })
       if (authData.user) {
@@ -34,23 +35,20 @@ export default function Workouts() {
           }
         ));
       }
-      console.log("added messing field")
       return;
     }
     // if the selected plan is found ?
-    else {
-    }
+    // do nothing
   }, [])
 
   // subpages
-  const titles = ["Today's Workout", "Weekly Plan", "Programs"];
+  const titles = ["Today's Workout", "Weekly Plan", "Programs", "History"];
   const components = [
     <TodaysWorkout />,
     <WeeklyPlan />,
     <Programs />,
+    <WorkoutHistory />
   ];
-
-  console.log(authData);
 
 
   return <div className="flex flex-col gap-4 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] bg-transparent mt-8">

@@ -27,6 +27,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     const [formStatus, setFormStatus] = useState("Analyzing...");
     const [connected, setConnected] = useState(false);
     const [repsCompleted, setRepsCompleted] = useState(0);
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const wsRef = useRef<WebSocket | null>(null);
@@ -35,7 +36,11 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "user" },
+                video: {
+                    width: 480,
+                    height: 480,
+                    facingMode: "user",
+                },
                 audio: false,
             });
             streamRef.current = stream;
@@ -57,48 +62,73 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     useEffect(() => {
         if (cameraActive && videoRef.current && streamRef.current) {
             videoRef.current.srcObject = streamRef.current;
-            videoRef.current.play().catch((err) => console.warn("Autoplay blocked:", err));
+            videoRef.current.play().catch(() => {});
         }
     }, [cameraActive]);
 
+
     useEffect(() => {
         if (!cameraActive) return;
-        const ws = new WebSocket( import.meta.env.VITE_BACKEND_API_KEY);
+
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
+        ws.binaryType = "arraybuffer";
         wsRef.current = ws;
+
         ws.onopen = () => {
             setConnected(true);
             ws.send(JSON.stringify({ model: exercise.modelName }));
         };
+
         ws.onmessage = (ev) => {
+            let data;
             try {
-                const data = JSON.parse(ev.data);
-                if (data.error) {
-                    console.error("Backend error:", data.error);
-                    setFormStatus("Error");
-                } else {
-                    setFormStatus(data.form_status || "Unknown");
-                    setRepsCompleted(data.rep_state.rep_counter || 0);
-                }
-            } catch (e) {
-                console.error("Invalid message", e);
+                data = JSON.parse(ev.data);
+            } catch {
+                console.warn("Non-JSON message from server:", ev.data);
+                return;
             }
-        };
-        ws.onclose = () => setConnected(false);
-        ws.onerror = () => setConnected(false);
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const sendFrame = () => {
-            if (!videoRef.current || ws.readyState !== WebSocket.OPEN) return;
-            const v = videoRef.current;
-            if (v.videoWidth === 0 || v.videoHeight === 0) return;
-            canvas.width = v.videoWidth;
-            canvas.height = v.videoHeight;
-            ctx?.drawImage(v, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-            ws.send(JSON.stringify({ frame: dataUrl }));
+
+            if (data.error) {
+                console.error("Backend error:", data.error);
+                setFormStatus("Error");
+                return;
+            }
+
+            setFormStatus(data.form_status || "Unknown");
+            setRepsCompleted(data.rep_state?.rep_counter || 0);
         };
 
-        intervalRef.current = setInterval(sendFrame, 100);
+        ws.onerror = () => setConnected(false);
+        ws.onclose = () => setConnected(false);
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const sendFrame = () => {
+            if (!videoRef.current) return;
+            if (ws.readyState !== WebSocket.OPEN) return;
+
+            const video = videoRef.current;
+            if (video.videoWidth === 0 || video.videoHeight === 0) return;
+
+            canvas.width = 480;
+            canvas.height = 480;
+
+            ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(
+                (blob) => {
+                    if (blob && ws.readyState === WebSocket.OPEN) {
+                        ws.send(blob);
+                    }
+                },
+                "image/jpeg",
+                0.7
+            );
+        };
+
+        intervalRef.current = setInterval(sendFrame, 100); 
+
         return () => {
             ws.close();
             if (intervalRef.current) clearInterval(intervalRef.current);
@@ -113,7 +143,6 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     };
 
     if (!isOpen) return null;
-    console.log()
     return (
         <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4"
@@ -161,40 +190,51 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                             className="w-full h-full object-cover bg-black"
                         />
                         <div
-                            className={`
-    absolute top-4 left-1/2 -translate-x-1/2 
-    bg-input text-text rounded-lg 
-    p-2.5 pr-10 text-sm
-    flex flex-nowrap items-center gap-3
-    whitespace-nowrap
-    dark:bg-input-dark dark:text-text-dark
-    h-15
-  `}
+                            className="
+                   absolute top-4 left-1/2 -translate-x-1/2
+                   bg-input dark:bg-input-dark 
+                   text-text dark:text-text-dark
+                   rounded-xl px-4 py-3
+                   flex flex-wrap lg:flex-nowrap
+                   whitespace-normal lg:whitespace-nowrap
+                   items-center justify-center
+                   gap-x-4 gap-y-1
+                   max-w-[90%]
+                   text-sm sm:text-base
+               "
                         >
-                            <span className="dark:text-secondary text-primary text-xl">{exercise.title} Train</span>
-                            <span>|</span>
+                            <span className="dark:text-secondary text-primary font-semibold text-lg sm:text-xl">
+                                {exercise.title} Train
+                            </span>
 
-                            <span className={connected ? "text-success text-xl" : "text-error text-xl"}>
+                            <span className=" sm:inline">|</span>
+
+                            <span className={connected ? "text-success font-semibold" : "text-error font-semibold"}>
                                 {connected ? "🟢 Connected" : "🔴 Disconnected"}
                             </span>
-                            <span>|</span>
+
+                            <span className=" sm:inline">|</span>
 
                             <span
-                                className={
-                                    `text-3xl ${formStatus.toLowerCase().includes("good")
+                                className={`
+      font-bold 
+      text-xl sm:text-2xl
+      ${formStatus.toLowerCase().includes("good")
                                         ? "dark:text-green-500 text-green-700"
                                         : "dark:text-red-500 text-red-700"
-                                    }`
-                                }
+                                    }
+    `}
                             >
                                 {formStatus}
                             </span>
-                            <span>|</span>
 
-                            <span className="dark:text-secondary text-primary  text-2xl">
+                            <span className=" sm:inline">|</span>
+
+                            <span className="dark:text-secondary text-primary font-semibold text-lg sm:text-2xl">
                                 Reps: {repsCompleted}
                             </span>
                         </div>
+
 
 
                         <button

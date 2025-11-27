@@ -18,7 +18,7 @@ export default function RecCard({ given, statement, icon }: RecCardProps) {
         <p className="font-bold  text-2xl  text-black dark:text-white">{given}</p>
         <p className="text-black dark:text-white">{statement}</p>
       </div>
-      </div>
+    </div>
   );
 
 }
