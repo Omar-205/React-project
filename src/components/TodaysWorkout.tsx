@@ -165,7 +165,7 @@ export function TodaysWorkout() {
 
   return (
     <div className="w-full shadow-xl rounded-lg p-4 
-  bg-white dark:bg-input-dark 
+  bg-white dark:bg-primary-dark
   text-prof-text dark:text-text-dark
   transition-colors duration-300"
     >
