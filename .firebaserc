@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "coach-project-b2752"
-  }
+  },
+  "targets": {
+    "coach-project-b2752": {
+      "hosting": {
+        "coachyTarget": [
+          "coachyfit"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
