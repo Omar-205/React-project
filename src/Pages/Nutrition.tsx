@@ -90,7 +90,7 @@ export default function Nutrition() {
 
       {/* Net Calories */}
       <div className="flex justify-center md:justify-end">
-        <div className="bg-[#EFF6FE] p-5 text-[#6379B4] rounded-xl w-full md:w-auto">
+        <div className="bg-[#EFF6FE] p-5 text-[#6379B4] rounded-xl w-full md:w-auto lg:h-full flex flex-col items-center justify-center">
           <h5 className="flex items-center">
             <Target color="#70A0FF" className="mr-1" /> Net Calories
           </h5>

@@ -42,7 +42,6 @@ export default function TraineePageLayout() {
                 <Loading
                     color="#215482"
                     size="large"
-                    className="flex flex-col items-center"
                 />
             )}
         </div>

@@ -14,10 +14,11 @@ import register from "../assets/Register.png";
 import traine from "../assets/trainee.png";
 import trainer from "../assets/trainer.png";
 import { registerTrainee } from "../services/AuthServices";
+import { number } from "framer-motion";
 function RegisterPage() {
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
-    const [selected,setSelected] = useState<string>("Trainee");
+    const [selected, setSelected] = useState<string>("Trainee");
     const theme = useSelector((state: RootState) => state.theme.theme);
     const [fullName, setFullName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -32,7 +33,7 @@ function RegisterPage() {
     const [activityLevel, setActivityLevel] = useState<string>("");
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
-    const [loading, setloading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const FormRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
     //error
@@ -57,7 +58,6 @@ function RegisterPage() {
             return newErrors;
         });
     };
-    //Clear all Fields content
     const clearAllFields = () => {
         setFullName("");
         setEmail("");
@@ -73,61 +73,111 @@ function RegisterPage() {
         setErrors({});
     };
 
-    // functions to display basic info or detailed info form
-    const nextStep = () => setStep((prev) => prev + 1);
     const prevStep = () => setStep((prev) => prev - 1);
 
 
 
-    const handleTraineeSubmit = async (e: React.FormEvent) => {
-        setloading(true);
-        e.preventDefault();
+    const handleNextStep = () => {
         const newErrors: typeof errors = {};
+
         validate({ fullName, email, password, confirmPassword, errors: newErrors });
-        if (!age || isNaN(Number(age))) newErrors.age = "Please enter a valid age";
-        if (!height || isNaN(Number(height))) newErrors.height = "Please enter a valid height";
-        if (!currentWeight || isNaN(Number(currentWeight))) newErrors.currentWeight = "Please enter a valid current weight";
-        if (!targetWeight || isNaN(Number(targetWeight))) newErrors.targetWeight = "Please enter a valid target weight";
-        if (!gender) newErrors.gender = "Gender is required";
-        if (!primaryGoal) newErrors.primaryGoal = "Primary Goal is required";
-        if (!activityLevel) newErrors.activityLevel = "Activity Level is required";
+
+        if (selected === "Trainee") {
+            if (!age || isNaN(Number(age)) || Number(age) > 150) newErrors.age = "Please enter a valid age";
+            if (!gender) newErrors.gender = "Gender is required";
+        }
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setAlert(true);
-            setAlertMessage("Error: Please fill all fields in the form");
-            setloading(false);
+            setAlertMessage("Error: Please complete all required fields.");
             return;
         }
-        const Trainee = await registerTrainee({ email, password, targetWeight, height, currentWeight, fullName, primaryGoal, activityLevel, gender, age, bio: "" });
-        setloading(false);
-        if ('error' in Trainee) {
+
+        setStep(2);
+    };
+
+
+
+    const handleFinalSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const newErrors: typeof errors = {};
+
+        if (!height) newErrors.height = "Height is required";
+        else if (isNaN(Number(height)) || Number(height) <= 0 || Number(height) > 300)
+            newErrors.height = "Please enter a valid height (0-300 cm)";
+
+        if (!currentWeight) newErrors.currentWeight = "Current weight is required";
+        else if (isNaN(Number(currentWeight)) || Number(currentWeight) <= 0 || Number(currentWeight) > 300)
+            newErrors.currentWeight = "Please enter a valid weight (0-300 kg)";
+
+        if (!targetWeight) newErrors.targetWeight = "Target weight is required";
+        else if (isNaN(Number(targetWeight)) || Number(targetWeight) <= 0 || Number(targetWeight) > 300)
+            newErrors.targetWeight = "Please enter a valid target weight (0-300 kg)";
+
+        if (!primaryGoal) newErrors.primaryGoal = "Primary Goal is required";
+        if (!activityLevel) newErrors.activityLevel = "Activity Level is required";
+
+        if (!gender) newErrors.gender = "Gender is required";
+
+        if (!age) newErrors.age = "Age is required";
+        else if (isNaN(Number(age)) || Number(age) <= 0 || Number(age) > 120)
+            newErrors.age = "Please enter a valid age (0-120)";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            setAlert(true);
+            setAlertMessage("Error: Please correct the highlighted fields.");
+            setLoading(false);
+            return;
+        }
+
+        const Trainee = await registerTrainee({
+            email,
+            password,
+            targetWeight,
+            height,
+            currentWeight,
+            fullName,
+            primaryGoal,
+            activityLevel,
+            gender,
+            age,
+            bio: "",
+        });
+
+        setLoading(false);
+
+        if ("error" in Trainee) {
             setAlert(true);
             setAlertMessage(Trainee.error);
             return;
         }
-        if (Trainee && !('error' in Trainee)) {
-            setAlert(true);
-            setAlertMessage("Trainee registered successfully!");
-        }
-        FormRef.current?.reset();
+
+        setAlert(true);
+        setAlertMessage("Trainee registered successfully!");
         clearAllFields();
+        setStep(1);
         setTimeout(() => {
-            navigate("/login")
-        }, 2000);
-    }
+            navigate("/login");
+        }, 1500);
+    };
+
+
 
 
     return (
         <>
-            <div className="flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-71px)]">
-                {/* progress bar */}
+            <div className={`flex flex-col items-center bg-white dark:bg-primary-dark px-4 min-h-[calc(100vh-75px)] pb-10`}>
                 <ProgressBar
                     percentage={step === 1 ? selected === "Trainee" ? 50 : 100 : 100}
                     step={step}
                     totalSteps={selected === "Trainee" ? 2 : 1}
                 />
                 {/* heading */}
-                <h1 className="heading mt-10">
+                <h1 className="heading">
                     {step === 1 ? "Create your account" : "Tell us about yourself"}
                 </h1>
                 {alert &&
@@ -136,7 +186,24 @@ function RegisterPage() {
                 {/* first step  */}
                 {step === 1 && (
                     <>
-                        <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl md:space-x-30 space-y-10 md:space-y-0">
+                        <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl md:gap-10 xl:gap-20">
+                            {/* cards */}
+                            <div className="flex justify-center items-center space-x-10 mb-10 p-2 order- md:order-2">
+                                <SelectionCard
+                                    label="Trainee"
+                                    image={traine}
+                                    selected={selected === "Trainee"}
+                                    onSelect={() => setSelected("Trainee")}
+                                />
+
+                                <SelectionCard
+                                    label="Trainer"
+                                    image={trainer}
+                                    selected={selected === "Trainer"}
+                                    onSelect={() => setSelected("Trainer")}
+                                />
+
+                            </div>
                             {/* form */}
                             <div className="w-full max-w-[550px] space-y-4">
                                 <form ref={FormRef} >
@@ -187,28 +254,12 @@ function RegisterPage() {
                                 </form>
                             </div>
 
-                            {/* cards */}
-                            <div className="flex justify-center items-center space-x-10 mb-10 p-2">
-                                <SelectionCard
-                                    label="Trainee"
-                                    image={traine}
-                                    selected={selected === "Trainee"}
-                                    onSelect={() => setSelected("Trainee")}
-                                />
 
-                                <SelectionCard
-                                    label="Trainer"
-                                    image={trainer}
-                                    selected={selected === "Trainer"}
-                                    onSelect={() => setSelected("Trainer")}
-                                />
-
-                            </div>
                         </div>
 
                         {/* buttons */}
                         {selected === "Trainee" && (
-                            <Button type="button" label="Next" icon="next" width="md:w-150 w-full" onClick={nextStep} />
+                            <Button type="button" label="Next" icon="next" width="md:w-150 w-full" onClick={() => { handleNextStep(); }} />
                         )}
                         {selected === "Trainer" && (
                             <><Button type="submit" label="Coming Soon" icon="submit" width="md:w-150 w-full" disabled />
@@ -223,7 +274,7 @@ function RegisterPage() {
                         <div className="flex flex-col md:flex-row items-center md:items-start justify-center mt-5 md:mt-10 w-full max-w-5xl md:space-x-30 space-y-10 md:space-y-0">
                             {/* form */}
                             <div className="w-full max-w-[550px]">
-                                <form onSubmit={(e) => { handleTraineeSubmit(e) }} ref={FormRef} >
+                                <form onSubmit={(e) => { handleFinalSubmit(e) }} ref={FormRef} >
                                     <InputField name="Height" id="Height" type="text" placeholder="Enter Your height (cm)" value={height} onChange={(e) => { setHeight(e.target.value); clearError("height") }} error={errors.height} />
                                     {errors.height && <p className="error">{errors.height}</p>}
                                     <InputField name="Current Weight" id="Weight" placeholder="Enter Your Weight (kg)" value={currentWeight} onChange={(e) => { setCurrentWeight(e.target.value); clearError("currentWeight") }} error={errors.currentWeight} />
