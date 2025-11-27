@@ -1,4 +1,3 @@
-import profileData from "../profile/profileData";
 interface Exercise {
   id: number;
   title: string;
@@ -20,7 +19,7 @@ interface Workout {
 const workOutData: Workout = {
   title: "Upper Body Strength",
   calories: 320,
-  level: profileData.fitnessLevel,
+  level: "Intermediate",
   exercises: [
     {
       id: 1,
