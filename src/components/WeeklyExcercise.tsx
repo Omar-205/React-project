@@ -40,14 +40,15 @@ export default function WeeklyExcercise(props: { day?: number, done?: boolean })
      * we exploit this to get the last friday = last thursday + 1
      * so the week starts at index 0 (fridays) for easier calculations
      */
-    const today = getToday();
-    const lastFriday = today - today % 7 + 1; // timestamp of last friday (index 0)
+    const today = Math.floor((new Date().getTime() + 1000 * 60 * 60 * 3) / (1000 * 60 * 60 * 24))
+    const lastFriday = (today % 7 == 0 ? today - 6 : today - (today % 7) + 1); // timestamp of last friday (index 0)
 
     if (!day) day = 0;
     const dayName = days[day % 7];
     const isToday: boolean = (lastFriday + day === today);
     // checking if the excersice in the last occurance of this day is done
     done = done || workoutData?.history[lastFriday + day] != undefined;
+
     return (
         <div className={"flex justify-between items-center mt-4 p-2 border-1 dark:border-gray-700 rounded-md"
             + (done ? ' bg-green-50 dark:bg-green-900/20 border-[#CBF8E3]' :

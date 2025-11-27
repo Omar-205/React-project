@@ -16,10 +16,10 @@ const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
 
 export default function Progress() {
-    //today's date index
-   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
-   const authData = useSelector((state: RootState) => state.Authantication);
- 
+  //today's date index
+  const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  const authData = useSelector((state: RootState) => state.Authantication);
+
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user } = useSelector(
     (state: RootState) => state.Authantication
@@ -29,8 +29,8 @@ export default function Progress() {
   const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "0");
   const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
   const [tempW, setTempW] = useState(currentWeight || "0");
-  const [date, setDate] = useState(""); 
-const handleSave = () => {
+  const [date, setDate] = useState("");
+  const handleSave = () => {
     if (!uid || !date) {
       return;
     }
@@ -38,7 +38,7 @@ const handleSave = () => {
     const weightInput = tempW;
     const targetInput = targetWeight;
 
-    
+
     // 1. Get Today's Date 
     const d = new Date();
     const year = d.getFullYear();
@@ -52,10 +52,10 @@ const handleSave = () => {
     // If it IS today, use the input. If NOT today, keep the existing DB value.
     const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
     const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
-    
+
     // 4. Determine Primary Goal
     // Only recalculate the goal if we are actually updating the current stats 
-    let finalPrimaryGoal = user?.primaryGoal; 
+    let finalPrimaryGoal = user?.primaryGoal;
 
     if (isToday) {
       const currentVal = parseFloat(weightInput);
@@ -72,7 +72,7 @@ const handleSave = () => {
       }
     }
     if (isToday) {
-        setCurrentWeight(finalCurrentWeight);
+      setCurrentWeight(finalCurrentWeight);
     }
 
     const newEntry = {
@@ -116,7 +116,7 @@ const handleSave = () => {
     setDate("");
   };
   // 1. Calculate Weight Difference since the beging  
-  const rawWeightDiff = Number(user?.startWeight)-Number(currentWeight);
+  const rawWeightDiff = Number(user?.startWeight) - Number(currentWeight);
   const hasGained = rawWeightDiff < 0; // If negative, current > start
 
   const progRecData = [
@@ -134,7 +134,7 @@ const handleSave = () => {
       ),
     },
     {
-      given: Number(currentWeight)-Number(targetWeight),
+      given: Number(currentWeight) - Number(targetWeight),
       statement: "To goal",
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
@@ -165,7 +165,7 @@ const handleSave = () => {
           border border-4-[var(--color-light-border)] dark:border-4-[var(--color-secondary-dark)] 
           rounded-2xl shadow-md
           bg-[var(--color-light-bg)] dark:bg-[var(--color-secondary-dark)]
-          transition-all
+          transition-all md:max-lg:grid md:max-lg:grid-cols-2
         "
       >
         {/*  Current Weight */}
@@ -232,7 +232,7 @@ const handleSave = () => {
         </div>
 
         {/*  Save Button */}
-        <button 
+        <button
           onClick={handleSave}
           className="
             px-6 py-2 mt-4 md:mt-0 font-semibold rounded-xl transition-all

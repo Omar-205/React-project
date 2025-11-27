@@ -9,6 +9,8 @@ import { workoutPrograms } from "../types/weeklyPlans";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
+import workOutData from "../types/todaysWorkout";
+import WorkoutHistory from "../components/WorkoutHistory";
 
 export default function Workouts() {
 
@@ -41,11 +43,12 @@ export default function Workouts() {
   }, [])
 
   // subpages
-  const titles = ["Today's Workout", "Weekly Plan", "Programs"];
+  const titles = ["Today's Workout", "Weekly Plan", "Programs", "History"];
   const components = [
     <TodaysWorkout />,
     <WeeklyPlan />,
     <Programs />,
+    <WorkoutHistory />
   ];
 
 
