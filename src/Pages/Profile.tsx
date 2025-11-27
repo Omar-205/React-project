@@ -18,8 +18,9 @@ export default function Profile() {
     const createdAtDate = user?.createdAt ? new Date(user.createdAt) : null;
     const month = createdAtDate ? String(createdAtDate.getUTCMonth() + 1).padStart(2, "0") : "00";
     const year = createdAtDate ? createdAtDate.getUTCFullYear() : "0000";
-    const formatted = `${month}-${year}`;
-    const BMI = user.currentWeight / ((user.height / 100) ** 2);
+    const formattedDate = `${month}-${year}`;
+
+    const BMI = user.currentWeight / ((user.height / 100) ** 2); //BMI formula
 
     return (
         <div className="flex flex-col gap-8 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] mt-8 px-4">
@@ -32,6 +33,7 @@ export default function Profile() {
                     </p>
                 </div>
                 <div>
+                    {/* button to save changes */}
                     <EditProfileButton
                         profile={profile}
                         disabled={disabled}
@@ -41,12 +43,11 @@ export default function Profile() {
                 </div>
             </div>
 
-            {/* Grid Section */}
+            {/* Grid Section containing details */}
             <div className="
-    grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 
-    gap-2 mt-8 
-    auto-rows-auto sm:auto-rows-auto lg:auto-rows-[150px]
-">                {/* Profile Picture */}
+                grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 
+                gap-2 mt-8 
+                auto-rows-auto sm:auto-rows-auto lg:auto-rows-[150px]">           
                 <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-3 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark">
                     <h4 className="m-4 text-prof-text font-bold dark:text-text-dark">Profile Picture</h4>
                     <div className="flex justify-center mt-5">
@@ -59,7 +60,7 @@ export default function Profile() {
                     <hr className="m-4 h-[2px] bg-text border-0" />
                     <p className="text-prof-text-secondary m-4 dark:text-text-secondary-dark">
                         <i className="fa-solid fa-calendar dark:text-text-dark"></i>{" "}
-                        <span className="font-bold dark:text-text-dark">Member since:</span> {formatted}
+                        <span className="font-bold dark:text-text-dark">Member since:</span> {formattedDate}
                     </p>
                     <p className="text-prof-text-secondary m-4 dark:text-text-secondary-dark">
                         <i className="fa-solid fa-chart-line dark:text-text-dark"></i>{" "}
@@ -75,10 +76,10 @@ export default function Profile() {
                         Your basic profile details.
                     </p>
 
-                    {/* FIXED GRID */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 pb-4 pt-1 w-full min-w-0">
 
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 pb-4 pt-1 w-full min-w-0">
                         <div className="w-full">
+                            {/* full name */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Full Name</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -91,6 +92,7 @@ export default function Profile() {
                         </div>
 
                         <div className="w-full">
+                            {/* email */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Email</h4>
                             <ProfileInput
                                 disabled={true}
@@ -101,8 +103,9 @@ export default function Profile() {
                                 field="email"
                             />
                         </div>
-                    
+
                         <div className="w-full">
+                            {/* age */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Age</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -115,6 +118,7 @@ export default function Profile() {
                         </div>
 
                         <div className="w-full">
+                            {/* gender */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Gender</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -127,6 +131,7 @@ export default function Profile() {
                         </div>
 
                         <div className="col-span-1 sm:col-span-2">
+                            {/* bio */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Bio</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -153,6 +158,7 @@ export default function Profile() {
                     </p>
                     <div className="grid grid-cols-2 gap-2 m-4 auto-rows-[80px]">
                         <div>
+                            {/* height */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Height (cm)</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -164,6 +170,7 @@ export default function Profile() {
                             />
                         </div>
                         <div>
+                            {/* weight */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Weight (kg)</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -175,6 +182,7 @@ export default function Profile() {
                             />
                         </div>
                         <div className="col-span-2">
+                            {/* bmi */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">
                                 Body Mass Index (BMI)
                             </h4>
@@ -200,6 +208,7 @@ export default function Profile() {
                     </p>
                     <div className="grid grid-cols-1 gap-2 m-4 auto-rows-[80px]">
                         <div>
+                            {/* primary goal */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Primary Goal</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -211,6 +220,7 @@ export default function Profile() {
                             />
                         </div>
                         <div>
+                            {/* target weight */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">
                                 Target Weight (kg)
                             </h4>
@@ -224,6 +234,7 @@ export default function Profile() {
                             />
                         </div>
                         <div>
+                            {/* activity level */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Activity Level</h4>
                             <ProfileInput
                                 disabled={disabled}
@@ -235,9 +246,10 @@ export default function Profile() {
                             />
                         </div>
                         <div>
+                            {/* progress to go */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Progress to go</h4>
                             <div className="bg-green-200 font-bold rounded px-3 py-2 w-full text-prof-text-secondary dark:text-prof-text">
-                                {Math.abs(Number(user?.targetWeight ?? 0) - Number(user?.currentWeight ?? 0))} kg
+                                {Math.abs(Number(user?.targetWeight ?? 0) - Number(user?.currentWeight ?? 0))} kg {Number(user?.targetWeight ?? 0) > Number(user?.currentWeight ?? 0) ? "(gain)" : Number(user?.targetWeight ?? 0) < Number(user?.currentWeight ?? 0) ? "(loss)" : "(maintain)"}
                             </div>
                         </div>
                     </div>
