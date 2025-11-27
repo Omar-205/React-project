@@ -118,7 +118,7 @@ const ProgressPhotos: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 bg-black text-white hover:bg-hover dark:bg-secondary-dark dark:hover:bg-hover"
+          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 bg-black text-white hover:bg-hover dark:bg-primary-darkdark:hover:bg-hover cursor-pointer"
         >
           + Add Photos
         </button>
@@ -129,7 +129,7 @@ const ProgressPhotos: React.FC = () => {
   {(progress?.progressPhotos ?? []).map((entry) => (
     <div
       key={entry.date}
-      className="bg-light-bg dark:bg-secondary-dark p-4 rounded-xl border border-light-border dark:border-input-dark transition-colors duration-300 w-full"
+      className="bg-light-bg dark:bg-primary-darkp-4 rounded-xl border border-light-border dark:border-input-dark transition-colors duration-300 w-full"
     >
       <h3 className="text-center font-semibold text-primary dark:text-text-dark mb-3">
         {entry.date}
@@ -144,7 +144,7 @@ const ProgressPhotos: React.FC = () => {
 
 
       {/* Tips Rectangle */}
-      <div className="bg-secondary dark:bg-secondary-dark border border-light-border dark:border-input-dark rounded-xl mt-8 p-4 transition-colors duration-300">
+      <div className="bg-secondary dark:bg-primary-darkborder border-light-border dark:border-input-dark rounded-xl mt-8 p-4 transition-colors duration-300">
         <h3 className="font-semibold text-primary dark:text-text-dark mb-2">
           Tips for Progress Photos
         </h3>
@@ -166,7 +166,7 @@ const ProgressPhotos: React.FC = () => {
             <input
               type="date"
               onChange={handleDateChange}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2 bg-transparent"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2 bg-transparent cursor-pointer"
               required
             />
             {date && (
@@ -187,7 +187,7 @@ const ProgressPhotos: React.FC = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setFrontPhoto(e.target.files?.[0] || null)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2 cursor-pointer"
               required
             />
           </div>
@@ -201,7 +201,7 @@ const ProgressPhotos: React.FC = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setSidePhoto(e.target.files?.[0] || null)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2 cursor-pointer"
               required
             />
           </div>
@@ -211,14 +211,14 @@ const ProgressPhotos: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg mr-2 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg mr-2 hover:bg-gray-500 dark:bg-gray-700 dark:text-gray-300 cursor-pointer dark:hover:bg-gray-600"
               disabled={isUploading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-hover"
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-hover cursor-pointer"
               disabled={isUploading}
             >
               {isUploading ? "Uploading..." : "Save Photos"}

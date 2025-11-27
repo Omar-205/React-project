@@ -60,12 +60,12 @@ export function TodaysWorkoutExercise(props: {
                 </div>
 
                 <button
-                    className={`rounded-lg px-4 py-2 transition-colors duration-200
+                    className={`rounded-lg px-4 py-2 transition-colors duration-200 cursor-pointer
       text-white
       ${exercise.completed
                             ? "bg-green-500 dark:bg-green-600 cursor-not-allowed"
                             : startWorkout
-                                ? "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/90"
+                                ? "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/70"
                                 : "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                         }
     `}

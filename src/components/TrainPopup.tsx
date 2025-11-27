@@ -3,6 +3,7 @@ import squat from "../assets/squat.gif";
 import biceps from "../assets/bicepscurl.gif";
 import lateral from "../assets/lateralraises.gif";
 import pushup from "../assets/pushup.gif";
+import { SwitchCamera } from 'lucide-react';
 
 interface Exercise {
     title: string;
@@ -31,6 +32,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
     const [formStatus, setFormStatus] = useState("Analyzing...");
     const [connected, setConnected] = useState(false);
     const [repsCompleted, setRepsCompleted] = useState(0);
+    const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
@@ -43,7 +45,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                 video: {
                     width: 480,
                     height: 480,
-                    facingMode: "user",
+                    facingMode: facingMode,
                 },
                 audio: false,
             });
@@ -54,7 +56,9 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             alert("Please allow camera access to continue.");
         }
     };
-
+    const swapCamera = () => {
+        setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+    };
     const stopCamera = () => {
         if (streamRef.current) {
             streamRef.current.getTracks().forEach((t) => t.stop());
@@ -161,7 +165,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             >
                 <button
                     onClick={handleClose}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-300 text-lg z-10"
+                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-300 text-lg z-10 cursor-pointer"
                 >
                     ✕
                 </button>
@@ -182,17 +186,17 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
                         {/* GIF */}
                         <div className="flex justify-center mt-2 border p-1 rounded-lg bg-input dark:bg-input-dark">
-                        {exercise.title.toLowerCase() === "biceps curl" ? (
-                            <img src={biceps} alt="exercise demonstration" className="rounded-lg" />
-                        ) : exercise.title.toLowerCase() === "squats" ? (
-                            <img src={squat} alt="exercise demonstration" className="rounded-lg" />
-                        ) : exercise.title.toLowerCase() === "lateral raises" ? (
-                            <img src={lateral} alt="exercise demonstration" className="rounded-lg" />
-                        ) : exercise.title.toLowerCase() === "push ups" ? (
-                            <img src={pushup} alt="exercise demonstration" className="rounded-lg" />
-                        ) : (
-                            <p>No GIF available for this exercise.</p>
-                        )}
+                            {exercise.title.toLowerCase() === "biceps curl" ? (
+                                <img src={biceps} alt="exercise demonstration" className="rounded-lg" />
+                            ) : exercise.title.toLowerCase() === "squats" ? (
+                                <img src={squat} alt="exercise demonstration" className="rounded-lg" />
+                            ) : exercise.title.toLowerCase() === "lateral raises" ? (
+                                <img src={lateral} alt="exercise demonstration" className="rounded-lg" />
+                            ) : exercise.title.toLowerCase() === "push ups" ? (
+                                <img src={pushup} alt="exercise demonstration" className="rounded-lg" />
+                            ) : (
+                                <p>No GIF available for this exercise.</p>
+                            )}
                         </div>
 
                         {exercise.note && (
@@ -203,7 +207,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
                         <button
                             onClick={startCamera}
-                            className="mt-6 w-full bg-primary hover:bg-primary/45 text-white rounded-lg py-2.5"
+                            className="mt-6 w-full bg-primary hover:bg-primary/45 text-white rounded-lg py-2.5 cursor-pointer"
                         >
                             Open Camera
                         </button>
@@ -265,13 +269,23 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                         </div>
 
 
+                        (
+                    <button
+                        onClick={swapCamera}
+                        className="absolute top-3 left-3 z-10 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
+                        title="Swap Camera"
+                    >
+                        <SwitchCamera size={20} className="text-secondary"/>
+                    </button>
+                )
+
 
                         <button
                             onClick={() => {
                                 onComplete();
                                 handleClose();
                             }}
-                            className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-success hover:bg-success/80 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200"
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-success hover:bg-success/80 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all duration-200 cursor-pointer"
                         >
                             End Training
                         </button>

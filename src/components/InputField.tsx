@@ -64,7 +64,7 @@ function InputField({
         <button
           type="button"
           onClick={onTogglePassword}
-          className="absolute right-3 bottom-3 -translate-y-2 text-text hover:text-primary-dark dark:text-text-dark dark:hover:text-primary"
+          className="absolute right-3 bottom-3 -translate-y-2 text-text hover:text-primary-dark dark:text-text-dark dark:hover:text-primary cursor-pointer"
         >
           {showPassword ? (
             <EyeOff className="w-5 h-5" />

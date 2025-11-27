@@ -23,7 +23,7 @@ export function MealPlans() {
   const baseStyle =
   "w-full bg-gray-800 text-white px-10 py-3 rounded-sm flex justify-center items-center gap-2 m-2 transition-colors duration-200 hover:bg-secondary hover:text-primary hover:cursor-pointer dark:hover:bg-primary dark:hover:text-secondary";
 const activeStyle =
-  "bg-secondary text-primary font-bold dark:bg-primary dark:text-secondary rounded-sm";
+  "bg-primary text-primary font-bold dark:bg-primary dark:text-secondary rounded-sm cursor-not-allowed";
 
 return (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">

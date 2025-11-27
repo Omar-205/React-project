@@ -13,7 +13,7 @@ function NotFoundPage() {
       </p>
       <button
         onClick={() => navigate("/")}
-        className="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-hover dark:bg-secondary-dark dark:text-text-dark dark:hover:bg-input-locked-dark transition-all duration-200"
+        className="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-hover dark:bg-primary-darkdark:text-text-dark dark:hover:bg-input-locked-dark transition-all duration-200"
       >
         Go Back Home
       </button>

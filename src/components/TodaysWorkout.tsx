@@ -134,7 +134,7 @@ export function TodaysWorkout() {
     return (
       <div>
         <div className=" text-6xl text-center text-text font-bold ">Workout Completed</div>
-        <p className="text-center text-slate-700 pt-2">You Crushed it! {workout.duration} minuits completed</p>
+        <p className="text-center text-slate-500 pt-2">You Crushed it! {workout.duration} minuits completed</p>
         <div className="w-full flex justify-center"><CheckCheck size={200} color="#22BB61" /></div>
         <div className="w-full max-w-5xl mt-5 ">
           <div className="text-text font-bold w-full text-end">100%</div>
@@ -147,9 +147,9 @@ export function TodaysWorkout() {
         </div>
         <div className="text-4xl text-center text-text">Keep it up!</div>
         <div className="mt-8 flex justify-center">
-          <div className="bg-white dark:bg-secondary-dark shadow-md rounded-lg p-6 flex items-center gap-4">
+          <div className="bg-white dark:bg-primary-dark shadow-md rounded-lg p-6 flex items-center gap-4">
             <i className="fa-solid fa-fire text-4xl text-orange-500"></i>
-            <div>
+            <div className="flex flex-col items-center">
               <p className="text-3xl font-bold text-text dark:text-white">
                 {authData?.user?.workoutData?.history?.[today]?.caloriesBurned}
               </p>
@@ -183,7 +183,7 @@ export function TodaysWorkout() {
         </div>
 
         <button
-          className={`px-4 py-2 rounded-lg transition-colors duration-200 
+          className={`px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer
         text-white 
         ${startWorkout
               ? "bg-green-600 dark:bg-green-700 cursor-not-allowed"

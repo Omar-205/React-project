@@ -14,7 +14,6 @@ import register from "../assets/Register.png";
 import traine from "../assets/trainee.png";
 import trainer from "../assets/trainer.png";
 import { registerTrainee } from "../services/AuthServices";
-import { number } from "framer-motion";
 function RegisterPage() {
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
