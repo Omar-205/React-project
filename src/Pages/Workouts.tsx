@@ -9,7 +9,6 @@ import { workoutPrograms } from "../types/weeklyPlans";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
-import workOutData from "../types/todaysWorkout";
 import WorkoutHistory from "../components/WorkoutHistory";
 
 export default function Workouts() {

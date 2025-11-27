@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState } from "react";
 import { ProgressBar } from "../components/ProgressBar";
 import InputField from "../components/InputField";
 import SelectionCard from "../components/SelectionCard";

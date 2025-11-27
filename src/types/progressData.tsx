@@ -62,7 +62,6 @@ export interface ProgressData {
   weightStats: WeightStat[] | null;
   weeklyProgressData: WeeklyProgress[] | null;
   progressPhotos: ProgressEntry[] | null;
-
   
 }
 
