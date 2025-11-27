@@ -33,7 +33,8 @@ export default function EditProfileButton(props: {
                     : "bg-primary hover:bg-primary-dark"
                 }`}
             onClick={handleClick}
-            disabled={
+            // cant click save changes if required fields are empty
+            disabled={ 
                 !disabled &&
                 (!profile.fullName ||
                     !profile.age ||

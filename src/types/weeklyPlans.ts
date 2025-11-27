@@ -1,4 +1,3 @@
-import profileData from "../profile/profileData";
 
 // Define the Workout type if not already defined elsewhere
 
@@ -30,7 +29,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Active Rest Day",
     calories: 150,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 25,
     exercises: [
       { id: 1, title: "Light Walk or Cycling", sets: 1, minReps: 20, maxReps: 30, rest: 0, time: 900, note: "Keep it casual", completed: false },
@@ -40,7 +39,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Upper Body Strength",
     calories: 320,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 45,
     exercises: [
       { id: 1, title: "Push-ups", sets: 3, minReps: 12, maxReps: 15, rest: 60, time: 45, note: "Keep your core tight", completed: false },
@@ -54,7 +53,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Lower Body Power",
     calories: 350,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 50,
     exercises: [
       { id: 1, title: "Bodyweight Squats", sets: 3, minReps: 15, maxReps: 20, rest: 60, time: 60, note: "Heels stay flat", completed: false },
@@ -67,7 +66,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Core & Stability",
     calories: 250,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 40,
     exercises: [
       { id: 1, title: "Plank", sets: 3, minReps: 45, maxReps: 60, rest: 60, time: 60, note: "Tighten abs and glutes", completed: false },
@@ -80,7 +79,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Cardio & Conditioning",
     calories: 400,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 35,
     exercises: [
       { id: 1, title: "Jump Rope", sets: 4, minReps: 60, maxReps: 90, rest: 60, time: 60, note: "Light on your feet", completed: false },
@@ -92,7 +91,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Pull & Posterior Chain",
     calories: 320,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 45,
     exercises: [
       { id: 1, title: "Pull-ups", sets: 3, minReps: 6, maxReps: 10, rest: 90, time: 60, note: "Full extension", completed: false },
@@ -104,7 +103,7 @@ export const beginnerFullBodyPlan: trainingPlan = [
   {
     title: "Mobility & Recovery",
     calories: 180,
-    level: profileData.fitnessLevel,
+    level: "Beginner",
     duration: 30,
     exercises: [
       { id: 1, title: "Dynamic Stretching", sets: 2, minReps: 8, maxReps: 10, rest: 30, time: 60, note: "Full body flow", completed: false },
