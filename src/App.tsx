@@ -18,15 +18,6 @@ function App() {
 
   return (
     <Routes>
-      <Route element={<PublicRoute />}>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Route>
-      <Route element={<ProtectedRoute />}>
         <Route element={<PublicRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
@@ -35,8 +26,16 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Route>
-      </Route>
-
+        <Route element={<ProtectedRoute />}>
+          <Route path="trainee" element={<TraineePageLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="progress" element={<Progress />} />
+            <Route path="workouts" element={<Workouts />} />
+            <Route path="nutrition" element={<Nutrition />} />
+          </Route>
+        </Route>
     </Routes>
 
   )
