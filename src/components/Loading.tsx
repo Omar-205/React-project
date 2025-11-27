@@ -5,11 +5,10 @@ interface LoadingProps {
     text ?: string
     textColor ?: string
     color ?: string
-    className?: string
 }
-const Loading = ({ size, text, textColor, color, className }: LoadingProps) => {
+const Loading = ({ size, text, textColor, color }: LoadingProps) => {
     return (
-        <div className={className}>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <Commet color={[color || "#000000", "#C7E1FC"]} size={size} text={text} textColor={textColor}/>
         </div>
     )

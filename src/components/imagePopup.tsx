@@ -29,7 +29,7 @@ const ImagePopup: React.FC<ImagePopupProps> = ({
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-xl font-bold leading-none"
+                        className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-xl font-bold leading-none cursor-pointer"
                     >
                         ✕
                     </button>

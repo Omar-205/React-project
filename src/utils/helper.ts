@@ -12,23 +12,55 @@ interface Errors {
     }
 }
 
+
 export const validate = ({ fullName, email, password, confirmPassword, errors }: Errors) => {
-    if (fullName.trim().length < 6) {
+    // Full Name Validation
+    if (!fullName.trim()) {
+        errors.fullName = "Full Name is required";
+    } else if (fullName.trim().length < 6) {
         errors.fullName = "Full Name must be at least 6 characters";
-    }
-    if (!email.trim()) errors.email = "Email is required";
-    if (!password) errors.password = "Password is required";
-    if (!confirmPassword) errors.confirmPassword = "Please confirm your password";
-    if (password !== confirmPassword) errors.confirmPassword = "Passwords don't match";
-    //regex validation for email 
-    if (email && ! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.email = "Email is invalid";
-    }
-    if (password && password.length < 6) {
-        errors.password = "Password must be at least 6 characters";
+    } else if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+        errors.fullName = "Full Name must only contain letters";
+    } else if (fullName.trim().split(" ").length < 2) {
+        errors.fullName = "Please enter both first and last name";
     }
 
-}
+    // Email Validation
+    if (!email.trim()) {
+        errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.email = "Invalid email address";
+    }
+
+    // Password Validation
+    if (!password) {
+        errors.password = "Password is required";
+    } else {
+        if (password.length < 8) {
+            errors.password = "Password must be at least 8 characters";
+        }
+        if (!/[A-Z]/.test(password)) {
+            errors.password = "Password must contain at least one uppercase letter (A-Z)";
+        }
+        if (!/[a-z]/.test(password)) {
+            errors.password = "Password must contain at least one lowercase letter (a-z)";
+        }
+        if (!/[0-9]/.test(password)) {
+            errors.password = "Password must contain at least one number (0-9)";
+        }
+        if (/\s/.test(password)) {
+            errors.password = "Password cannot contain spaces";
+        }
+    }
+
+    // Confirm Password Validation
+    if (!confirmPassword) {
+        errors.confirmPassword = "Please confirm your password";
+    } else if (password !== confirmPassword) {
+        errors.confirmPassword = "Passwords do not match";
+    }
+};
+
 
 export async function uploadImageToImgbb(imageFile: File): Promise<string> {
     const formData = new FormData();

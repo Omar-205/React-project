@@ -42,7 +42,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
   };
 
   return (
-    <nav className="bg-white shadow-sm dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700">
+    <nav className="bg-white shadow-sm dark:bg-primary-dark border-b border-gray-200 dark:border-gray-700 ">
       <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Left side (logo) */}
         <div className="flex gap-2">
@@ -61,7 +61,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
           {/* theme toggle */}
           <button
             onClick={() => dispatch(toggleTheme())}
-            className="p-3 rounded-full  text-primary hover:bg-secondary transition dark:text-secondary dark:hover:bg-prof-text-secondary"
+            className="p-3 rounded-full  text-primary hover:bg-secondary transition dark:text-secondary dark:hover:bg-prof-text-secondary cursor-pointer"
           >
             {theme == "light" ? <Moon size={30} /> : <Sun size={30} />}
           </button>
@@ -70,7 +70,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
               {/* Avatar */}
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 text-white"
+                className="flex items-center gap-2 text-white cursor-pointer"
               >
                 <Avatar name={username || ""} />
               </button>
@@ -89,7 +89,7 @@ function Navbar({ buttonLabel, secondButtonLabel, isLandingPage, icon, hideMenu,
             </div>
             :
             <div className="flex items-center gap-4 w-min-[250px]">
-              {!isLandingPage && <NavLink to="/" className="text-black cursor-pointer dark:text-white text-xs lg:text-lg"> Overview</NavLink>}
+              {!isLandingPage && <NavLink to="/" className="text-black cursor-pointer dark:text-white text-xs lg:text-lg hover:text-primary"> Overview</NavLink>}
               <Button label={buttonLabel} onClick={buttonLabel === "Login" ? handleLogin : handleRegister} width={buttonLabel === "Login" ? "md:w-[90px] w-[60px]" : "md:w-[90px] w-[60px]"} />
               {secondButtonLabel && <Button label={secondButtonLabel} onClick={handleRegister} isSecondary={true}  />}
             </div>

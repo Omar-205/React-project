@@ -1,4 +1,3 @@
-//imports
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
@@ -10,78 +9,92 @@ import ProgressPhotos from "../components/ProgressPhotos";
 import RecCard from "../components/RecCard";
 import WeightProgress from "../components/WeightProgress";
 import WorkoutStats from "../components/WorkoutStats";
+import AlertCard from "../components/AlertCard";
 
 const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
-
 export default function Progress() {
-  //today's date index
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
   const authData = useSelector((state: RootState) => state.Authantication);
-
   const dispatch = useDispatch<AppDispatch>();
-  const { uid, user } = useSelector(
-    (state: RootState) => state.Authantication
-  );
+  const { uid, user } = authData;
 
   const progress = user?.progress;
-  const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "0");
-  const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "0");
-  const [tempW, setTempW] = useState(currentWeight || "0");
+  const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "");
+  const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "");
+  const [tempW, setTempW] = useState(currentWeight || "");
   const [date, setDate] = useState("");
-  const handleSave = () => {
-    if (!uid || !date) {
-      return;
+
+  const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [errors, setErrors] = useState<{ currentWeight?: string; targetWeight?: string; date?: string }>({});
+
+  const validateForm = () => {
+    const newErrors: typeof errors = {};
+    if (!tempW || isNaN(Number(tempW)) || Number(tempW) <= 0) newErrors.currentWeight = "Enter a valid current weight";
+    if (!targetWeight || isNaN(Number(targetWeight)) || Number(targetWeight) <= 0) newErrors.targetWeight = "Enter a valid target weight";
+    if (!date) newErrors.date = "Please select a date";
+    if (date) {
+      const selectedDate = new Date(date);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+      if (selectedDate < todayDate) newErrors.date = "Date cannot be in the past";
     }
 
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = () => {
+    if (!uid) return;
+  
+    // ✅ Validate form
+    if (!validateForm()) {
+      setAlert({ type: "error", message: "Please fix errors in the form." });
+      return;
+    }
+  
     const weightInput = tempW;
     const targetInput = targetWeight;
-
-
-    // 1. Get Today's Date 
+  
+    // 📅 Today's date in YYYY-MM-DD
     const d = new Date();
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     const todayString = `${year}-${month}-${day}`;
-
-    // 2. Check if the selected date is today
+  
+    // ⏳ Check if selected date is today
     const isToday = date === todayString;
-
-    // If it IS today, use the input. If NOT today, keep the existing DB value.
+  
     const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
     const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
-
-    // 4. Determine Primary Goal
-    // Only recalculate the goal if we are actually updating the current stats 
+  
+    // 🎯 Calculate primary goal
     let finalPrimaryGoal = user?.primaryGoal;
-
     if (isToday) {
       const currentVal = parseFloat(weightInput);
       const targetVal = parseFloat(targetInput);
-
       if (!isNaN(currentVal) && !isNaN(targetVal)) {
-        if (targetVal > currentVal) {
-          finalPrimaryGoal = "Gain weight";
-        } else if (targetVal < currentVal) {
-          finalPrimaryGoal = "Lose weight";
-        } else {
-          finalPrimaryGoal = "Maintain Weight";
-        }
+        if (targetVal > currentVal) finalPrimaryGoal = "Gain weight";
+        else if (targetVal < currentVal) finalPrimaryGoal = "Lose weight";
+        else finalPrimaryGoal = "Maintain Weight";
       }
     }
-    if (isToday) {
-      setCurrentWeight(finalCurrentWeight);
-    }
-
-    const newEntry = {
-      date,
-      weight: parseFloat(weightInput),
-    };
+  
+    if (isToday) setCurrentWeight(finalCurrentWeight);
+  
+    // 🔄 Update weight history (overwrite if date exists)
+    const newEntry = { date, weight: parseFloat(weightInput) };
     const existingData = progress?.weightData ?? [];
-    const updatedWeightData = [...existingData, newEntry];
-
+    let updatedWeightData = existingData.map(entry =>
+      entry.date === date ? newEntry : entry
+    );
+    if (!updatedWeightData.find(entry => entry.date === date)) {
+      updatedWeightData.push(newEntry);
+    }
+  
+    // 📝 Update progress object
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
@@ -92,54 +105,51 @@ export default function Progress() {
       weeklyProgressData: progress?.weeklyProgressData ?? null,
       progressPhotos: progress?.progressPhotos ?? [],
     };
-
-    dispatch(
-      updateProgress({
+  
+    // 💾 Dispatch updates
+    dispatch(updateProgress({
+      currentWeight: finalCurrentWeight,
+      targetWeight: finalTargetWeight,
+      progressPhotos: updatedProgress.progressPhotos,
+    }));
+  
+    dispatch(updateUser({
+      uid,
+      data: {
+        progress: updatedProgress,
         currentWeight: finalCurrentWeight,
         targetWeight: finalTargetWeight,
-        progressPhotos: updatedProgress.progressPhotos,
-      })
-    );
-
-    dispatch(
-      updateUser({
-        uid,
-        data: {
-          progress: updatedProgress,
-          currentWeight: finalCurrentWeight,
-          targetWeight: finalTargetWeight,
-          primaryGoal: finalPrimaryGoal,
-        },
-      })
-    );
-
+        primaryGoal: finalPrimaryGoal,
+      },
+    }));
+  
+    // ✅ Reset date input
     setDate("");
+  
+    // 🎉 Success alert
+      setAlert({ type: "success", message: "Progress saved successfully!" });
+
+  
   };
-  // 1. Calculate Weight Difference since the beging  
-  const rawWeightDiff = Number(user?.startWeight) - Number(currentWeight);
-  const hasGained = rawWeightDiff < 0; // If negative, current > start
+  
+
+  const rawWeightDiff = Number(currentWeight) - Number(user?.startWeight);
+  const hasGained = rawWeightDiff > 0; 
+  const toGoal = Number(targetWeight) - Number(currentWeight);
 
   const progRecData = [
     {
-      //show absolute number
       given: Math.abs(rawWeightDiff),
-
       statement: hasGained ? "Weight gained" : "Weight lost",
-
-      // Up for gain, Down for loss
-      icon: hasGained ? (
-        <i className="fa-solid fa-arrow-up text-red-500"></i>
-      ) : (
-        <i className="fa-solid fa-arrow-down text-green-500"></i>
-      ),
+      icon: hasGained ? <i className="fa-solid fa-arrow-up text-red-500"></i> : <i className="fa-solid fa-arrow-down text-green-500"></i>,
     },
     {
-      given: Number(currentWeight) - Number(targetWeight),
+      given: Math.abs(toGoal),
       statement: "To goal",
       icon: <i className="fa-solid fa-bullseye text-blue-500"></i>,
     },
     {
-      given: Object.keys(user?.workoutData?.history || {}).length ?? 0,
+      given: Object.keys(user?.workoutData?.history || {}).length,
       statement: "Workouts",
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
@@ -159,87 +169,65 @@ export default function Progress() {
         </p>
       </h3>
 
-      <div
-        className="
-          flex flex-col md:flex-row justify-between items-center mt-4 p-4 
-          border border-4-[var(--color-light-border)] dark:border-4-[var(--color-secondary-dark)] 
-          rounded-2xl shadow-md
-          bg-[var(--color-light-bg)] dark:bg-[var(--color-secondary-dark)]
-          transition-all md:max-lg:grid md:max-lg:grid-cols-2
-        "
-      >
-        {/*  Current Weight */}
-        <div className="flex flex-col mb-3 md:mb-0 dark:text-white">
-          <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
-            Current Weight (kg)
-          </label>
+  {alert && (
+    <AlertCard
+      key={alert.message}
+      variant={alert.type}
+      message={alert.message}
+      duration={3000}
+      dismissible
+      onClose={() => setAlert(null)}
+    />
+  )}
+
+
+      <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 border rounded-2xl shadow-md bg-[var(--color-light-bg)] dark:bg-primary-dark transition-all md:max-lg:grid md:max-lg:grid-cols-2 gap-4">
+
+        {/* Current Weight */}
+        <div className="flex flex-col w-full md:w-auto">
+          <label className="text-black dark:text-secondary">Current Weight (kg)</label>
           <input
             type="number"
             value={tempW}
             onChange={(e) => setTempW(e.target.value)}
-            className="
-              border border-[var(--color-light-border)] dark:border-secondary
-              bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
-              text-[var(--color-black)] dark:text-[var(--color-text-dark)]
-              rounded-xl p-2 w-44 outline-none
-              focus:ring-2 focus:ring-[var(--color-success)] focus:border-[var(--color-success)]
-              hover:ring-2 hover:ring-[var(--color-success)]
-              transition-all duration-200
-            "
+            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15
+              ${errors.currentWeight ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
+            placeholder="Enter your current weight"
           />
+          {errors.currentWeight && <p className="text-error text-sm mt-1">{errors.currentWeight}</p>}
         </div>
 
-        {/*  Goal Weight */}
-        <div className="flex flex-col mb-3 md:mb-0">
-          <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
-            Goal Weight (kg)
-          </label>
+        {/* Goal Weight */}
+        <div className="flex flex-col w-full md:w-auto">
+          <label className="text-black dark:text-secondary">Goal Weight (kg)</label>
           <input
             type="number"
             value={targetWeight}
             onChange={(e) => setTargetWeight(e.target.value)}
-            className="
-              border border-[var(--color-light-border)] dark:border-secondary
-              bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
-              text-[var(--color-black)] dark:text-[var(--color-text-dark)]
-              rounded-xl p-2 w-44 outline-none
-              focus:ring-2 focus:ring-[var(--color-success)] focus:border-[var(--color-success)]
-              hover:ring-2 hover:ring-[var(--color-success)]
-              transition-all duration-200
-            "
+            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15
+              ${errors.targetWeight ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
+            placeholder="Enter your goal weight"
           />
+          {errors.targetWeight && <p className="text-error text-sm mt-1">{errors.targetWeight}</p>}
         </div>
 
-        {/*  Date */}
-        <div className="flex flex-col mb-3 md:mb-0">
-          <label className="text-sm text-[var(--color-text)] dark:text-[var(--color-text-dark)]">
-            Date (YYYY-DD-MM)
-          </label>
+        {/* Date */}
+        <div className="flex flex-col w-full md:w-auto">
+          <label className="text-black dark:text-secondary">Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="
-              border border-[var(--color-light-border)] dark:border-secondary
-              bg-[var(--color-input)] dark:bg-[var(--color-input-dark)]
-              text-[var(--color-black)] dark:text-[var(--color-text-dark)]
-              rounded-xl p-2 w-48 outline-none
-              focus:ring-2 focus:ring-[var(--color-success)] focus:border-[var(--color-success)]
-              hover:ring-2 hover:ring-[var(--color-success)]
-              transition-all duration-200
-            "
+            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15 
+              ${errors.date ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
           />
+          {errors.date && <p className="text-error text-sm mt-1">{errors.date}</p>}
         </div>
 
-        {/*  Save Button */}
+        {/* Save Button */}
         <button
           onClick={handleSave}
-          className="
-            px-6 py-2 mt-4 md:mt-0 font-semibold rounded-xl transition-all
-            bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-[var(--color-black)]
-            dark:bg-[var(--color-primary)] dark:text-white dark:hover:bg-[var(--color-hover)]
-            shadow-sm
-          "
+          className="px-6 py-2 font-semibold rounded-xl transition-all bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-[var(--color-black)] dark:bg-[var(--color-primary)] dark:text-white dark:hover:bg-[var(--color-hover)] shadow-sm mt-4 md:mt-0 cursor-pointer"
         >
           Save
         </button>
@@ -248,12 +236,7 @@ export default function Progress() {
       {/* 📊 Cards */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
         {progRecData.map((item, index) => (
-          <RecCard
-            key={index}
-            given={Number(item.given)}
-            statement={item.statement}
-            icon={item.icon}
-          />
+          <RecCard key={index} given={Number(item.given)} statement={item.statement} icon={item.icon} />
         ))}
       </div>
 

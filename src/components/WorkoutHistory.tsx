@@ -18,7 +18,7 @@ export default function WorkoutHistory() {
                     let day = new Date(+date * 1000 * 60 * 60 * 24)
 
                     return (
-                        <div key={idx} className="flex justify-between bg-[#F8F9FA] p-4 rounded-lg dark:bg-secondary-dark dark:text-white">
+                        <div key={idx} className="flex justify-between bg-[#F8F9FA] p-4 rounded-lg dark:bg-primary-darkdark:text-white">
                             <div className="flex justify-between items-center gap-2">
                                 <div className="bg-[#D0FAE1] w-10 h-10 rounded-xl flex justify-center items-center">
                                     <TrophyIcon color="#0DA871" fill="#D0FAE1" />

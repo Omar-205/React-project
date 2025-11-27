@@ -99,7 +99,7 @@ export function TodayMeal() {
                                 <button
                                     onClick={() => handleConsume(index, meal.name)}
                                     disabled={consumed[index]}
-                                    className={`px-4 py-1.5 rounded-full shadow-sm font-semibold transition
+                                    className={`px-4 py-1.5 rounded-full shadow-sm font-semibold transition cursor-pointer
                       ${consumed[index]
                                             ? "bg-green-500 text-white cursor-not-allowed opacity-90"
                                             : "bg-primary text-white hover:opacity-90 active:scale-95"
@@ -114,7 +114,7 @@ export function TodayMeal() {
 
                                 <button
                                     onClick={() => setOpen(!open)}
-                                    className="text-sm text-primary font-semibold mt-1"
+                                    className="text-sm text-primary font-semibold mt-1 cursor-pointer hover:underline"
                                 >
                                     {open ? "Hide Details ▲" : "Show Details ▼"}
                                 </button>

@@ -25,12 +25,12 @@ export default function NavTabs({ titles, components }: NavTabsProps) {
             key={index}
             onClick={() => setActiveIndex(index)}
             className={`
-              flex-1 text-center py-2 px-3 rounded-full text-sm font-medium transition-all duration-200
+              flex-1 text-center py-2 px-3 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
               ${
                 activeIndex === index
                   ? `bg-primary text-white shadow-sm 
                      dark:bg-primary dark:text-secondary`
-                  : `hover:bg-gray-300 dark:hover:bg-gray-700`
+                  : `hover:bg-gray-300 dark:hover:bg-gray-400`
               }
             `}
           >

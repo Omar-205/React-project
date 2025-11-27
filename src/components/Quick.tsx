@@ -6,7 +6,7 @@ import Profile from "../Pages/Profile";
 
 const quickActions = [
   { path: "trainee/workouts", label: "Start Workout", icon: "fa-dumbbell", bg: "bg-green-400", element: <Workouts /> },
-  { path: "trainee/nutrition", label: "Log Meal", icon: "fa-fire", bg: "bg-red-500", element: <Nutrition /> },
+  { path: "trainee/nutrition", label: "Log Meal", icon: "fa-fire", bg: "bg-orange-500", element: <Nutrition /> },
   { path: "trainee/progress", label: "View Progress", icon: "fa-bullseye", bg: "bg-blue-400", element: <Progress /> },
   { path: "trainee/profile", label: "View Profile", icon: "fa-user", bg: "bg-violet-500", element: <Profile /> },
 ];
