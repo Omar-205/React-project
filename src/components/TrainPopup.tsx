@@ -41,6 +41,10 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
     const startCamera = async () => {
         try {
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+            }
+
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     width: 480,
@@ -50,15 +54,26 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                 audio: false,
             });
             streamRef.current = stream;
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
             setCameraActive(true);
         } catch (err) {
             console.error("Camera access denied:", err);
             alert("Please allow camera access to continue.");
         }
     };
+
     const swapCamera = () => {
-        setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+        setFacingMode(prev => (prev === "user" ? "environment" : "user"));
     };
+
+    useEffect(() => {
+        if (cameraActive) {
+            startCamera();
+        }
+    }, [facingMode]);
+    
     const stopCamera = () => {
         if (streamRef.current) {
             streamRef.current.getTracks().forEach((t) => t.stop());
@@ -270,14 +285,14 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
 
                         (
-                    <button
-                        onClick={swapCamera}
-                        className="absolute top-3 left-3 z-10 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
-                        title="Swap Camera"
-                    >
-                        <SwitchCamera size={20} className="text-secondary"/>
-                    </button>
-                )
+                        <button
+                            onClick={swapCamera}
+                            className="absolute top-3 left-3 z-10 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
+                            title="Swap Camera"
+                        >
+                            <SwitchCamera size={20} className="text-secondary" />
+                        </button>
+                        )
 
 
                         <button

@@ -154,7 +154,7 @@ export default function Progress() {
       icon: <i className="fa-solid fa-dumbbell text-violet-500"></i>,
     },
     {
-      given: authData?.user?.workoutData?.history?.[today]?.caloriesBurned || 0,
+      given: user?.workoutData?.history?.[today]?.caloriesBurned || 0,
       statement: "Calories burned",
       icon: <i className="fa-solid fa-heart-pulse text-orange-500"></i>,
     },
@@ -181,16 +181,16 @@ export default function Progress() {
   )}
 
 
-      <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 border rounded-2xl shadow-md bg-[var(--color-light-bg)] dark:bg-primary-dark transition-all md:max-lg:grid md:max-lg:grid-cols-2 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 border rounded-2xl shadow-md bg-[var(--color-light-bg)] dark:bg-primary-dark transition-all md:max-lg:grid md:max-lg:grid-cols-2">
 
         {/* Current Weight */}
-        <div className="flex flex-col w-full md:w-auto">
+        <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Current Weight (kg)</label>
           <input
             type="number"
             value={tempW}
             onChange={(e) => setTempW(e.target.value)}
-            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15
+            className={`bg-input rounded-lg block w-full p-2.5 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark 
               ${errors.currentWeight ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
             placeholder="Enter your current weight"
           />
@@ -198,13 +198,13 @@ export default function Progress() {
         </div>
 
         {/* Goal Weight */}
-        <div className="flex flex-col w-full md:w-auto">
+        <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Goal Weight (kg)</label>
           <input
             type="number"
             value={targetWeight}
             onChange={(e) => setTargetWeight(e.target.value)}
-            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15
+            className={`bg-input rounded-lg block w-full p-2.5 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark 
               ${errors.targetWeight ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
             placeholder="Enter your goal weight"
           />
@@ -212,15 +212,16 @@ export default function Progress() {
         </div>
 
         {/* Date */}
-        <div className="flex flex-col w-full md:w-auto">
+        <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Date</label>
           <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className={`bg-input rounded-lg block p-2.5 pr-10 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark w-full h-15 
-              ${errors.date ? "border-1 border-error ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
-          />
+  type="date"
+  value={date}
+  onChange={(e) => setDate(e.target.value)}
+  className={`bg-input rounded-lg block w-full p-2.5 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark 
+    ${errors.date ? "border border-error ring-1 ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
+/>
+
           {errors.date && <p className="text-error text-sm mt-1">{errors.date}</p>}
         </div>
 
