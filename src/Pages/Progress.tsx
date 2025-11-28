@@ -31,13 +31,11 @@ export default function Progress() {
 
   const progress = user?.progress;
   
-  // State for weights
   const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "");
   const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "");
   const [tempW, setTempW] = useState(currentWeight || "");
   
-  // NOTE: 'date' state is removed because we force 'todayString'
-
+ 
   const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [errors, setErrors] = useState<{ currentWeight?: string; targetWeight?: string }>({});
 
@@ -54,7 +52,7 @@ export default function Progress() {
   const handleSave = () => {
     if (!uid) return;
   
-    // ✅ Validate form
+    // Validate form
     if (!validateForm()) {
       setAlert({ type: "error", message: "Please fix errors in the form." });
       return;
@@ -66,7 +64,7 @@ export default function Progress() {
     const finalCurrentWeight = weightInput;
     const finalTargetWeight = targetInput;
   
-    // 🎯 Calculate primary goal based on new inputs
+    //  Calculate primary goal based on new inputs
     let finalPrimaryGoal = user?.primaryGoal;
     
     const currentVal = parseFloat(weightInput);
@@ -80,34 +78,30 @@ export default function Progress() {
     // Update local state immediately
     setCurrentWeight(finalCurrentWeight);
   
-    // 🔄 Update weight history (Overwrite logic)
+    //  Update weight history (Overwrite logic)
     const newEntry = { date: todayString, weight: parseFloat(weightInput) };
     const existingData = progress?.weightData ?? [];
     
-    // Check if entry exists for today, if so replace it, otherwise keep it
-    let updatedWeightData = existingData.map(entry =>
+    const updatedWeightData = existingData.map(entry =>
       entry.date === todayString ? newEntry : entry
     );
     
-    // If we didn't find today's date in the map (it's a new day), push it
     const dateExists = existingData.some(entry => entry.date === todayString);
     if (!dateExists) {
       updatedWeightData.push(newEntry);
     }
   
-    // 📝 Update progress object
     const updatedProgress = {
       ...progress,
       currentWeight: finalCurrentWeight,
       targetWeight: finalTargetWeight,
-      weightData: updatedWeightData, // Uses the overwritten/appended list
+      weightData: updatedWeightData, 
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
       weeklyProgressData: progress?.weeklyProgressData ?? null,
       progressPhotos: progress?.progressPhotos ?? [],
     };
   
-    // 💾 Dispatch updates to Redux
     dispatch(updateProgress({
       currentWeight: finalCurrentWeight,
       targetWeight: finalTargetWeight,
@@ -124,7 +118,6 @@ export default function Progress() {
       },
     }));
   
-    // 🎉 Success alert
     setAlert({ type: "success", message: "Progress saved successfully!" });
   };
   
@@ -178,7 +171,6 @@ export default function Progress() {
 
       <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 border rounded-2xl shadow-md bg-[var(--color-light-bg)] dark:bg-primary-dark transition-all md:max-lg:grid md:max-lg:grid-cols-2">
 
-        {/* Current Weight */}
         <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Current Weight (kg)</label>
           <input
@@ -192,7 +184,6 @@ export default function Progress() {
           {errors.currentWeight && <p className="text-error text-sm mt-1">{errors.currentWeight}</p>}
         </div>
 
-        {/* Goal Weight */}
         <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Goal Weight (kg)</label>
           <input
@@ -206,18 +197,16 @@ export default function Progress() {
           {errors.targetWeight && <p className="text-error text-sm mt-1">{errors.targetWeight}</p>}
         </div>
 
-        {/* Date (FIXED TO TODAY) */}
         <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Date</label>
           <input
             type="date"
             value={todayString}
-            disabled={true} // 🔒 Locks the input so user cannot change it
+            disabled={true} 
             className="bg-gray-200 rounded-lg block w-full p-2.5 text-gray-500 dark:bg-gray-700 dark:text-gray-400 border border-gray-300 cursor-not-allowed opacity-70"
           />
         </div>
 
-        {/* Save Button */}
         <button
           onClick={handleSave}
           className="px-6 py-2 font-semibold rounded-xl transition-all bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-[var(--color-black)] dark:bg-[var(--color-primary)] dark:text-white dark:hover:bg-[var(--color-hover)] shadow-sm mt-4 md:mt-0 cursor-pointer"
@@ -226,7 +215,6 @@ export default function Progress() {
         </button>
       </div>
 
-      {/* 📊 Cards */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-4">
         {progRecData.map((item, index) => (
           <RecCard key={index} given={Number(item.given)} statement={item.statement} icon={item.icon} />
