@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import type { TraineeData } from "../types/TraineeData";
 import type { AppDispatch } from "../store/store";
 import { updateUser } from "../store/slices/authSlice";
+import type { Cursor } from "recharts/types/component/Cursor";
 
 export default function EditProfileButton(props: {
     profile: TraineeData,
@@ -28,8 +29,8 @@ export default function EditProfileButton(props: {
 
     return (
         <button
-            className={`mt-6 text-white px-6 py-2 rounded-lg font-medium duration-200 ${disabled
-                    ? "hover:bg-primary-dark bg-black"
+            className={`mt-6 text-white px-6 py-2 rounded-lg font-medium duration-200 cursor-pointer ${disabled
+                    ? "hover:bg-primary bg-black"
                     : "bg-primary hover:bg-primary-dark"
                 }`}
             onClick={handleClick}

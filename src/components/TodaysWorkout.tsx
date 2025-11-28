@@ -187,7 +187,7 @@ export function TodaysWorkout() {
         text-white 
         ${startWorkout
               ? "bg-green-600 dark:bg-green-700 cursor-not-allowed"
-              : "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/90"
+              : "bg-black dark:bg-primary hover:bg-primary dark:hover:bg-primary/90"
             }`}
           onClick={handleStartWorkout}
           disabled={startWorkout}

@@ -222,7 +222,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
                         <button
                             onClick={startCamera}
-                            className="mt-6 w-full bg-primary hover:bg-primary/45 text-white rounded-lg py-2.5 cursor-pointer"
+                            className="mt-6 w-full bg-primary hover:bg-secondary text-white hover:text-text rounded-lg py-2.5 cursor-pointer"
                         >
                             Open Camera
                         </button>
@@ -287,10 +287,10 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
                         (
                         <button
                             onClick={swapCamera}
-                            className="absolute top-3 left-3 z-10 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
+                            className="absolute top-3 left-3 z-10 text-white  p-2 rounded-full bg-white/50 hover:bg-white/100 cursor-pointer transition"
                             title="Swap Camera"
                         >
-                            <SwitchCamera size={20} className="text-secondary" />
+                            <SwitchCamera size={20} className="text-primary" />
                         </button>
                         )
 

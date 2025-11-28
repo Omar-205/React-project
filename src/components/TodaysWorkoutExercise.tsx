@@ -65,7 +65,7 @@ export function TodaysWorkoutExercise(props: {
       ${exercise.completed
                             ? "bg-green-500 dark:bg-green-600 cursor-not-allowed"
                             : startWorkout
-                                ? "bg-black dark:bg-primary hover:bg-slate-900 dark:hover:bg-primary/70"
+                                ? "bg-black dark:bg-primary hover:bg-primary dark:hover:bg-primary/70"
                                 : "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                         }
     `}
