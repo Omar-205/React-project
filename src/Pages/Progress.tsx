@@ -15,32 +15,38 @@ const titles = ["Weight Progress", "Workout Stats", "Progress Photos"];
 const components = [<WeightProgress />, <WorkoutStats />, <ProgressPhotos />];
 
 export default function Progress() {
+  // 1. Calculate Today's Date String consistently
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const todayString = `${year}-${month}-${day}`;
+
+  // Used for stats calculation elsewhere
   const today = Math.floor((new Date().getTime() + 3 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24));
+  
   const authData = useSelector((state: RootState) => state.Authantication);
   const dispatch = useDispatch<AppDispatch>();
   const { uid, user } = authData;
 
   const progress = user?.progress;
+  
+  // State for weights
   const [currentWeight, setCurrentWeight] = useState(user?.currentWeight || "");
   const [targetWeight, setTargetWeight] = useState(user?.targetWeight || "");
   const [tempW, setTempW] = useState(currentWeight || "");
-  const [date, setDate] = useState("");
+  
+  // NOTE: 'date' state is removed because we force 'todayString'
 
   const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
-  const [errors, setErrors] = useState<{ currentWeight?: string; targetWeight?: string; date?: string }>({});
+  const [errors, setErrors] = useState<{ currentWeight?: string; targetWeight?: string }>({});
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
     if (!tempW || isNaN(Number(tempW)) || Number(tempW) <= 0) newErrors.currentWeight = "Enter a valid current weight";
     if (!targetWeight || isNaN(Number(targetWeight)) || Number(targetWeight) <= 0) newErrors.targetWeight = "Enter a valid target weight";
-    if (!date) newErrors.date = "Please select a date";
-    if (date) {
-      const selectedDate = new Date(date);
-      const todayDate = new Date();
-      todayDate.setHours(0, 0, 0, 0);
-      if (selectedDate < todayDate) newErrors.date = "Date cannot be in the past";
-    }
-
+    
+    // Date validation removed because it is hardcoded to today
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,40 +63,35 @@ export default function Progress() {
     const weightInput = tempW;
     const targetInput = targetWeight;
   
-    // 📅 Today's date in YYYY-MM-DD
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const todayString = `${year}-${month}-${day}`;
+    const finalCurrentWeight = weightInput;
+    const finalTargetWeight = targetInput;
   
-    // ⏳ Check if selected date is today
-    const isToday = date === todayString;
-  
-    const finalCurrentWeight = isToday ? weightInput : (user?.currentWeight || "0");
-    const finalTargetWeight = isToday ? targetInput : (user?.targetWeight || "0");
-  
-    // 🎯 Calculate primary goal
+    // 🎯 Calculate primary goal based on new inputs
     let finalPrimaryGoal = user?.primaryGoal;
-    if (isToday) {
-      const currentVal = parseFloat(weightInput);
-      const targetVal = parseFloat(targetInput);
-      if (!isNaN(currentVal) && !isNaN(targetVal)) {
+    
+    const currentVal = parseFloat(weightInput);
+    const targetVal = parseFloat(targetInput);
+    if (!isNaN(currentVal) && !isNaN(targetVal)) {
         if (targetVal > currentVal) finalPrimaryGoal = "Gain weight";
         else if (targetVal < currentVal) finalPrimaryGoal = "Lose weight";
         else finalPrimaryGoal = "Maintain Weight";
-      }
     }
+    
+    // Update local state immediately
+    setCurrentWeight(finalCurrentWeight);
   
-    if (isToday) setCurrentWeight(finalCurrentWeight);
-  
-    // 🔄 Update weight history (overwrite if date exists)
-    const newEntry = { date, weight: parseFloat(weightInput) };
+    // 🔄 Update weight history (Overwrite logic)
+    const newEntry = { date: todayString, weight: parseFloat(weightInput) };
     const existingData = progress?.weightData ?? [];
+    
+    // Check if entry exists for today, if so replace it, otherwise keep it
     let updatedWeightData = existingData.map(entry =>
-      entry.date === date ? newEntry : entry
+      entry.date === todayString ? newEntry : entry
     );
-    if (!updatedWeightData.find(entry => entry.date === date)) {
+    
+    // If we didn't find today's date in the map (it's a new day), push it
+    const dateExists = existingData.some(entry => entry.date === todayString);
+    if (!dateExists) {
       updatedWeightData.push(newEntry);
     }
   
@@ -99,14 +100,14 @@ export default function Progress() {
       ...progress,
       currentWeight: finalCurrentWeight,
       targetWeight: finalTargetWeight,
-      weightData: updatedWeightData,
+      weightData: updatedWeightData, // Uses the overwritten/appended list
       progRecData: progress?.progRecData ?? null,
       weightStats: progress?.weightStats ?? null,
       weeklyProgressData: progress?.weeklyProgressData ?? null,
       progressPhotos: progress?.progressPhotos ?? [],
     };
   
-    // 💾 Dispatch updates
+    // 💾 Dispatch updates to Redux
     dispatch(updateProgress({
       currentWeight: finalCurrentWeight,
       targetWeight: finalTargetWeight,
@@ -123,13 +124,8 @@ export default function Progress() {
       },
     }));
   
-    // ✅ Reset date input
-    setDate("");
-  
     // 🎉 Success alert
-      setAlert({ type: "success", message: "Progress saved successfully!" });
-
-  
+    setAlert({ type: "success", message: "Progress saved successfully!" });
   };
   
 
@@ -169,17 +165,16 @@ export default function Progress() {
         </p>
       </h3>
 
-  {alert && (
-    <AlertCard
-      key={alert.message}
-      variant={alert.type}
-      message={alert.message}
-      duration={3000}
-      dismissible
-      onClose={() => setAlert(null)}
-    />
-  )}
-
+    {alert && (
+      <AlertCard
+        key={alert.message}
+        variant={alert.type}
+        message={alert.message}
+        duration={3000}
+        dismissible
+        onClose={() => setAlert(null)}
+      />
+    )}
 
       <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 border rounded-2xl shadow-md bg-[var(--color-light-bg)] dark:bg-primary-dark transition-all md:max-lg:grid md:max-lg:grid-cols-2">
 
@@ -211,18 +206,15 @@ export default function Progress() {
           {errors.targetWeight && <p className="text-error text-sm mt-1">{errors.targetWeight}</p>}
         </div>
 
-        {/* Date */}
+        {/* Date (FIXED TO TODAY) */}
         <div className="flex flex-col w-full md:w-auto items-center">
           <label className="text-black dark:text-secondary">Date</label>
           <input
-  type="date"
-  value={date}
-  onChange={(e) => setDate(e.target.value)}
-  className={`bg-input rounded-lg block w-full p-2.5 text-text placeholder:text-text placeholder:text-md placeholder:font-thin dark:bg-input-dark dark:text-text-dark dark:placeholder:text-text-dark 
-    ${errors.date ? "border border-error ring-1 ring-error" : "border border-text-dark focus:border-primary dark:focus:border-primary"}`}
-/>
-
-          {errors.date && <p className="text-error text-sm mt-1">{errors.date}</p>}
+            type="date"
+            value={todayString}
+            disabled={true} // 🔒 Locks the input so user cannot change it
+            className="bg-gray-200 rounded-lg block w-full p-2.5 text-gray-500 dark:bg-gray-700 dark:text-gray-400 border border-gray-300 cursor-not-allowed opacity-70"
+          />
         </div>
 
         {/* Save Button */}
