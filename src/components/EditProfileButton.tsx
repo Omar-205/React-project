@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import type { TraineeData } from "../types/TraineeData";
 import type { AppDispatch } from "../store/store";
 import { updateUser } from "../store/slices/authSlice";
-import type { Cursor } from "recharts/types/component/Cursor";
 
 export default function EditProfileButton(props: {
     profile: TraineeData,

@@ -17,7 +17,7 @@ export default function Profile() {
     const [profile, setProfile] = useState(user || {});
     
     // Photo upload states
-    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [, setPhotoFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [alert, setAlert] = useState<{ message: string; variant: "success" | "error" } | null>(null);
 
