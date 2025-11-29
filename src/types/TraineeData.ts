@@ -17,6 +17,7 @@ export interface TraineeData {
     totalWorkouts: number | null;
     bio: string;
     createdAt: string;
+    photoURL?: string;
     workoutData: {
         selectedWorkout: string;
         history: Record<number, {

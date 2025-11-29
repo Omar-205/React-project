@@ -24,8 +24,11 @@ export default function ProfileInput(props: { disabled: boolean, content: string
 
     // Render input based on disabled state
     if (disabled) {
+        if (type === "bio" && contentState === "") {
+            setContentState("Enter bio.");
+        }
         return (
-            <div className={`bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full ${field === "bmi" ? 'text-green-500 font-bold' : 'text-neutral-500 dark:text-[#738899]'}`}>
+            <div className={`bg-input dark:bg-input-dark border border-gray-300 rounded px-3 py-2 w-full ${field === "bmi" ? 'text-green-500 font-bold' : 'text-neutral-500 dark:text-[#738899] min-h-10'}`}>
                 {type === "number" ? numberState : contentState}
             </div>
         )
