@@ -4,6 +4,8 @@ import ProfileInput from "../components/ProfileInput";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { uploadImageToImgbb } from "../utils/helper";
+import AlertCard from "../components/AlertCard";
 
 export default function Profile() {
     // State to toggle edit/save mode
@@ -13,6 +15,11 @@ export default function Profile() {
 
     // Local copy of user profile
     const [profile, setProfile] = useState(user || {});
+    
+    // Photo upload states
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [alert, setAlert] = useState<{ message: string; variant: "success" | "error" } | null>(null);
 
     // Format created date
     const createdAtDate = user?.createdAt ? new Date(user.createdAt) : null;
@@ -22,8 +29,39 @@ export default function Profile() {
 
     const BMI = user.currentWeight / ((user.height / 100) ** 2); //BMI formula
 
+    // Handle photo file selection and upload
+    const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setPhotoFile(file);
+        setIsUploading(true);
+
+        try {
+            const photoURL = await uploadImageToImgbb(file);
+            setProfile({ ...profile, photoURL });
+            setAlert({ message: "Photo uploaded successfully! Click Save Changes to update your profile.", variant: "success" });
+        } catch (error) {
+            console.error(error);
+            setAlert({ message: "Failed to upload photo. Please try again.", variant: "error" });
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     return (
-        <div className="flex flex-col gap-8 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] mt-8 px-4">
+        <div className="flex flex-col gap-8 max-w-[1000px] md:min-w-[55vw] min-w-[95vw] mt-8 px-4 relative">
+            {/* Alert */}
+            {alert && (
+                <div className="absolute top-4 right-4 z-50">
+                    <AlertCard
+                        variant={alert.variant}
+                        message={alert.message}
+                        onClose={() => setAlert(null)}
+                    />
+                </div>
+            )}
+            
             {/* Header Section */}
             <div className="flex justify-between items-center">
                 <div>
@@ -51,11 +89,33 @@ export default function Profile() {
                 <div className="bg-white col-span-1 sm:col-span-2 lg:col-span-3 row-span-3 rounded-2xl shadow-xl dark:bg-primary-dark">
                     <h4 className="m-4 text-prof-text font-bold dark:text-text-dark">Profile Picture</h4>
                     <div className="flex justify-center mt-5">
-                        <img
-                            src={userProfilePhoto}
-                            alt="Profile"
-                            className="object-cover w-[150px] h-[150px] rounded-full"
-                        />
+                        <div className="relative">
+                            <img
+                                src={profile?.photoURL || user?.photoURL || userProfilePhoto}
+                                alt="Profile"
+                                className="object-cover w-[150px] h-[150px] rounded-full"
+                            />
+                            {!disabled && (
+                                <label 
+                                    htmlFor="photo-upload"
+                                    className="absolute bottom-0 right-0 bg-primary hover:bg-primary-dark text-white rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-lg transition-colors duration-200"
+                                >
+                                    {isUploading ? (
+                                        <i className="fa-solid fa-spinner fa-spin"></i>
+                                    ) : (
+                                        <i className="fa-solid fa-camera"></i>
+                                    )}
+                                </label>
+                            )}
+                            <input
+                                id="photo-upload"
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                disabled={disabled || isUploading}
+                                onChange={handlePhotoChange}
+                            />
+                        </div>
                     </div>
                     <hr className="m-4 h-[2px] bg-text border-0" />
                     <p className="text-prof-text-secondary m-4 dark:text-text-secondary-dark">
@@ -77,7 +137,7 @@ export default function Profile() {
                     </p>
 
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 pb-4 pt-1 w-full min-w-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 pb-2 pt-1 w-full min-w-0">
                         <div className="w-full">
                             {/* full name */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Full Name</h4>
@@ -130,7 +190,7 @@ export default function Profile() {
                             />
                         </div>
 
-                        <div className="col-span-1 sm:col-span-2">
+                        <div className="col-span-1 sm:col-span-2 pb-2">
                             {/* bio */}
                             <h4 className="mt-2 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Bio</h4>
                             <ProfileInput
@@ -156,7 +216,7 @@ export default function Profile() {
                     <p className="text-prof-text-secondary ml-4 dark:text-text-secondary-dark">
                         Your current physical stats.
                     </p>
-                    <div className="grid grid-cols-2 gap-2 m-4 auto-rows-[80px]">
+                    <div className="grid grid-cols-2 gap-2 m-4 auto-rows-[80px] pb-3">
                         <div>
                             {/* height */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Height (cm)</h4>
@@ -206,7 +266,7 @@ export default function Profile() {
                     <p className="text-prof-text-secondary ml-4 dark:text-text-secondary-dark">
                         Define your fitness objectives.
                     </p>
-                    <div className="grid grid-cols-1 gap-2 m-4 auto-rows-[80px]">
+                    <div className="grid grid-cols-1 gap-2 m-4 auto-rows-[80px] pb-2">
                         <div>
                             {/* primary goal */}
                             <h4 className="m-4 mb-2 text-prof-text-secondary font-bold dark:text-text-dark">Primary Goal</h4>
