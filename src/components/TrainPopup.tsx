@@ -47,12 +47,13 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    width: 480,
-                    height: 480,
-                    facingMode: facingMode,
+                    facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
                 },
                 audio: false,
             });
+
             streamRef.current = stream;
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -64,6 +65,8 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
         }
     };
 
+
+
     const swapCamera = () => {
         setFacingMode(prev => (prev === "user" ? "environment" : "user"));
     };
@@ -73,7 +76,7 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
             startCamera();
         }
     }, [facingMode]);
-    
+
     const stopCamera = () => {
         if (streamRef.current) {
             streamRef.current.getTracks().forEach((t) => t.stop());
@@ -230,13 +233,18 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
                 ) : (
                     <div className="relative w-full h-full rounded-lg overflow-hidden">
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            playsInline
-                            muted
-                            className="w-full h-full object-cover bg-black"
-                        />
+                        <div className="w-full h-full flex items-center justify-center bg-black">
+                            <video
+                                ref={videoRef}
+                                autoPlay
+                                playsInline
+                                muted
+                                className="max-w-full max-h-full object-contain"
+                            />
+
+                        </div>
+
+
                         <div
                             className="
                    absolute top-4 left-1/2 -translate-x-1/2
