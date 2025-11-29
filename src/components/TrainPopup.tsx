@@ -47,9 +47,9 @@ const TrainPopup: React.FC<TrainPopupProps> = ({
 
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    facingMode,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
+                    width: 480,
+                    height: 480,
+                    facingMode: facingMode,
                 },
                 audio: false,
             });
